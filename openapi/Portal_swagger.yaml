@@ -1,0 +1,1066 @@
+basePath: /api
+consumes:
+- application/json
+definitions:
+  AccountGetRes:
+    properties:
+      account:
+        $ref: '#/definitions/authenticator.Account'
+      workspaces:
+        items:
+          $ref: '#/definitions/Workspace'
+        type: array
+    required:
+    - account
+    - workspaces
+    type: object
+  AnalyticsGetOverviewRes:
+    properties:
+      application_count:
+        type: integer
+      credentials_count:
+        type: integer
+      endpoint_count:
+        type: integer
+      rule_count:
+        type: integer
+    required:
+    - application_count
+    - credentials_count
+    - endpoint_count
+    - rule_count
+    type: object
+  ApplicationGetMessageRes:
+    properties:
+      app_id:
+        type: string
+      body:
+        type: string
+      headers:
+        type: string
+      id:
+        type: string
+      metadata:
+        type: string
+      timestamp:
+        type: integer
+      type:
+        type: string
+    required:
+    - app_id
+    - body
+    - headers
+    - id
+    - metadata
+    - timestamp
+    - type
+    type: object
+  ApplicationListMessageRes:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/Message'
+        type: array
+    required:
+    - data
+    type: object
+  EndpointGetMessageRes:
+    properties:
+      app_id:
+        type: string
+      body:
+        type: string
+      headers:
+        type: string
+      id:
+        type: string
+      metadata:
+        type: string
+      request_count:
+        type: integer
+      request_latest_ts:
+        type: integer
+      requests:
+        items:
+          $ref: '#/definitions/Request'
+        type: array
+      response_count:
+        type: integer
+      response_latest_ts:
+        type: integer
+      responses:
+        items:
+          $ref: '#/definitions/Response'
+        type: array
+      success_id:
+        type: string
+      timestamp:
+        type: integer
+      type:
+        type: string
+    required:
+    - app_id
+    - body
+    - headers
+    - id
+    - metadata
+    - request_count
+    - request_latest_ts
+    - requests
+    - response_count
+    - response_latest_ts
+    - responses
+    - success_id
+    - timestamp
+    - type
+    type: object
+  EndpointListMessageRes:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/EndpointMessage'
+        type: array
+    required:
+    - data
+    type: object
+  EndpointMessage:
+    properties:
+      app_id:
+        type: string
+      body:
+        type: string
+      headers:
+        type: string
+      id:
+        type: string
+      metadata:
+        type: string
+      request_count:
+        type: integer
+      request_latest_ts:
+        type: integer
+      requests:
+        items:
+          $ref: '#/definitions/Request'
+        type: array
+      response_count:
+        type: integer
+      response_latest_ts:
+        type: integer
+      responses:
+        items:
+          $ref: '#/definitions/Response'
+        type: array
+      success_id:
+        type: string
+      timestamp:
+        type: integer
+      type:
+        type: string
+    required:
+    - app_id
+    - body
+    - headers
+    - id
+    - metadata
+    - request_count
+    - request_latest_ts
+    - requests
+    - response_count
+    - response_latest_ts
+    - responses
+    - success_id
+    - timestamp
+    - type
+    type: object
+  Error:
+    properties:
+      error:
+        type: string
+    required:
+    - error
+    type: object
+  Message:
+    properties:
+      app_id:
+        type: string
+      body:
+        type: string
+      headers:
+        type: string
+      id:
+        type: string
+      metadata:
+        type: string
+      timestamp:
+        type: integer
+      type:
+        type: string
+    required:
+    - app_id
+    - body
+    - headers
+    - id
+    - metadata
+    - timestamp
+    - type
+    type: object
+  Request:
+    properties:
+      app_id:
+        type: string
+      body:
+        type: string
+      ep_id:
+        type: string
+      headers:
+        type: string
+      id:
+        type: string
+      metadata:
+        type: string
+      method:
+        type: string
+      msg_id:
+        type: string
+      timestamp:
+        type: integer
+      type:
+        type: string
+      uri:
+        type: string
+    required:
+    - app_id
+    - body
+    - ep_id
+    - headers
+    - id
+    - metadata
+    - method
+    - msg_id
+    - timestamp
+    - type
+    - uri
+    type: object
+  Response:
+    properties:
+      app_id:
+        type: string
+      body:
+        type: string
+      ep_id:
+        type: string
+      error:
+        type: string
+      headers:
+        type: string
+      id:
+        type: string
+      metadata:
+        type: string
+      msg_id:
+        type: string
+      req_id:
+        type: string
+      status:
+        type: integer
+      timestamp:
+        type: integer
+      type:
+        type: string
+      uri:
+        type: string
+    required:
+    - app_id
+    - body
+    - ep_id
+    - error
+    - headers
+    - id
+    - metadata
+    - msg_id
+    - req_id
+    - status
+    - timestamp
+    - type
+    - uri
+    type: object
+  Workspace:
+    properties:
+      created_at:
+        type: integer
+      id:
+        type: string
+      name:
+        type: string
+      owner_id:
+        type: string
+      tier:
+        type: string
+      updated_at:
+        type: integer
+    required:
+    - created_at
+    - id
+    - name
+    - owner_id
+    - tier
+    - updated_at
+    type: object
+  WorkspaceCreateReq:
+    properties:
+      name:
+        default: main
+        type: string
+    required:
+    - name
+    type: object
+  WorkspaceCreateRes:
+    properties:
+      created_at:
+        type: integer
+      id:
+        type: string
+      name:
+        type: string
+      owner_id:
+        type: string
+      tier:
+        type: string
+      updated_at:
+        type: integer
+    required:
+    - created_at
+    - id
+    - name
+    - owner_id
+    - tier
+    - updated_at
+    type: object
+  WorkspaceCredentials:
+    properties:
+      created_at:
+        type: integer
+      expired_at:
+        type: integer
+      id:
+        type: string
+      name:
+        type: string
+      updated_at:
+        type: integer
+      ws_id:
+        type: string
+    required:
+    - created_at
+    - expired_at
+    - id
+    - name
+    - updated_at
+    - ws_id
+    type: object
+  WorkspaceCredentialsCreateReq:
+    properties:
+      expired_at:
+        default: 1893456000000
+        type: integer
+      name:
+        default: swagger demo
+        type: string
+    required:
+    - expired_at
+    - name
+    type: object
+  WorkspaceCredentialsCreateRes:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+      user:
+        type: string
+    required:
+    - id
+    - name
+    - password
+    - user
+    type: object
+  WorkspaceCredentialsExpireReq:
+    properties:
+      duration:
+        default: 1800000
+        type: integer
+    required:
+    - duration
+    type: object
+  WorkspaceCredentialsExpireRes:
+    properties:
+      expired_at:
+        type: integer
+      id:
+        type: string
+    required:
+    - expired_at
+    - id
+    type: object
+  WorkspaceCredentialsGetRes:
+    properties:
+      created_at:
+        type: integer
+      expired_at:
+        type: integer
+      id:
+        type: string
+      name:
+        type: string
+      updated_at:
+        type: integer
+      ws_id:
+        type: string
+    required:
+    - created_at
+    - expired_at
+    - id
+    - name
+    - updated_at
+    - ws_id
+    type: object
+  WorkspaceCredentialsListRes:
+    properties:
+      count:
+        type: integer
+      data:
+        items:
+          $ref: '#/definitions/WorkspaceCredentials'
+        type: array
+    required:
+    - count
+    - data
+    type: object
+  WorkspaceCredentialsUpdateReq:
+    properties:
+      expired_at:
+        default: 1893456000000
+        type: integer
+      name:
+        default: swagger demo update
+        type: string
+    required:
+    - expired_at
+    - name
+    type: object
+  WorkspaceCredentialsUpdateRes:
+    properties:
+      created_at:
+        type: integer
+      expired_at:
+        type: integer
+      id:
+        type: string
+      name:
+        type: string
+      updated_at:
+        type: integer
+      ws_id:
+        type: string
+    required:
+    - created_at
+    - expired_at
+    - id
+    - name
+    - updated_at
+    - ws_id
+    type: object
+  WorkspaceExportRes:
+    properties:
+      applications:
+        items:
+          $ref: '#/definitions/WorkspaceSnapshotApp'
+        type: array
+      name:
+        type: string
+    required:
+    - applications
+    - name
+    type: object
+  WorkspaceGetRes:
+    properties:
+      created_at:
+        type: integer
+      id:
+        type: string
+      name:
+        type: string
+      owner_id:
+        type: string
+      tier:
+        type: string
+      updated_at:
+        type: integer
+    required:
+    - created_at
+    - id
+    - name
+    - owner_id
+    - tier
+    - updated_at
+    type: object
+  WorkspaceImportReq:
+    properties:
+      snapshot:
+        $ref: '#/definitions/WorkspaceSnapshot'
+    required:
+    - snapshot
+    type: object
+  WorkspaceImportRes:
+    properties:
+      app_id:
+        items:
+          type: string
+        type: array
+      ep_id:
+        items:
+          type: string
+        type: array
+      epr_id:
+        items:
+          type: string
+        type: array
+    required:
+    - app_id
+    - ep_id
+    - epr_id
+    type: object
+  WorkspaceSnapshot:
+    properties:
+      applications:
+        items:
+          $ref: '#/definitions/WorkspaceSnapshotApp'
+        type: array
+      name:
+        type: string
+    required:
+    - applications
+    - name
+    type: object
+  WorkspaceSnapshotApp:
+    properties:
+      endpoints:
+        items:
+          $ref: '#/definitions/WorkspaceSnapshotEp'
+        type: array
+      name:
+        type: string
+    required:
+    - endpoints
+    - name
+    type: object
+  WorkspaceSnapshotEp:
+    properties:
+      method:
+        type: string
+      name:
+        type: string
+      rules:
+        items:
+          $ref: '#/definitions/WorkspaceSnapshotEpr'
+        type: array
+      uri:
+        type: string
+    required:
+    - method
+    - name
+    - rules
+    - uri
+    type: object
+  WorkspaceSnapshotEpr:
+    properties:
+      condition_expression:
+        type: string
+      condition_source:
+        type: string
+      exclusionary:
+        type: boolean
+      name:
+        type: string
+      priority:
+        type: integer
+    required:
+    - condition_expression
+    - condition_source
+    - exclusionary
+    - name
+    - priority
+    type: object
+  WorkspaceUpdateReq:
+    properties:
+      name:
+        example: another name
+        type: string
+    required:
+    - name
+    type: object
+  WorkspaceUpdateRes:
+    properties:
+      created_at:
+        type: integer
+      id:
+        type: string
+      name:
+        type: string
+      owner_id:
+        type: string
+      tier:
+        type: string
+      updated_at:
+        type: integer
+    required:
+    - created_at
+    - id
+    - name
+    - owner_id
+    - tier
+    - updated_at
+    type: object
+  authenticator.Account:
+    properties:
+      metadata:
+        additionalProperties:
+          type: string
+        type: object
+      name:
+        type: string
+      sub:
+        type: string
+    required:
+    - metadata
+    - name
+    - sub
+    type: object
+externalDocs:
+  description: OpenAPI
+  url: https://swagger.io/resources/open-api/
+info:
+  contact:
+    email: support@kanthorlabs.com
+    name: Kanthor Support
+    url: http://kanthorlabs.com/support
+  description: Portal API
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://kanthorlabs.com/terms/
+  title: Kanthor Portal API
+  version: 2022.1201.1701
+paths:
+  /account:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/AccountGetRes'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - Authorization: []
+      - WorkspaceId: []
+      tags:
+      - account
+  /analytics/overview:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/AnalyticsGetOverviewRes'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - Authorization: []
+      - WorkspaceId: []
+      tags:
+      - analytics
+  /application/{app_id}/message:
+    get:
+      parameters:
+      - default: 10
+        description: limit returning records
+        in: query
+        name: _limit
+        type: integer
+      - description: starting time to scan in milliseconds
+        example: 1669914060000
+        in: query
+        name: _start
+        type: integer
+      - description: ending time to scan in milliseconds
+        example: 1985533260000
+        in: query
+        name: _end
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ApplicationListMessageRes'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - Authorization: []
+      - WorkspaceId: []
+      tags:
+      - application
+  /application/{app_id}/message/{msg_id}:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ApplicationGetMessageRes'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - Authorization: []
+      - WorkspaceId: []
+      tags:
+      - application
+  /credentials:
+    get:
+      parameters:
+      - collectionFormat: csv
+        description: list by ids
+        in: query
+        items:
+          type: string
+        name: id
+        type: array
+      - description: search keyword
+        in: query
+        name: _q
+        type: string
+      - default: 10
+        description: limit returning records
+        in: query
+        name: _limit
+        type: integer
+      - default: 0
+        description: requesting page
+        in: query
+        name: _page
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/WorkspaceCredentialsListRes'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - Authorization: []
+      - WorkspaceId: []
+      tags:
+      - credentials
+    post:
+      parameters:
+      - description: credentials payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/WorkspaceCredentialsCreateReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/WorkspaceCredentialsCreateRes'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - Authorization: []
+      - WorkspaceId: []
+      tags:
+      - credentials
+  /credentials/{wsc_id}:
+    get:
+      parameters:
+      - description: credentials id
+        in: path
+        name: wsc_id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/WorkspaceCredentialsGetRes'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - Authorization: []
+      - WorkspaceId: []
+      tags:
+      - credentials
+    patch:
+      parameters:
+      - description: credentials id
+        in: path
+        name: wsc_id
+        required: true
+        type: string
+      - description: credentials payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/WorkspaceCredentialsUpdateReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/WorkspaceCredentialsUpdateRes'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - Authorization: []
+      - WorkspaceId: []
+      tags:
+      - credentials
+  /credentials/{wsc_id}/expiration:
+    put:
+      parameters:
+      - description: credentials id
+        in: path
+        name: wsc_id
+        required: true
+        type: string
+      - description: credentials payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/WorkspaceCredentialsExpireReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/WorkspaceCredentialsExpireRes'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - Authorization: []
+      - WorkspaceId: []
+      tags:
+      - credentials
+  /endpoint/{ep_id}/message:
+    get:
+      parameters:
+      - default: 10
+        description: limit returning records
+        in: query
+        name: _limit
+        type: integer
+      - description: starting time to scan in milliseconds
+        example: 1669914060000
+        in: query
+        name: _start
+        type: integer
+      - description: ending time to scan in milliseconds
+        example: 1985533260000
+        in: query
+        name: _end
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/EndpointListMessageRes'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - Authorization: []
+      - WorkspaceId: []
+      tags:
+      - endpoint
+  /endpoint/{ep_id}/message/{msg_id}:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/EndpointGetMessageRes'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - Authorization: []
+      - WorkspaceId: []
+      tags:
+      - endpoint
+  /workspace:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/WorkspaceGetRes'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - Authorization: []
+      tags:
+      - workspace
+    post:
+      parameters:
+      - description: workspace payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/WorkspaceCreateReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/WorkspaceCreateRes'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - Authorization: []
+      tags:
+      - workspace
+  /workspace/{ws_id}:
+    get:
+      parameters:
+      - description: workspace id
+        in: path
+        name: ws_id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/WorkspaceGetRes'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - Authorization: []
+      tags:
+      - workspace
+    patch:
+      parameters:
+      - description: workspace id
+        in: path
+        name: ws_id
+        required: true
+        type: string
+      - description: workspace payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/WorkspaceUpdateReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/WorkspaceUpdateRes'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - Authorization: []
+      tags:
+      - workspace
+  /workspace/{ws_id}/transfer:
+    get:
+      parameters:
+      - description: workspace id
+        in: path
+        name: ws_id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/WorkspaceExportRes'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - Authorization: []
+      tags:
+      - workspace
+    post:
+      parameters:
+      - description: workspace id
+        in: path
+        name: ws_id
+        required: true
+        type: string
+      - description: import payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/WorkspaceImportReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/WorkspaceImportRes'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - Authorization: []
+      tags:
+      - workspace
+produces:
+- application/json
+securityDefinitions:
+  Authorization:
+    description: '[Bearer JWT_TOKEN] or [Basic base64(key:secret)]'
+    in: header
+    name: Authorization
+    type: apiKey
+  WorkspaceId:
+    description: The selected workspace id you are working with
+    in: header
+    name: x-authorization-workspace
+    type: apiKey
+swagger: "2.0"

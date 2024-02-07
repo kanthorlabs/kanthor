@@ -1,0 +1,146 @@
+package infrastructure
+
+import (
+	"context"
+	"errors"
+
+	"github.com/kanthorlabs/kanthor/configuration"
+	"github.com/kanthorlabs/kanthor/infrastructure/authenticator"
+	"github.com/kanthorlabs/kanthor/infrastructure/cache"
+	"github.com/kanthorlabs/kanthor/infrastructure/circuitbreaker"
+	"github.com/kanthorlabs/kanthor/infrastructure/config"
+	"github.com/kanthorlabs/kanthor/infrastructure/dlm"
+	"github.com/kanthorlabs/kanthor/infrastructure/idempotency"
+	"github.com/kanthorlabs/kanthor/infrastructure/sender"
+	"github.com/kanthorlabs/kanthor/infrastructure/streaming"
+	"github.com/kanthorlabs/kanthor/logging"
+	"github.com/kanthorlabs/kanthor/pkg/timer"
+)
+
+func New(provider configuration.Provider) (*Infrastructure, error) {
+	conf, err := config.New(provider)
+	if err != nil {
+		return nil, err
+	}
+	logger, err := logging.New(provider)
+	if err != nil {
+		return nil, err
+	}
+
+	t := timer.New()
+	send, err := sender.New(&conf.Sender, logger)
+	if err != nil {
+		return nil, err
+	}
+	idemp, err := idempotency.New(&conf.Idempotency, logger)
+	if err != nil {
+		return nil, err
+	}
+	cb, err := circuitbreaker.New(&conf.CircuitBreaker, logger)
+	if err != nil {
+		return nil, err
+	}
+	auth, err := authenticator.New(conf.Authenticators, logger, send, cb)
+	if err != nil {
+		return nil, err
+	}
+	lock, err := dlm.New(&conf.DistributedLockManager)
+	if err != nil {
+		return nil, err
+	}
+	c, err := cache.New(&conf.Cache, logger)
+	if err != nil {
+		return nil, err
+	}
+	s, err := streaming.New(&conf.Streaming, logger)
+	if err != nil {
+		return nil, err
+	}
+
+	infra := &Infrastructure{
+		conf:   conf,
+		logger: logger,
+
+		Timer:                  t,
+		Send:                   send,
+		Idempotency:            idemp,
+		CircuitBreaker:         cb,
+		Authenticator:          auth,
+		DistributedLockManager: lock,
+		Stream:                 s,
+		Cache:                  c,
+	}
+	return infra, nil
+}
+
+type Infrastructure struct {
+	conf   *config.Config
+	logger logging.Logger
+
+	Timer                  timer.Timer
+	Send                   sender.Send
+	Idempotency            idempotency.Idempotency
+	CircuitBreaker         circuitbreaker.CircuitBreaker
+	DistributedLockManager dlm.Factory
+	Authenticator          authenticator.Authenticator
+	Stream                 streaming.Stream
+	Cache                  cache.Cache
+}
+
+func (infra *Infrastructure) Readiness() error {
+	if err := infra.Idempotency.Readiness(); err != nil {
+		return err
+	}
+	if err := infra.Stream.Readiness(); err != nil {
+		return err
+	}
+	if err := infra.Cache.Readiness(); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (infra *Infrastructure) Liveness() error {
+	if err := infra.Idempotency.Liveness(); err != nil {
+		return err
+	}
+	if err := infra.Stream.Liveness(); err != nil {
+		return err
+	}
+	if err := infra.Cache.Liveness(); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (infra *Infrastructure) Connect(ctx context.Context) error {
+	if err := infra.Idempotency.Connect(ctx); err != nil {
+		return err
+	}
+	if err := infra.Stream.Connect(ctx); err != nil {
+		return err
+	}
+	if err := infra.Cache.Connect(ctx); err != nil {
+		return err
+	}
+
+	infra.logger.Infow("connected")
+	return nil
+}
+
+func (infra *Infrastructure) Disconnect(ctx context.Context) error {
+	infra.logger.Infow("disconnected")
+	var returning error
+
+	if err := infra.Idempotency.Disconnect(ctx); err != nil {
+		returning = errors.Join(returning, err)
+	}
+	if err := infra.Stream.Disconnect(ctx); err != nil {
+		returning = errors.Join(returning, err)
+	}
+	if err := infra.Cache.Disconnect(ctx); err != nil {
+		returning = errors.Join(returning, err)
+	}
+
+	return returning
+}

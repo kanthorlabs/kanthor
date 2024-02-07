@@ -1,0 +1,52 @@
+{
+  "name": "tesing",
+  "applications": [
+    {
+      "name": "tesing",
+      "endpoints": [
+        {
+          "name": "success",
+          "method": "POST",
+          "uri": "https://httpbin.org/post",
+          "rules": [
+            {
+              "name": "pass-through",
+              "priority": 1,
+              "exclusionary": false,
+              "condition_source": "type",
+              "condition_expression": "any::"
+            }
+          ]
+        },
+        {
+          "name": "fail",
+          "method": "POST",
+          "uri": "https://httpbin.org/status/500",
+          "rules": [
+            {
+              "name": "pass-through",
+              "priority": 1,
+              "exclusionary": false,
+              "condition_source": "type",
+              "condition_expression": "any::"
+            }
+          ]
+        },
+        {
+          "name": "delay",
+          "method": "POST",
+          "uri": "https://httpbin.org/delay/5",
+          "rules": [
+            {
+              "name": "pass-through",
+              "priority": 1,
+              "exclusionary": false,
+              "condition_source": "type",
+              "condition_expression": "any::"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

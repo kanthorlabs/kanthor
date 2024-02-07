@@ -1,0 +1,37 @@
+package config
+
+import (
+	"github.com/kanthorlabs/kanthor/configuration"
+	"github.com/kanthorlabs/kanthor/gateway"
+)
+
+func New(provider configuration.Provider) (*Config, error) {
+	var conf Wrapper
+	if err := provider.Unmarshal(&conf); err != nil {
+		return nil, err
+	}
+	return &conf.Sdk, conf.Validate()
+}
+
+type Wrapper struct {
+	Sdk Config `json:"sdk" yaml:"sdk" mapstructure:"sdk"`
+}
+
+func (conf *Wrapper) Validate() error {
+	if err := conf.Sdk.Validate(); err != nil {
+		return err
+	}
+	return nil
+}
+
+type Config struct {
+	Gateway gateway.Config `json:"gateway" yaml:"gateway" mapstructure:"gateway"`
+}
+
+func (conf *Config) Validate() error {
+	if err := conf.Gateway.Validate("SDK.CONFIG."); err != nil {
+		return err
+	}
+
+	return nil
+}

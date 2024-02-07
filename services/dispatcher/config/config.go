@@ -1,0 +1,59 @@
+package config
+
+import (
+	"github.com/kanthorlabs/kanthor/configuration"
+	"github.com/kanthorlabs/kanthor/pkg/validator"
+)
+
+func New(provider configuration.Provider) (*Config, error) {
+	var conf Wrapper
+	if err := provider.Unmarshal(&conf); err != nil {
+		return nil, err
+	}
+	return &conf.Dispatcher, conf.Validate()
+}
+
+type Wrapper struct {
+	Dispatcher Config `json:"dispatcher" yaml:"dispatcher" mapstructure:"dispatcher"`
+}
+
+func (conf *Wrapper) Validate() error {
+	if err := conf.Dispatcher.Validate(); err != nil {
+		return err
+	}
+	return nil
+}
+
+type Config struct {
+	Forwarder DispatcherForwarder `json:"forwarder" yaml:"forwarder" mapstructure:"forwarder"`
+}
+
+func (conf *Config) Validate() error {
+	if err := conf.Forwarder.Validate(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+type DispatcherForwarder struct {
+	Send DispatcherForwarderSend `json:"send" yaml:"send" mapstructure:"send"`
+}
+
+func (conf *DispatcherForwarder) Validate() error {
+	if err := conf.Send.Validate(); err != nil {
+		return err
+	}
+	return nil
+}
+
+type DispatcherForwarderSend struct {
+	Concurrency int `json:"concurrency" yaml:"concurrency" mapstructure:"concurrency"`
+}
+
+func (conf *DispatcherForwarderSend) Validate() error {
+	return validator.Validate(
+		validator.DefaultConfig,
+		validator.NumberGreaterThan("DISPATCHER.CONFIG.FORWARDER.SEND.CONCURRENCY", conf.Concurrency, 0),
+	)
+}

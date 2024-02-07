@@ -1,0 +1,88 @@
+package usecase
+
+import (
+	"context"
+
+	"github.com/kanthorlabs/kanthor/infrastructure/streaming"
+	"github.com/kanthorlabs/kanthor/internal/entities"
+	"github.com/kanthorlabs/kanthor/internal/transformation"
+	"github.com/kanthorlabs/kanthor/pkg/identifier"
+	"github.com/kanthorlabs/kanthor/pkg/validator"
+	"github.com/kanthorlabs/kanthor/telemetry"
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
+)
+
+type MessageCreateIn struct {
+	WsId  string
+	Tier  string
+	AppId string
+	Type  string
+
+	Body     string
+	Headers  entities.Header
+	Metadata entities.Metadata
+}
+
+func (in *MessageCreateIn) Validate() error {
+	return validator.Validate(
+		validator.DefaultConfig,
+		validator.StringStartsWith("ws_id", in.WsId, entities.IdNsWs),
+		validator.StringRequired("tier", in.Tier),
+		validator.StringStartsWith("app_id", in.AppId, entities.IdNsApp),
+		validator.StringRequired("type", in.Type),
+		validator.StringRequired("body", in.Body),
+	)
+}
+
+type MessageCreateOut struct {
+	EventId string `json:"event_id"`
+	Message *entities.Message
+}
+
+func (uc *message) Create(ctx context.Context, in *MessageCreateIn) (*MessageCreateOut, error) {
+	attributes := trace.WithAttributes(attribute.String("app.id", in.AppId))
+	subctx, span := ctx.Value(telemetry.CtxTracer).(trace.Tracer).Start(ctx, "usecase.message.create", attributes)
+	defer func() {
+		span.End()
+	}()
+
+	app, err := uc.repositories.Database().Application().Get(subctx, in.WsId, in.AppId)
+	if err != nil {
+		return nil, err
+	}
+
+	msg := &entities.Message{
+		Tier:     in.Tier,
+		AppId:    app.Id,
+		Type:     in.Type,
+		Body:     in.Body,
+		Headers:  entities.Header{},
+		Metadata: entities.Metadata{},
+	}
+	// must use merge function otherwise you will edit the original data
+	msg.Headers.Merge(in.Headers)
+	msg.Metadata.Merge(in.Metadata)
+	msg.Id = identifier.New(entities.IdNsMsg)
+	msg.SetTS(uc.infra.Timer.Now())
+
+	event, err := transformation.EventFromMessage(msg)
+	if err != nil {
+		return nil, err
+	}
+
+	events := map[string]*streaming.Event{}
+	events[event.Id] = event
+
+	spanner := &telemetry.Spanner{
+		Tracer:   ctx.Value(telemetry.CtxTracer).(trace.Tracer),
+		Contexts: make(map[string]context.Context),
+	}
+	spanner.Contexts[event.Id] = subctx
+
+	if errs := uc.publisher.Pub(context.WithValue(subctx, telemetry.CtxSpanner, spanner), events); len(errs) > 0 {
+		return nil, errs[event.Id]
+	}
+
+	return &MessageCreateOut{Message: msg}, nil
+}

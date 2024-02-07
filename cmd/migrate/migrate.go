@@ -1,0 +1,17 @@
+package migrate
+
+import (
+	"github.com/kanthorlabs/kanthor/configuration"
+	"github.com/spf13/cobra"
+)
+
+func New(provider configuration.Provider) *cobra.Command {
+	command := &cobra.Command{
+		Use: "migrate",
+	}
+
+	command.AddCommand(NewDatabase(provider))
+	command.AddCommand(NewDatastore(provider))
+
+	return command
+}

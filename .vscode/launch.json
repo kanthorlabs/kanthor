@@ -1,0 +1,73 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Default",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceRoot}",
+      "showLog": true,
+      "env": {
+        "KANTHOR_ENV": "development",
+        "KANTHOR_DEBUGGING_SERVER_PORT": "6062"
+      },
+      "args": ["serve", "${input:service_name}"],
+      "preLaunchTask": "make"
+    },
+    {
+      "name": "Core APIs",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceRoot}",
+      "showLog": true,
+      "env": {
+        "KANTHOR_ENV": "development",
+        "KANTHOR_DEBUGGING_SERVER_PORT": "6061"
+      },
+      "args": ["serve", "sdk", "portal"],
+      "preLaunchTask": "make"
+    },
+    {
+      "name": "Core Background",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceRoot}",
+      "showLog": true,
+      "env": {
+        "KANTHOR_ENV": "development",
+        "KANTHOR_DEBUGGING_SERVER_PORT": "6062"
+      },
+      "args": ["serve", "scheduler", "dispatcher", "storage"],
+      "preLaunchTask": "make"
+    }
+  ],
+  "inputs": [
+    {
+      "id": "service_name",
+      "type": "pickString",
+      "description": "What service do you want to start?",
+      "options": [
+        "all",
+        "sdk",
+        "portal",
+        "scheduler",
+        "dispatcher",
+        "storage",
+        "recovery.cronjob",
+        "recovery.consumer",
+        "attempt.cronjob",
+        "attempt.consumer",
+        "attempt.trigger",
+        "attempt.selector",
+        "attempt.endeavor"
+      ],
+      "default": "all"
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+package usecase
+
+import (
+	"context"
+
+	"github.com/kanthorlabs/kanthor/internal/entities"
+	"github.com/kanthorlabs/kanthor/pkg/validator"
+)
+
+type WorkspaceListIn struct {
+	AccId string
+}
+
+func (in *WorkspaceListIn) Validate() error {
+	return validator.Validate(
+		validator.DefaultConfig,
+		validator.StringRequired("acc_id", in.AccId),
+	)
+}
+
+type WorkspaceListOut struct {
+	Data  []entities.Workspace
+	Count int64
+}
+
+func (uc *workspace) List(ctx context.Context, in *WorkspaceListIn) (*WorkspaceListOut, error) {
+	out := &WorkspaceListOut{}
+	seen := map[string]bool{}
+
+	// owner
+	own, err := uc.repositories.Database().Workspace().ListOwned(ctx, in.AccId)
+	if err != nil {
+		return nil, err
+	}
+	for _, ws := range own {
+		if _, found := seen[ws.Id]; found {
+			continue
+		}
+
+		seen[ws.Id] = true
+		out.Data = append(out.Data, ws)
+	}
+
+	return out, nil
+}

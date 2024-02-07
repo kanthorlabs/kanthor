@@ -1,0 +1,14 @@
+package ds
+
+import (
+	"context"
+
+	"github.com/kanthorlabs/kanthor/internal/entities"
+)
+
+type Message interface {
+	ListByIds(ctx context.Context, appId string, ids []string) ([]entities.Message, error)
+	GetByIds(ctx context.Context, appId string, ids []string) ([]entities.Message, error)
+	Scan(ctx context.Context, appId string, query *entities.ScanningQuery) ([]entities.Message, error)
+	Get(ctx context.Context, appId, id string) (*entities.Message, error)
+}
