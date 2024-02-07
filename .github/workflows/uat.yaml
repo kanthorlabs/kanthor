@@ -8,6 +8,7 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    environment: UAT
     if: ${{ startsWith(github.event.head_commit.message, 'ci') }}
     steps:
       - uses: actions/checkout@v3
@@ -26,6 +27,7 @@ jobs:
 
   prepare:
     runs-on: ubuntu-latest
+    environment: UAT
     needs: [test]
     outputs:
       ENABLED_ECR: ${{ steps.CHECK_ECR.outputs.ENABLED }}
@@ -53,6 +55,7 @@ jobs:
 
   dockerhub:
     runs-on: ubuntu-latest
+    environment: UAT
     needs: [prepare]
     if: ${{ needs.prepare.outputs.ENABLED_DOCKERHUB == 'true' }}
     steps:
@@ -71,6 +74,7 @@ jobs:
 
   ecr:
     runs-on: ubuntu-latest
+    environment: UAT
     needs: [prepare]
     if: ${{ needs.prepare.outputs.ENABLED_ECR == 'true' }}
     steps:
