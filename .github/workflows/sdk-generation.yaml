@@ -1,4 +1,4 @@
-name: SDK Auto Sync CI
+name: SDK Generation CI
 
 on:
   push:
