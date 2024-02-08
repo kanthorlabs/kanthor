@@ -7,7 +7,7 @@ on:
 
 jobs:
   go:
-    runs-on: ubuntu-latestlatest
+    runs-on: ubuntu-latest
     environment: UAT
     if: ${{ startsWith(github.event.head_commit.message, 'sync') || (startsWith(github.event.head_commit.message, 'ci') && contains(github.event.head_commit.message, '#sdk')) }}
     steps:
@@ -21,32 +21,32 @@ jobs:
           repository: ${{ github.repository_owner }}/kanthor-sdk-go
           token: ${{ secrets.KANTHOR_GITHUB_TOKEN }}
 
-      # - name: setup git config
-      #   working-directory: sdk
-      #   run: |
-      #     git config user.name "Kanthor SDK Sync Bot"
-      #     git config user.email "<>"
+      - name: setup git config
+        working-directory: sdk
+        run: |
+          git config user.name "Kanthor SDK Sync Bot"
+          git config user.email "<>"
 
-      # - name: sync assets
-      #   run: |
-      #     cp core/openapi/Sdk_swagger.json sdk/openapi.json
-      #     cp core/openapi/Sdk_swagger.yaml sdk/openapi.yaml
-      #     cp core/scripts/sdk_setup.sh sdk/scripts/sdk_setup.sh
-      #     # data
-      #     mkdir -p sdk/data
-      #     cp core/data/snapshot.json sdk/data/snapshot.json
-      #     # routing
-      #     mkdir -p sdk/routing
-      #     cp core/internal/routing/condition_source.go sdk/routing/condition_source.go
-      #     cp core/internal/routing/condition_expression.go sdk/routing/condition_expression.go
-      #     # replace version
-      #     jq --arg version $(cat core/.version) '.version = $version' sdk/project.json > project.json
-      #     rm sdk/project.json
-      #     mv project.json sdk/project.json
+      - name: sync assets
+        run: |
+          cp core/openapi/Sdk_swagger.json sdk/openapi.json
+          cp core/openapi/Sdk_swagger.yaml sdk/openapi.yaml
+          cp core/scripts/sdk_setup.sh sdk/scripts/sdk_setup.sh
+          # data
+          mkdir -p sdk/data
+          cp core/data/snapshot.json sdk/data/snapshot.json
+          # routing
+          mkdir -p sdk/routing
+          cp core/internal/routing/condition_source.go sdk/routing/condition_source.go
+          cp core/internal/routing/condition_expression.go sdk/routing/condition_expression.go
+          # replace version
+          jq --arg version $(cat core/.version) '.version = $version' sdk/project.json > project.json
+          rm sdk/project.json
+          mv project.json sdk/project.json
 
-      # - name: push
-      #   working-directory: sdk
-      #   run: |
-      #     git add .
-      #     git commit --allow-empty -m "ci($(date +%Y.%-m%d.%-H%M)): sync"; \
-      #     git push origin;
+      - name: push
+        working-directory: sdk
+        run: |
+          git add .
+          git commit --allow-empty -m "ci($(date +%Y.%-m%d.%-H%M)): sync"; \
+          git push origin;
