@@ -44,7 +44,7 @@ func (uc *workspaceCredentials) Generate(ctx context.Context, in *WorkspaceCrede
 
 	password := fmt.Sprintf("%s.%s", project.RegionCode(), utils.RandomString(constants.PasswordLength))
 	// once we got error, reject entirely request instead of do a partial success request
-	hash, err := utils.PasswordHash(password)
+	hash, err := uc.infra.Cipher.Password.HashString(password)
 	if err != nil {
 		return nil, err
 	}

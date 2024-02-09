@@ -22,8 +22,8 @@ func (sql *SqlApplication) Get(ctx context.Context, id string) (*entities.Applic
 	return &doc, nil
 }
 
-func (sql *SqlApplication) GetRoutes(ctx context.Context, ids []string) (map[string][]routing.Route, error) {
-	returning := make(map[string][]routing.Route)
+func (sql *SqlApplication) GetRoutes(ctx context.Context, ids []string) (map[string]map[string]*routing.Route, error) {
+	returning := make(map[string]map[string]*routing.Route)
 
 	endpoints, err := sql.getRouteEndpoints(ctx, ids)
 	if err != nil {
@@ -42,18 +42,10 @@ func (sql *SqlApplication) GetRoutes(ctx context.Context, ids []string) (map[str
 	}
 
 	for i := range endpoints {
-		if _, has := returning[endpoints[i].AppId]; has {
-			returning[endpoints[i].AppId] = append(returning[endpoints[i].AppId], routing.Route{
-				Endpoint: &endpoints[i],
-				Rules:    rules[endpoints[i].Id],
-			})
-			continue
-		}
-
-		returning[endpoints[i].AppId] = []routing.Route{{
+		returning[endpoints[i].AppId][endpoints[i].Id] = &routing.Route{
 			Endpoint: &endpoints[i],
 			Rules:    rules[endpoints[i].Id],
-		}}
+		}
 	}
 
 	return returning, nil
@@ -80,7 +72,6 @@ func (sql *SqlApplication) getRouteRules(ctx context.Context, endpoints []entiti
 	tx := sql.client.
 		Model(&entities.EndpointRule{}).
 		Where("ep_id IN ?", ids).
-		// IMPORTANT: we must get the exclusionary rule first to match it, then priority first
 		Order("ep_id DESC, exclusionary DESC, priority DESC").
 		Find(&rules)
 	if tx.Error != nil {

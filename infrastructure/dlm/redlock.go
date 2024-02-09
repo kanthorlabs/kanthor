@@ -52,7 +52,7 @@ func (locker *redlock) Unlock(ctx context.Context) error {
 		return err
 	}
 	if !ok {
-		return errors.New("INFRASTRUCTURE.DLM.REDLOCK.UNLOCK.ERROR")
+		return errors.New("DLM.REDLOCK.UNLOCK.ERROR")
 	}
 
 	return nil

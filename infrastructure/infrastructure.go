@@ -7,6 +7,7 @@ import (
 	"github.com/kanthorlabs/kanthor/configuration"
 	"github.com/kanthorlabs/kanthor/infrastructure/authenticator"
 	"github.com/kanthorlabs/kanthor/infrastructure/cache"
+	"github.com/kanthorlabs/kanthor/infrastructure/cipher"
 	"github.com/kanthorlabs/kanthor/infrastructure/circuitbreaker"
 	"github.com/kanthorlabs/kanthor/infrastructure/config"
 	"github.com/kanthorlabs/kanthor/infrastructure/dlm"
@@ -27,7 +28,13 @@ func New(provider configuration.Provider) (*Infrastructure, error) {
 		return nil, err
 	}
 
+	cipher, err := cipher.New(&conf.Cipher)
+	if err != nil {
+		return nil, err
+	}
+
 	t := timer.New()
+
 	send, err := sender.New(&conf.Sender, logger)
 	if err != nil {
 		return nil, err
@@ -61,6 +68,7 @@ func New(provider configuration.Provider) (*Infrastructure, error) {
 		conf:   conf,
 		logger: logger,
 
+		Cipher:                 cipher,
 		Timer:                  t,
 		Send:                   send,
 		Idempotency:            idemp,
@@ -77,6 +85,7 @@ type Infrastructure struct {
 	conf   *config.Config
 	logger logging.Logger
 
+	Cipher                 *cipher.Cipher
 	Timer                  timer.Timer
 	Send                   sender.Send
 	Idempotency            idempotency.Idempotency

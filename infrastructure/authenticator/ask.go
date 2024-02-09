@@ -18,11 +18,17 @@ func (verifier *ask) Verify(ctx context.Context, request *Request) (*Account, er
 		return nil, err
 	}
 
-	accessOK := user == verifier.conf.AccessKey
-	secretOk := pass == verifier.conf.SecretKey
-	if !accessOK || !secretOk {
-		return nil, ErrInvalidCredentials
+	for i := range verifier.conf.Users {
+		if user != verifier.conf.Users[i].Username {
+			continue
+		}
+
+		if pass != verifier.conf.Users[i].Password {
+			return nil, ErrInvalidCredentials
+		}
+
+		return &Account{Sub: user, Name: user, Metadata: make(map[string]string, 0)}, nil
 	}
 
-	return &Account{Sub: user, Name: user, Metadata: make(map[string]string, 0)}, nil
+	return nil, ErrInvalidCredentials
 }

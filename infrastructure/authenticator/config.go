@@ -1,19 +1,20 @@
 package authenticator
 
 import (
+	"fmt"
+
 	"github.com/kanthorlabs/kanthor/pkg/validator"
 )
 
 type Config struct {
-	Engine   string    `json:"engine" yaml:"engine" mapstructure:"engine"`
-	Ask      *Ask      `json:"ask" yaml:"ask" mapstructure:"ask"`
-	External *External `json:"external" yaml:"external" mapstructure:"external"`
+	Engine string `json:"engine" yaml:"engine" mapstructure:"engine"`
+	Ask    *Ask   `json:"ask" yaml:"ask" mapstructure:"ask"`
 }
 
 func (conf *Config) Validate() error {
 	err := validator.Validate(
 		validator.DefaultConfig,
-		validator.StringOneOf("AUTHENTICATOR.SCHEME", conf.Engine, []string{EngineAsk, EngineExternal}),
+		validator.StringOneOf("AUTHENTICATOR.ENGINE", conf.Engine, []string{EngineAsk}),
 	)
 	if err != nil {
 		return err
@@ -23,58 +24,32 @@ func (conf *Config) Validate() error {
 		return conf.Ask.Validate()
 	}
 
-	if conf.Engine == EngineExternal {
-		return conf.External.Validate()
-	}
-
 	return nil
 }
 
 type Ask struct {
-	AccessKey string `json:"access_key" yaml:"access_key" mapstructure:"access_key"`
-	SecretKey string `json:"secret_key" yaml:"secret_key" mapstructure:"secret_key"`
+	Users []AskUser `json:"users" yaml:"users" mapstructure:"users"`
 }
 
 func (conf *Ask) Validate() error {
 	return validator.Validate(
 		validator.DefaultConfig,
-		validator.StringRequired("AUTHENTICATOR.ASK.ACCESS_KEY", conf.AccessKey),
-		validator.StringRequired("AUTHENTICATOR.ASK.SECRET_KEY", conf.SecretKey),
+		validator.SliceRequired("AUTHENTICATOR.ASK.USERS", conf.Users),
+		validator.Slice(conf.Users, func(i int, item *AskUser) error {
+			return item.Validate(fmt.Sprintf("AUTHENTICATOR.ASK.USERS[%d]", i))
+		}),
 	)
 }
 
-type External struct {
-	Uri     string          `json:"uri" yaml:"uri" mapstructure:"uri"`
-	Headers []string        `json:"headers" yaml:"headers" mapstructure:"headers"`
-	Mapper  *ExternalMapper `json:"mapper" yaml:"mapper" mapstructure:"mapper"`
+type AskUser struct {
+	Username string `json:"username" yaml:"username" mapstructure:"username"`
+	Password string `json:"password" yaml:"password" mapstructure:"password"`
 }
 
-func (conf *External) Validate() error {
-	err := validator.Validate(
-		validator.DefaultConfig,
-		validator.StringUri("AUTHENTICATOR.EXTERNAL.URI", conf.Uri),
-	)
-	if err != nil {
-		return err
-	}
-
-	if conf.Mapper != nil {
-		if err := conf.Mapper.Validate(); err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
-type ExternalMapper struct {
-	Uri string `json:"uri" yaml:"uri" mapstructure:"uri"`
-}
-
-func (conf *ExternalMapper) Validate() error {
+func (conf *AskUser) Validate(prefix string) error {
 	return validator.Validate(
 		validator.DefaultConfig,
-		validator.StringUri("AUTHENTICATOR.EXTERNAL.MAPPER.URI", conf.Uri),
-		validator.StringStartsWithOneOf("AUTHENTICATOR.EXTERNAL.MAPPER.URI", conf.Uri, []string{"base64"}),
+		validator.StringRequired(prefix+".USERNAME", conf.Username),
+		validator.StringRequired(prefix+".PASSWORD", conf.Password),
 	)
 }

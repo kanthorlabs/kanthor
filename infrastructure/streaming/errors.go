@@ -3,11 +3,11 @@ package streaming
 import "errors"
 
 var (
-	ErrNotConnected        = errors.New("INFRASTRUCTURE.STREAMING.NOT_CONNECTED.ERROR")
-	ErrAlreadyConnected    = errors.New("INFRASTRUCTURE.STREAMING.ALREADY_CONNECTED.ERROR")
-	ErrSubNotConnected     = errors.New("INFRASTRUCTURE.STREAMING.SUBSCRIBER.NOT_CONNECTED.ERROR")
-	ErrSubAlreadyConnected = errors.New("INFRASTRUCTURE.STREAMING.SUBSCRIBER.ALREADY_CONNECTED.ERROR")
-	ErrSubTerminiated      = errors.New("INFRASTRUCTURE.STREAMING.SUBSCRIBER.TERMINATED.ERROR")
-	ErrSubAckFail          = errors.New("INFRASTRUCTURE.STREAMING.SUBSCRIBER.ACK_FAIL.ERROR")
-	ErrSubNakFail          = errors.New("INFRASTRUCTURE.STREAMING.SUBSCRIBER.NAK_FAIL.ERROR")
+	ErrNotConnected        = errors.New("STREAMING.NOT_CONNECTED.ERROR")
+	ErrAlreadyConnected    = errors.New("STREAMING.ALREADY_CONNECTED.ERROR")
+	ErrSubNotConnected     = errors.New("STREAMING.SUBSCRIBER.NOT_CONNECTED.ERROR")
+	ErrSubAlreadyConnected = errors.New("STREAMING.SUBSCRIBER.ALREADY_CONNECTED.ERROR")
+	ErrSubTerminiated      = errors.New("STREAMING.SUBSCRIBER.TERMINATED.ERROR")
+	ErrSubAckFail          = errors.New("STREAMING.SUBSCRIBER.ACK_FAIL.ERROR")
+	ErrSubNakFail          = errors.New("STREAMING.SUBSCRIBER.NAK_FAIL.ERROR")
 )

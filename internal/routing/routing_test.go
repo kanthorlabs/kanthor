@@ -104,36 +104,38 @@ func TestPlanRequest(t *testing.T) {
 	app := tester.Application(timer)
 
 	t.Run("success", func(st *testing.T) {
-		routes := []routing.Route{
-			// match this endpoint
-			{
-				Endpoint: tester.EndpointOfApp(timer, app),
-				Rules: []entities.EndpointRule{
-					{
-						ConditionSource:     routing.ConditionSourceType,
-						ConditionExpression: fmt.Sprintf("%s%s", routing.ConditionExpressionAny, routing.ConditionExpressionDivider),
-					},
+		routes := make(map[string]*routing.Route)
+
+		match := tester.EndpointOfApp(timer, app)
+		routes[match.Id] = &routing.Route{
+			Endpoint: match,
+			Rules: []entities.EndpointRule{
+				{
+					ConditionSource:     routing.ConditionSourceType,
+					ConditionExpression: fmt.Sprintf("%s%s", routing.ConditionExpressionAny, routing.ConditionExpressionDivider),
 				},
 			},
-			// match this endpoint
-			{
-				Endpoint: tester.EndpointOfApp(timer, app),
-				Rules: []entities.EndpointRule{
-					{
-						ConditionSource:     routing.ConditionSourceType,
-						ConditionExpression: fmt.Sprintf("%s%s", routing.ConditionExpressionAny, routing.ConditionExpressionDivider),
-					},
+		}
+
+		matchother := tester.EndpointOfApp(timer, app)
+		routes[matchother.Id] = &routing.Route{
+			Endpoint: matchother,
+			Rules: []entities.EndpointRule{
+				{
+					ConditionSource:     routing.ConditionSourceType,
+					ConditionExpression: fmt.Sprintf("%s%s", routing.ConditionExpressionAny, routing.ConditionExpressionDivider),
 				},
 			},
-			// but NOT this one
-			{
-				Endpoint: tester.EndpointOfApp(timer, app),
-				Rules: []entities.EndpointRule{
-					{
-						ConditionSource:     routing.ConditionSourceType,
-						ConditionExpression: fmt.Sprintf("%s%s", routing.ConditionExpressionAny, routing.ConditionExpressionDivider),
-						Exclusionary:        true,
-					},
+		}
+
+		not := tester.EndpointOfApp(timer, app)
+		routes[not.Id] = &routing.Route{
+			Endpoint: tester.EndpointOfApp(timer, app),
+			Rules: []entities.EndpointRule{
+				{
+					ConditionSource:     routing.ConditionSourceType,
+					ConditionExpression: fmt.Sprintf("%s%s", routing.ConditionExpressionAny, routing.ConditionExpressionDivider),
+					Exclusionary:        true,
 				},
 			},
 		}

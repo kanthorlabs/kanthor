@@ -140,7 +140,6 @@ func (uc *request) Schedule(ctx context.Context, in *RequestScheduleIn) (*Reques
 }
 
 func (uc *request) arrange(ctx context.Context, in *RequestScheduleIn) (map[string]*entities.Request, error) {
-
 	appIds := make([]string, 0)
 	for refId := range in.Messages {
 		appIds = append(appIds, in.Messages[refId].AppId)
@@ -163,6 +162,11 @@ func (uc *request) arrange(ctx context.Context, in *RequestScheduleIn) (map[stri
 			}
 
 			for id, request := range requests {
+				// sign request before returning it
+				signing := fmt.Sprintf("%s.%d.%s", request.Id, request.Timestamp, request.Body)
+				signature := uc.infra.Cipher.Signature.SignString(items[request.EpId].Endpoint.SecretKey, signing)
+				request.Headers.Set(entities.HeaderWebhookSign, fmt.Sprintf("v1,%s", signature))
+
 				returning[id] = request
 			}
 		}

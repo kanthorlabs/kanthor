@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/kanthorlabs/kanthor/internal/entities"
-	"github.com/kanthorlabs/kanthor/pkg/utils"
 	"github.com/kanthorlabs/kanthor/pkg/validator"
 	"github.com/kanthorlabs/kanthor/telemetry"
 	"go.opentelemetry.io/otel/trace"
@@ -48,7 +47,7 @@ func (uc *workspace) Authenticate(ctx context.Context, in *WorkspaceAuthenticate
 	}
 
 	_, subspan := tracer.Start(ctx, "usecase.workspace.authenticate.password.compare")
-	if err := utils.PasswordCompare(in.Pass, credentials.Hash); err != nil {
+	if err := uc.infra.Cipher.Password.CompareString(in.Pass, credentials.Hash); err != nil {
 		subspan.End()
 		return nil, err
 	}

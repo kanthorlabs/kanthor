@@ -12,7 +12,7 @@ type Config struct {
 func (conf *Config) Validate() error {
 	err := validator.Validate(
 		validator.DefaultConfig,
-		validator.NumberGreaterThanOrEqual("INFRASTRUCTURE.SENDER.CONFIG.TIMEOUT", conf.Timeout, 0),
+		validator.NumberGreaterThanOrEqual("SENDER.CONFIG.TIMEOUT", conf.Timeout, 0),
 	)
 	if err != nil {
 		return err
@@ -29,8 +29,8 @@ type Retry struct {
 func (conf *Retry) Validate() error {
 	return validator.Validate(
 		validator.DefaultConfig,
-		validator.NumberGreaterThanOrEqual("INFRASTRUCTURE.SENDER.CONFIG.RETRY.COUNT", conf.Count, 0),
-		validator.NumberGreaterThanOrEqual("INFRASTRUCTURE.SENDER.CONFIG.RETRY.WAIT_TIME", conf.WaitTime, 100),
+		validator.NumberGreaterThanOrEqual("SENDER.CONFIG.RETRY.COUNT", conf.Count, 0),
+		validator.NumberGreaterThanOrEqual("SENDER.CONFIG.RETRY.WAIT_TIME", conf.WaitTime, 100),
 	)
 }
 

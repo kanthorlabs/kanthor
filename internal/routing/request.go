@@ -6,7 +6,6 @@ import (
 	"github.com/kanthorlabs/kanthor/internal/entities"
 	"github.com/kanthorlabs/kanthor/pkg/identifier"
 	"github.com/kanthorlabs/kanthor/pkg/timer"
-	"github.com/kanthorlabs/kanthor/pkg/utils"
 	"github.com/kanthorlabs/kanthor/project"
 )
 
@@ -42,11 +41,8 @@ func NewRequest(
 	req.Headers.Set(entities.HeaderIdempotencyKey, msg.Id)
 
 	// https://github.com/standard-webhooks/standard-webhooks/blob/main/spec/standard-webhooks.md
-	req.Headers.Set(entities.HeaderWebhookId, msg.Id)
+	req.Headers.Set(entities.HeaderWebhookId, req.Id)
 	req.Headers.Set(entities.HeaderWebhookTs, fmt.Sprintf("%d", req.Timestamp))
-	signature := utils.SignatureSign(ep.SecretKey, fmt.Sprintf("%s.%d.%s", msg.Id, req.Timestamp, msg.Body))
-	req.Headers.Set(entities.HeaderWebhookSign, fmt.Sprintf("v1,%s", signature))
-
 	// custom headers
 	req.Headers.Set(entities.HeaderWebhookRef, fmt.Sprintf("%s/%s", msg.AppId, ep.Id))
 

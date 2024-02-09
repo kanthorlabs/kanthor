@@ -1,11 +1,13 @@
 package config
 
 import (
+	"errors"
 	"log"
 
 	"github.com/kanthorlabs/kanthor/configuration"
 	"github.com/kanthorlabs/kanthor/infrastructure/authenticator"
 	"github.com/kanthorlabs/kanthor/infrastructure/cache"
+	"github.com/kanthorlabs/kanthor/infrastructure/cipher"
 	"github.com/kanthorlabs/kanthor/infrastructure/circuitbreaker"
 	"github.com/kanthorlabs/kanthor/infrastructure/dlm"
 	"github.com/kanthorlabs/kanthor/infrastructure/idempotency"
@@ -39,6 +41,7 @@ func (conf *Wrapper) Validate() error {
 }
 
 type Config struct {
+	Cipher                 cipher.Config          `json:"cipher" yaml:"cipher" mapstructure:"cipher"`
 	Sender                 sender.Config          `json:"sender" yaml:"sender" mapstructure:"sender"`
 	CircuitBreaker         circuitbreaker.Config  `json:"circuit_breaker" yaml:"circuit_breaker" mapstructure:"circuit_breaker"`
 	Idempotency            idempotency.Config     `json:"idempotency" yaml:"idempotency" mapstructure:"idempotency"`
@@ -49,6 +52,9 @@ type Config struct {
 }
 
 func (conf *Config) Validate() error {
+	if err := conf.Cipher.Validate(); err != nil {
+		return err
+	}
 	if err := conf.Sender.Validate(); err != nil {
 		return err
 	}
@@ -64,11 +70,12 @@ func (conf *Config) Validate() error {
 	if err := conf.Cache.Validate(); err != nil {
 		return err
 	}
-	if len(conf.Authenticators) > 0 {
-		for _, authenticator := range conf.Authenticators {
-			if err := authenticator.Validate(); err != nil {
-				return err
-			}
+	if len(conf.Authenticators) == 0 {
+		return errors.New("AUTHENTICATORS.EMPTY")
+	}
+	for _, authenticator := range conf.Authenticators {
+		if err := authenticator.Validate(); err != nil {
+			return err
 		}
 	}
 	if err := conf.Streaming.Validate(); err != nil {

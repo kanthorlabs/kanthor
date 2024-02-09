@@ -42,14 +42,6 @@ func New(conf []Config, logger logging.Logger, send sender.Send, cb circuitbreak
 			}
 			instance.Register(c.Engine, ask)
 		}
-
-		if c.Engine == EngineExternal {
-			external, err := NewExternal(c.External, logger, send, cb)
-			if err != nil {
-				return nil, err
-			}
-			instance.Register(c.Engine, external)
-		}
 	}
 
 	return instance, nil

@@ -112,7 +112,6 @@ func (sql *SqlApplication) getRouteRules(ctx context.Context, endpoints []entiti
 	tx := sql.client.
 		Model(&entities.EndpointRule{}).
 		Where("ep_id IN ?", ids).
-		// IMPORTANT: we must get the exclusionary rule first to match it, then priority first
 		Order("ep_id DESC, exclusionary DESC, priority DESC").
 		Find(&rules)
 	if tx.Error != nil {

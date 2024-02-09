@@ -23,7 +23,7 @@ func Rest(conf *Config, logger logging.Logger) Send {
 			status := r.StatusCode()
 			url := r.Request.URL
 			if status >= http.StatusInternalServerError {
-				logger.Warnw("INFRASTRUCTURE.SENDER.REST.RETRYING", "status", status, "url", url)
+				logger.Warnw("SENDER.REST.RETRYING", "status", status, "url", url)
 				return true
 			}
 			return false
@@ -39,7 +39,7 @@ func Rest(conf *Config, logger logging.Logger) Send {
 			SetHeaderMultiValues(req.Headers)
 
 		var rp *resty.Response
-		err := fmt.Errorf("INFRASTRUCTURE.SENDER.REST.METHOD.%s.NOT_SUPPORT.ERROR", strings.ToUpper(req.Method))
+		err := fmt.Errorf("SENDER.REST.METHOD.%s.NOT_SUPPORT.ERROR", strings.ToUpper(req.Method))
 
 		if req.Method == http.MethodGet {
 			rp, err = r.Get(req.Uri)
@@ -54,7 +54,7 @@ func Rest(conf *Config, logger logging.Logger) Send {
 			rp, err = r.SetBody(req.Body).Patch(req.Uri)
 		}
 
-		logger.Debugw("INFRASTRUCTURE.SENDER.REST.SENT", "traces", rp.Request.TraceInfo())
+		logger.Debugw("SENDER.REST.SENT", "traces", rp.Request.TraceInfo())
 		if err != nil {
 			return nil, err
 		}

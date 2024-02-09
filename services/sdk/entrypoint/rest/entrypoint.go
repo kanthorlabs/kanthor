@@ -108,9 +108,7 @@ func (service *sdk) router() *gin.Engine {
 		api.Use(middlewares.UseIdempotency(service.logger, service.infra.Idempotency, project.IsDev()))
 		api.Use(middlewares.UseAuthn(service.infra.Authenticator, AuthzEngineInternal))
 
-		// IMPORTANT: always put the longer route in the top
 		RegisterAccountRoutes(api.Group("/account"), service)
-
 		RegisterEndpointRuleRoutes(api.Group("/rule"), service)
 		RegisterEndpointRoutes(api.Group("/endpoint"), service)
 		RegisterMessageRoutes(api.Group("/message"), service)

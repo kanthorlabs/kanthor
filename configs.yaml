@@ -21,6 +21,9 @@ datastore:
 
 # infrastructure
 infrastructure:
+  cipher:
+    secret: 3a1e37f7d6a340c08f273e3310fd1a51
+
   sender:
     trace: true
     timeout: 5000 # 5s
@@ -54,9 +57,10 @@ infrastructure:
   authenticators:
     - engine: ask
       ask:
-        access_key: admin@kanthorlabs.com
-        secret_key: changemenow
-        # base64(key:secret): basic YWRtaW5Aa2FudGhvcmxhYnMuY29tOmNoYW5nZW1lbm93
+        users:
+          username: admin@kanthorlabs.com
+          password: changemenow
+          # base64(username:password): basic YWRtaW5Aa2FudGhvcmxhYnMuY29tOmNoYW5nZW1lbm93
 
   streaming:
     name: main

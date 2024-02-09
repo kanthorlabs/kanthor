@@ -15,16 +15,16 @@ type Route struct {
 func PlanRequests(
 	timer timer.Timer,
 	msg *entities.Message,
-	routes []Route,
+	routes map[string]*Route,
 ) (map[string]*entities.Request, [][]any) {
 	requests := &safe.Map[*entities.Request]{}
 	traces := &safe.Slice[[]any]{}
 
 	var wg conc.WaitGroup
-	for i := range routes {
-		route := routes[i]
+	for id := range routes {
+		route := routes[id]
 		wg.Go(func() {
-			request, trace := PlanRequest(timer, msg, &route)
+			request, trace := PlanRequest(timer, msg, route)
 			if request != nil {
 				requests.Set(request.Id, request)
 			}

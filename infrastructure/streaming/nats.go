@@ -7,10 +7,10 @@ import (
 	"sync"
 	"time"
 
-	natscore "github.com/nats-io/nats.go"
 	"github.com/kanthorlabs/kanthor/logging"
 	"github.com/kanthorlabs/kanthor/patterns"
 	"github.com/kanthorlabs/kanthor/project"
+	natscore "github.com/nats-io/nats.go"
 )
 
 func NewNats(conf *Config, logger logging.Logger) (Stream, error) {
@@ -30,21 +30,21 @@ func NewNatsConn(uri string, logger logging.Logger) (*natscore.Conn, error) {
 		natscore.MaxReconnects(9),
 		natscore.DisconnectErrHandler(func(c *natscore.Conn, err error) {
 			if err != nil {
-				logger.Errorw("INFRASTRUCTURE.STREAMING.NATS.DISCONNECTED.ERROR", "error", err)
+				logger.Errorw("STREAMING.NATS.DISCONNECTED.ERROR", "error", err)
 				return
 			}
 		}),
 		natscore.ReconnectHandler(func(conn *natscore.Conn) {
-			logger.Warnw("INFRASTRUCTURE.STREAMING.NATS.RECONNECT", "url", conn.ConnectedUrl())
+			logger.Warnw("STREAMING.NATS.RECONNECT", "url", conn.ConnectedUrl())
 		}),
 		natscore.ErrorHandler(func(c *natscore.Conn, s *natscore.Subscription, err error) {
 			if err == natscore.ErrSlowConsumer {
 				count, bytes, err := s.Pending()
-				logger.Errorw("INFRASTRUCTURE.STREAMING.NATS.SLOW_CONSUMER.ERROR", "error", err, "subject", s.Subject, "count", count, "bytes", bytes)
+				logger.Errorw("STREAMING.NATS.SLOW_CONSUMER.ERROR", "error", err, "subject", s.Subject, "count", count, "bytes", bytes)
 				return
 			}
 
-			logger.Errorw("INFRASTRUCTURE.STREAMING.NATS.ERROR", "error", err)
+			logger.Errorw("STREAMING.NATS.ERROR", "error", err)
 		}),
 	}
 
