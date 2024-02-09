@@ -162,6 +162,12 @@ func (uc *request) arrange(ctx context.Context, in *RequestScheduleIn) (map[stri
 			}
 
 			for id, request := range requests {
+				// https://github.com/standard-webhooks/standard-webhooks/blob/main/spec/standard-webhooks.md
+				request.Headers.Set(entities.HeaderWebhookId, request.Id)
+				request.Headers.Set(entities.HeaderWebhookTs, fmt.Sprintf("%d", request.Timestamp))
+				// custom headers
+				request.Headers.Set(entities.HeaderWebhookRef, fmt.Sprintf("%s/%s", msg.AppId, request.EpId))
+
 				// sign request before returning it
 				signing := fmt.Sprintf("%s.%d.%s", request.Id, request.Timestamp, request.Body)
 				signature := uc.infra.Cipher.Signature.SignString(items[request.EpId].Endpoint.SecretKey, signing)
