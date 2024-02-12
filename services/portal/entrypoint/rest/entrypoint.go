@@ -11,7 +11,7 @@ import (
 	"github.com/kanthorlabs/common/project"
 	"github.com/kanthorlabs/kanthor/database"
 	"github.com/kanthorlabs/kanthor/datastore"
-	"github.com/kanthorlabs/kanthor/gateway/gin/middlewares"
+	"github.com/kanthorlabs/kanthor/gateway/httpx/middlewares"
 	"github.com/kanthorlabs/kanthor/infrastructure"
 	"github.com/kanthorlabs/kanthor/openapi"
 	"github.com/kanthorlabs/kanthor/patterns"

@@ -2,7 +2,7 @@ package rest
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/kanthorlabs/kanthor/gateway/gin/middlewares"
+	"github.com/kanthorlabs/kanthor/gateway/httpx/middlewares"
 )
 
 func RegisterApplicationRoutes(router gin.IRoutes, service *portal) {

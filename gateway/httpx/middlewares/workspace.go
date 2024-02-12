@@ -24,7 +24,7 @@ func UseWorkspace(resolve func(ctx context.Context, acc *authenticator.Account, 
 		}
 
 		if wsId == "" {
-			ginctx.AbortWithStatusJSON(http.StatusUnauthorized, gateway.ErrorString("GATEWAY.MIDDLEWARE.WORKSPACE.UNKNOWN.ERROR"))
+			ginctx.AbortWithStatusJSON(http.StatusUnauthorized, gateway.ErrorString("GATEWAY.HTTPX.MIDDLEWARE.WORKSPACE.UNKNOWN.ERROR"))
 			return
 		}
 
