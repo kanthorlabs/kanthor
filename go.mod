@@ -11,12 +11,11 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/google/wire v0.5.0
 	github.com/jaswdr/faker v1.19.1
-	github.com/kanthorlabs/common v0.0.0-20240212100034-a542ba1bbb71
+	github.com/kanthorlabs/common v0.0.0-20240212134927-8275a55dcdd8
 	github.com/lib/pq v1.10.9
 	github.com/nats-io/nats.go v1.31.0
 	github.com/redis/go-redis/v9 v9.3.1
 	github.com/robfig/cron/v3 v3.0.0
-	github.com/segmentio/ksuid v1.0.4
 	github.com/sony/gobreaker v0.5.0
 	github.com/sourcegraph/conc v0.3.0
 	github.com/spf13/cobra v1.8.0
@@ -85,6 +84,7 @@ require (
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/sagikazarmark/locafero v0.4.0 // indirect
 	github.com/sagikazarmark/slog-shim v0.1.0 // indirect
+	github.com/segmentio/ksuid v1.0.4 // indirect
 	github.com/spf13/afero v1.11.0 // indirect
 	github.com/spf13/cast v1.6.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect

@@ -3,8 +3,8 @@ package ds
 import (
 	"context"
 
+	"github.com/kanthorlabs/common/idx"
 	"github.com/kanthorlabs/kanthor/internal/entities"
-	"github.com/kanthorlabs/kanthor/pkg/identifier"
 	"gorm.io/gorm"
 )
 
@@ -21,8 +21,8 @@ func (sql *SqlMessage) Scan(ctx context.Context, appId string, query *entities.S
 func (sql *SqlMessage) scan(ctx context.Context, appId string, query *entities.ScanningQuery, ch chan *entities.ScanningResult[[]entities.Message]) {
 	defer close(ch)
 
-	low := identifier.Id(entities.IdNsMsg, identifier.BeforeTime(query.From))
-	high := identifier.Id(entities.IdNsMsg, identifier.AfterTime(query.To))
+	low := idx.Build(entities.IdNsMsg, idx.BeforeTime(query.From))
+	high := idx.Build(entities.IdNsMsg, idx.AfterTime(query.To))
 	var cursor string
 	for {
 		if ctx.Err() != nil {

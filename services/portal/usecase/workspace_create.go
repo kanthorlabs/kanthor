@@ -3,10 +3,10 @@ package usecase
 import (
 	"context"
 
+	"github.com/kanthorlabs/common/idx"
 	"github.com/kanthorlabs/common/project"
 	"github.com/kanthorlabs/common/validator"
 	"github.com/kanthorlabs/kanthor/internal/entities"
-	"github.com/kanthorlabs/kanthor/pkg/identifier"
 )
 
 type WorkspaceCreateIn struct {
@@ -32,7 +32,7 @@ func (uc *workspace) Create(ctx context.Context, in *WorkspaceCreateIn) (*Worksp
 			Name:    in.Name,
 			Tier:    project.Tier(),
 		}
-		doc.Id = identifier.New(entities.IdNsWs)
+		doc.Id = idx.New(entities.IdNsWs)
 		doc.SetAT(uc.infra.Timer.Now())
 
 		ws, err := uc.repositories.Database().Workspace().Create(ctx, doc)

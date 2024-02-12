@@ -4,12 +4,12 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/kanthorlabs/common/idx"
 	"github.com/kanthorlabs/common/project"
 	"github.com/kanthorlabs/common/utils"
 	"github.com/kanthorlabs/common/validator"
 	"github.com/kanthorlabs/kanthor/internal/constants"
 	"github.com/kanthorlabs/kanthor/internal/entities"
-	"github.com/kanthorlabs/kanthor/pkg/identifier"
 )
 
 type WorkspaceCredentialsGenerateIn struct {
@@ -38,7 +38,7 @@ func (uc *workspaceCredentials) Generate(ctx context.Context, in *WorkspaceCrede
 		Name:      in.Name,
 		ExpiredAt: in.ExpiredAt,
 	}
-	doc.Id = identifier.New(entities.IdNsWsc)
+	doc.Id = idx.New(entities.IdNsWsc)
 	doc.SetAT(now)
 
 	password := fmt.Sprintf("%s.%s", project.Region(), utils.RandomString(constants.PasswordLength))

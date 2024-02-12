@@ -3,10 +3,10 @@ package entities
 import (
 	"time"
 
+	"github.com/kanthorlabs/common/timer"
 	"github.com/kanthorlabs/common/utils"
 	"github.com/kanthorlabs/common/validator"
 	"github.com/kanthorlabs/kanthor/gateway"
-	"github.com/kanthorlabs/kanthor/pkg/timer"
 )
 
 var DefaultPagingLimitMin = 5

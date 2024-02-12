@@ -4,9 +4,9 @@ import (
 	"context"
 	"net/http"
 
+	"github.com/kanthorlabs/common/idx"
 	"github.com/kanthorlabs/common/validator"
 	"github.com/kanthorlabs/kanthor/internal/entities"
-	"github.com/kanthorlabs/kanthor/pkg/identifier"
 )
 
 type EndpointCreateIn struct {
@@ -48,7 +48,7 @@ func (uc *endpoint) Create(ctx context.Context, in *EndpointCreateIn) (*Endpoint
 		Method:    in.Method,
 		Uri:       in.Uri,
 	}
-	doc.Id = identifier.New(entities.IdNsEp)
+	doc.Id = idx.New(entities.IdNsEp)
 	doc.SetAT(uc.infra.Timer.Now())
 	doc.GenSecretKey()
 

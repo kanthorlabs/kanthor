@@ -4,9 +4,9 @@ import (
 	"testing"
 
 	"github.com/jaswdr/faker"
+	"github.com/kanthorlabs/common/idx"
 	"github.com/kanthorlabs/kanthor/internal/entities"
 	"github.com/kanthorlabs/kanthor/internal/routing"
-	"github.com/kanthorlabs/kanthor/pkg/identifier"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -26,7 +26,7 @@ func TestConditionSource(t *testing.T) {
 	})
 
 	msg := &entities.Message{
-		AppId: identifier.New(entities.IdNsApp),
+		AppId: idx.New(entities.IdNsApp),
 		Type:  "testing.routing",
 	}
 

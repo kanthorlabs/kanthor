@@ -1,8 +1,8 @@
 package rest
 
 import (
+	"github.com/kanthorlabs/common/idx"
 	"github.com/kanthorlabs/kanthor/internal/entities"
-	"github.com/kanthorlabs/kanthor/pkg/identifier"
 )
 
 type Workspace struct {
@@ -255,13 +255,13 @@ func FromWorkspaceSnapshot(snapshot *WorkspaceSnapshot, id string) *entities.Wor
 					ConditionSource:     epr.ConditionSource,
 					ConditionExpression: epr.ConditionExpression,
 				}
-				endpoint.Rules[identifier.New(entities.IdNsEpr)] = rule
+				endpoint.Rules[idx.New(entities.IdNsEpr)] = rule
 			}
 
-			application.Endpoints[identifier.New(entities.IdNsEp)] = endpoint
+			application.Endpoints[idx.New(entities.IdNsEp)] = endpoint
 		}
 
-		returning.Applications[identifier.New(entities.IdNsApp)] = application
+		returning.Applications[idx.New(entities.IdNsApp)] = application
 	}
 
 	return returning

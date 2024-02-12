@@ -3,8 +3,8 @@ package datastore
 import (
 	"fmt"
 
+	"github.com/kanthorlabs/common/idx"
 	"github.com/kanthorlabs/kanthor/internal/entities"
-	"github.com/kanthorlabs/kanthor/pkg/identifier"
 	"gorm.io/gorm"
 )
 
@@ -14,8 +14,8 @@ type ScanningCondition struct {
 }
 
 func SqlApplyScanQuery(tx *gorm.DB, query *entities.ScanningQuery, condition *ScanningCondition) *gorm.DB {
-	low := identifier.Id(condition.PrimaryKeyNs, identifier.BeforeTime(query.From))
-	high := identifier.Id(condition.PrimaryKeyNs, identifier.AfterTime(query.To))
+	low := idx.Build(condition.PrimaryKeyNs, idx.BeforeTime(query.From))
+	high := idx.Build(condition.PrimaryKeyNs, idx.AfterTime(query.To))
 
 	tx = tx.
 		Where(fmt.Sprintf(`%s > ?`, condition.PrimaryKeyCol), low).

@@ -3,11 +3,11 @@ package usecase
 import (
 	"context"
 
+	"github.com/kanthorlabs/common/idx"
 	"github.com/kanthorlabs/common/validator"
 	"github.com/kanthorlabs/kanthor/infrastructure/streaming"
 	"github.com/kanthorlabs/kanthor/internal/entities"
 	"github.com/kanthorlabs/kanthor/internal/transformation"
-	"github.com/kanthorlabs/kanthor/pkg/identifier"
 	"github.com/kanthorlabs/kanthor/telemetry"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/trace"
@@ -62,7 +62,7 @@ func (uc *message) Create(ctx context.Context, in *MessageCreateIn) (*MessageCre
 	// must use merge function otherwise you will edit the original data
 	msg.Headers.Merge(in.Headers)
 	msg.Metadata.Merge(in.Metadata)
-	msg.Id = identifier.New(entities.IdNsMsg)
+	msg.Id = idx.New(entities.IdNsMsg)
 	msg.SetTS(uc.infra.Timer.Now())
 
 	event, err := transformation.EventFromMessage(msg)

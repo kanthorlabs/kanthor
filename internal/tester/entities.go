@@ -5,21 +5,21 @@ import (
 	"net/http"
 
 	"github.com/jaswdr/faker"
+	"github.com/kanthorlabs/common/idx"
 	"github.com/kanthorlabs/common/project"
+	"github.com/kanthorlabs/common/timer"
 	"github.com/kanthorlabs/common/utils"
 	"github.com/kanthorlabs/kanthor/internal/entities"
-	"github.com/kanthorlabs/kanthor/pkg/identifier"
-	"github.com/kanthorlabs/kanthor/pkg/timer"
 )
 
 var fake = faker.New()
 
 func Application(t timer.Timer) *entities.Application {
 	doc := &entities.Application{
-		WsId: identifier.New(entities.IdNsWs),
+		WsId: idx.New(entities.IdNsWs),
 		Name: fake.App().Name(),
 	}
-	doc.Id = identifier.New(entities.IdNsApp)
+	doc.Id = idx.New(entities.IdNsApp)
 	doc.SetAT(t.Now())
 
 	return doc
@@ -33,7 +33,7 @@ func EndpointOfApp(t timer.Timer, app *entities.Application) *entities.Endpoint 
 		Method:    fake.RandomStringElement([]string{http.MethodPost, http.MethodPut}),
 		Uri:       fake.Internet().URL(),
 	}
-	doc.Id = identifier.New(entities.IdNsEp)
+	doc.Id = idx.New(entities.IdNsEp)
 	doc.SetAT(t.Now())
 
 	return doc
@@ -48,7 +48,7 @@ func RuleOfEndpoint(t timer.Timer, ep *entities.Endpoint) *entities.EndpointRule
 		ConditionSource:     "type",
 		ConditionExpression: "any::",
 	}
-	doc.Id = identifier.New(entities.IdNsEpr)
+	doc.Id = idx.New(entities.IdNsEpr)
 	doc.SetAT(t.Now())
 
 	return doc
@@ -64,7 +64,7 @@ func MessageOfApp(t timer.Timer, app *entities.Application) *entities.Message {
 		Headers:  entities.Header{},
 		Metadata: entities.Metadata{},
 	}
-	doc.Id = identifier.New(entities.IdNsMsg)
+	doc.Id = idx.New(entities.IdNsMsg)
 	doc.SetTS(t.Now())
 
 	return doc

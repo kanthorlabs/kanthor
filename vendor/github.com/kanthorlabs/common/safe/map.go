@@ -10,7 +10,7 @@ type Map[T any] struct {
 
 func (sm *Map[T]) int() {
 	if sm.data == nil {
-		sm.data = map[string]T{}
+		sm.data = make(map[string]T)
 	}
 }
 
@@ -34,12 +34,6 @@ func (sm *Map[T]) Get(key string) (T, bool) {
 	return value, ok
 }
 
-func (sm *Map[T]) Merge(values map[string]T) {
-	for k, v := range values {
-		sm.Set(k, v)
-	}
-}
-
 func (sm *Map[T]) Sample() T {
 	return sm.sample
 }
@@ -60,4 +54,10 @@ func (sm *Map[T]) Keys() []string {
 		}
 	}
 	return keys
+}
+
+func (sm *Map[T]) Merge(values map[string]T) {
+	for k, v := range values {
+		sm.Set(k, v)
+	}
 }

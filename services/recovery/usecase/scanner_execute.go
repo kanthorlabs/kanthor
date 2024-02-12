@@ -4,12 +4,12 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/kanthorlabs/common/safe"
 	"github.com/kanthorlabs/common/validator"
 	"github.com/kanthorlabs/kanthor/infrastructure/streaming"
 	"github.com/kanthorlabs/kanthor/internal/entities"
 	"github.com/kanthorlabs/kanthor/internal/routing"
 	"github.com/kanthorlabs/kanthor/internal/transformation"
-	"github.com/kanthorlabs/kanthor/pkg/safe"
 )
 
 type ScannerExecuteIn struct {

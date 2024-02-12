@@ -1,26 +1,29 @@
-package identifier
+package idx
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/segmentio/ksuid"
 )
 
+var (
+	Differ = time.Second * 10
+)
+
 // AfterTime uses SafeUnixDiff as factor to make sure we can get an id that is always less than the given time
 func BeforeTime(t time.Time) string {
-	id, err := ksuid.NewRandomWithTime(t.Add(-SafeUnixDiff))
+	id, err := ksuid.FromParts(t.Add(-Differ), []byte("0000000000000000"))
 	if err != nil {
-		panic(fmt.Sprintf("Couldn't generate KSUID, inconceivable! error: %v", err))
+		panic(err)
 	}
-	return id.String()
+	return id.Prev().String()
 }
 
 // AfterTime uses SafeUnixDiff as factor to make sure we can get an id that is always greater than the given time
 func AfterTime(t time.Time) string {
-	id, err := ksuid.NewRandomWithTime(t.Add(+SafeUnixDiff))
+	id, err := ksuid.FromParts(t.Add(Differ), []byte("0000000000000000"))
 	if err != nil {
-		panic(fmt.Sprintf("Couldn't generate KSUID, inconceivable! error: %v", err))
+		panic(err)
 	}
-	return id.String()
+	return id.Next().Next().String()
 }

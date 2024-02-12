@@ -3,9 +3,9 @@ package usecase
 import (
 	"context"
 
+	"github.com/kanthorlabs/common/idx"
 	"github.com/kanthorlabs/common/validator"
 	"github.com/kanthorlabs/kanthor/internal/entities"
-	"github.com/kanthorlabs/kanthor/pkg/identifier"
 )
 
 type EndpointRuleCreateIn struct {
@@ -48,7 +48,7 @@ func (uc *endpointRule) Create(ctx context.Context, in *EndpointRuleCreateIn) (*
 		ConditionSource:     in.ConditionSource,
 		ConditionExpression: in.ConditionExpression,
 	}
-	doc.Id = identifier.New(entities.IdNsEpr)
+	doc.Id = idx.New(entities.IdNsEpr)
 	doc.SetAT(uc.infra.Timer.Now())
 
 	epr, err := uc.repositories.Database().EndpointRule().Create(ctx, doc)

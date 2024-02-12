@@ -7,6 +7,8 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/kanthorlabs/common/idx"
+	"github.com/kanthorlabs/common/safe"
 	"github.com/kanthorlabs/common/utils"
 	"github.com/kanthorlabs/common/validator"
 	"github.com/kanthorlabs/kanthor/infrastructure/circuitbreaker"
@@ -15,8 +17,6 @@ import (
 	"github.com/kanthorlabs/kanthor/internal/entities"
 	"github.com/kanthorlabs/kanthor/internal/status"
 	"github.com/kanthorlabs/kanthor/internal/transformation"
-	"github.com/kanthorlabs/kanthor/pkg/identifier"
-	"github.com/kanthorlabs/kanthor/pkg/safe"
 	"github.com/sourcegraph/conc/pool"
 )
 
@@ -162,7 +162,7 @@ func (uc *retry) send(ctx context.Context, request *entities.Request) *entities.
 	}
 	// must use merge function otherwise you will edit the original data
 	doc.Metadata.Merge(request.Metadata)
-	doc.Id = identifier.New(entities.IdNsRes)
+	doc.Id = idx.New(entities.IdNsRes)
 	doc.SetTS(uc.infra.Timer.Now())
 
 	// IMPORTANT: we have an anti-pattern response that returns both error && response to trigger circuit breaker

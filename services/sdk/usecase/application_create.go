@@ -3,9 +3,9 @@ package usecase
 import (
 	"context"
 
+	"github.com/kanthorlabs/common/idx"
 	"github.com/kanthorlabs/common/validator"
 	"github.com/kanthorlabs/kanthor/internal/entities"
-	"github.com/kanthorlabs/kanthor/pkg/identifier"
 )
 
 type ApplicationCreateIn struct {
@@ -29,7 +29,7 @@ func (uc *application) Create(ctx context.Context, in *ApplicationCreateIn) (*Ap
 		WsId: in.WsId,
 		Name: in.Name,
 	}
-	doc.Id = identifier.New(entities.IdNsApp)
+	doc.Id = idx.New(entities.IdNsApp)
 	doc.SetAT(uc.infra.Timer.Now())
 
 	app, err := uc.repositories.Database().Application().Create(ctx, doc)

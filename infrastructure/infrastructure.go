@@ -6,6 +6,7 @@ import (
 
 	"github.com/kanthorlabs/common/configuration"
 	"github.com/kanthorlabs/common/logging"
+	"github.com/kanthorlabs/common/timer"
 	"github.com/kanthorlabs/kanthor/infrastructure/authenticator"
 	"github.com/kanthorlabs/kanthor/infrastructure/cache"
 	"github.com/kanthorlabs/kanthor/infrastructure/cipher"
@@ -15,7 +16,6 @@ import (
 	"github.com/kanthorlabs/kanthor/infrastructure/idempotency"
 	"github.com/kanthorlabs/kanthor/infrastructure/sender"
 	"github.com/kanthorlabs/kanthor/infrastructure/streaming"
-	"github.com/kanthorlabs/kanthor/pkg/timer"
 )
 
 func New(provider configuration.Provider) (*Infrastructure, error) {

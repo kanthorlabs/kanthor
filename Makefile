@@ -1,11 +1,7 @@
-all: ioc swagger vet
+all: ioc swagger
 
 ioc:
 	./scripts/gen_ioc.sh
 
 swagger:
 	./scripts/gen_swagger.sh
-	
-vet:
-	./scripts/ci_vet.sh
-

@@ -4,10 +4,10 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/kanthorlabs/common/safe"
 	"github.com/kanthorlabs/common/utils"
 	"github.com/kanthorlabs/common/validator"
 	"github.com/kanthorlabs/kanthor/internal/entities"
-	"github.com/kanthorlabs/kanthor/pkg/safe"
 	"github.com/kanthorlabs/kanthor/telemetry"
 	"github.com/sourcegraph/conc/pool"
 	"go.opentelemetry.io/otel/attribute"

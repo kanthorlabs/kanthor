@@ -209,15 +209,18 @@ github.com/josharian/intern
 # github.com/json-iterator/go v1.1.12
 ## explicit; go 1.12
 github.com/json-iterator/go
-# github.com/kanthorlabs/common v0.0.0-20240212100034-a542ba1bbb71
+# github.com/kanthorlabs/common v0.0.0-20240212134927-8275a55dcdd8
 ## explicit; go 1.21.5
 github.com/kanthorlabs/common/configuration
 github.com/kanthorlabs/common/healthcheck
 github.com/kanthorlabs/common/healthcheck/background
 github.com/kanthorlabs/common/healthcheck/config
+github.com/kanthorlabs/common/idx
 github.com/kanthorlabs/common/logging
 github.com/kanthorlabs/common/logging/config
 github.com/kanthorlabs/common/project
+github.com/kanthorlabs/common/safe
+github.com/kanthorlabs/common/timer
 github.com/kanthorlabs/common/utils
 github.com/kanthorlabs/common/validator
 # github.com/klauspost/compress v1.17.0

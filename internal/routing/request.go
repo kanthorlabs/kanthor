@@ -3,10 +3,10 @@ package routing
 import (
 	"fmt"
 
+	"github.com/kanthorlabs/common/idx"
 	"github.com/kanthorlabs/common/project"
+	"github.com/kanthorlabs/common/timer"
 	"github.com/kanthorlabs/kanthor/internal/entities"
-	"github.com/kanthorlabs/kanthor/pkg/identifier"
-	"github.com/kanthorlabs/kanthor/pkg/timer"
 )
 
 func NewRequest(
@@ -32,7 +32,7 @@ func NewRequest(
 	// must use merge function otherwise you will edit the original data
 	req.Headers.Merge(msg.Headers)
 	req.Metadata.Merge(msg.Metadata)
-	req.Id = identifier.New(entities.IdNsReq)
+	req.Id = idx.New(entities.IdNsReq)
 	req.SetTS(timer.Now())
 
 	req.Metadata.Set(entities.MetaEprId, epr.Id)

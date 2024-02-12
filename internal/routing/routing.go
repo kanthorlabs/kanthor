@@ -1,9 +1,9 @@
 package routing
 
 import (
+	"github.com/kanthorlabs/common/safe"
+	"github.com/kanthorlabs/common/timer"
 	"github.com/kanthorlabs/kanthor/internal/entities"
-	"github.com/kanthorlabs/kanthor/pkg/safe"
-	"github.com/kanthorlabs/kanthor/pkg/timer"
 	"github.com/sourcegraph/conc"
 )
 

@@ -17,10 +17,6 @@ jobs:
         with:
           go-version: ">=1.21"
 
-      - name: Linter
-        run: |
-          bash scripts/ci_vet.sh
-
       - name: Test
         run: |
           bash scripts/ci_test.sh

@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/kanthorlabs/common/idx"
+	"github.com/kanthorlabs/common/safe"
 	"github.com/kanthorlabs/kanthor/internal/entities"
-	"github.com/kanthorlabs/kanthor/pkg/identifier"
-	"github.com/kanthorlabs/kanthor/pkg/safe"
 	"github.com/sourcegraph/conc"
 	"gorm.io/gorm"
 )
@@ -25,8 +25,8 @@ func (sql *SqlAttempt) Scan(ctx context.Context, query *entities.ScanningQuery, 
 func (sql *SqlAttempt) scan(ctx context.Context, query *entities.ScanningQuery, next int64, count int, ch chan *entities.ScanningResult[[]entities.Attempt]) {
 	defer close(ch)
 
-	low := identifier.Id(entities.IdNsReq, identifier.BeforeTime(query.From))
-	high := identifier.Id(entities.IdNsReq, identifier.AfterTime(query.To))
+	low := idx.Build(entities.IdNsReq, idx.BeforeTime(query.From))
+	high := idx.Build(entities.IdNsReq, idx.AfterTime(query.To))
 	var cursor string
 	for {
 		if ctx.Err() != nil {
