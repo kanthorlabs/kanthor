@@ -7,7 +7,7 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/kanthorlabs/kanthor/logging"
+	"github.com/kanthorlabs/common/logging"
 )
 
 func New(conf *Config, logger logging.Logger) (Send, error) {

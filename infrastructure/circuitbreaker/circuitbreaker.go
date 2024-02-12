@@ -1,6 +1,6 @@
 package circuitbreaker
 
-import "github.com/kanthorlabs/kanthor/logging"
+import "github.com/kanthorlabs/common/logging"
 
 func New(conf *Config, logger logging.Logger) (CircuitBreaker, error) {
 	return NewSony(conf, logger)

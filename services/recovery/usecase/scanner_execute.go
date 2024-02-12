@@ -4,12 +4,12 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/kanthorlabs/common/validator"
 	"github.com/kanthorlabs/kanthor/infrastructure/streaming"
 	"github.com/kanthorlabs/kanthor/internal/entities"
 	"github.com/kanthorlabs/kanthor/internal/routing"
 	"github.com/kanthorlabs/kanthor/internal/transformation"
 	"github.com/kanthorlabs/kanthor/pkg/safe"
-	"github.com/kanthorlabs/kanthor/pkg/validator"
 )
 
 type ScannerExecuteIn struct {
@@ -19,7 +19,6 @@ type ScannerExecuteIn struct {
 
 func ValidateScannerExecuteRecoveryTask(prefix string, recovery *entities.RecoveryTask) error {
 	return validator.Validate(
-		validator.DefaultConfig,
 		validator.StringStartsWith(prefix+".app_id", recovery.AppId, entities.IdNsApp),
 		validator.NumberGreaterThanOrEqual(prefix+".to", recovery.From, 0),
 		validator.NumberGreaterThan(prefix+".to", recovery.To, recovery.From),
@@ -28,7 +27,6 @@ func ValidateScannerExecuteRecoveryTask(prefix string, recovery *entities.Recove
 
 func (in *ScannerExecuteIn) Validate() error {
 	return validator.Validate(
-		validator.DefaultConfig,
 		validator.NumberGreaterThan("recovery_batch_size", in.RecoveryBatchSize, 0),
 		validator.MapRequired("tasks", in.Tasks),
 		validator.Map(in.Tasks, func(refId string, item *entities.RecoveryTask) error {

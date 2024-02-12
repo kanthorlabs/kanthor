@@ -4,9 +4,9 @@ import (
 	_ "embed"
 	"log"
 
+	"github.com/kanthorlabs/common/configuration"
+	"github.com/kanthorlabs/common/project"
 	"github.com/kanthorlabs/kanthor/cmd"
-	"github.com/kanthorlabs/kanthor/configuration"
-	"github.com/kanthorlabs/kanthor/project"
 )
 
 //go:embed .version
@@ -15,7 +15,7 @@ var version string
 func main() {
 	project.SetVersion(version)
 
-	provider, err := configuration.New()
+	provider, err := configuration.New(project.Namespace())
 	if err != nil {
 		panic(err)
 	}

@@ -3,8 +3,6 @@ package dlm
 import (
 	"context"
 	"fmt"
-
-	"github.com/kanthorlabs/kanthor/project"
 )
 
 type Factory func(key string, opts ...Option) DistributedLockManager
@@ -19,5 +17,5 @@ func New(conf *Config) (Factory, error) {
 }
 
 func Key(key string) string {
-	return project.Key(fmt.Sprintf("dlm/%s", key))
+	return fmt.Sprintf("dlm/%s", key)
 }

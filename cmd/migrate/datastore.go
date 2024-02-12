@@ -3,9 +3,9 @@ package migrate
 import (
 	"errors"
 
-	"github.com/kanthorlabs/kanthor/configuration"
+	"github.com/kanthorlabs/common/configuration"
+	"github.com/kanthorlabs/common/logging"
 	"github.com/kanthorlabs/kanthor/datastore/migrator"
-	"github.com/kanthorlabs/kanthor/logging"
 	"github.com/spf13/cobra"
 )
 

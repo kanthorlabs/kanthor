@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/go-resty/resty/v2"
-	"github.com/kanthorlabs/kanthor/logging"
+	"github.com/kanthorlabs/common/logging"
 )
 
 func Rest(conf *Config, logger logging.Logger) Send {

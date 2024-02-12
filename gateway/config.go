@@ -1,7 +1,7 @@
 package gateway
 
 import (
-	"github.com/kanthorlabs/kanthor/pkg/validator"
+	"github.com/kanthorlabs/common/validator"
 )
 
 const EngineHttpx = "httpx"
@@ -16,9 +16,7 @@ func (conf *Config) Validate(prefix string) error {
 	if prefix != "" {
 		prefix += "."
 	}
-	return validator.Validate(
-		validator.DefaultConfig,
-		validator.StringRequired(prefix+"GATEWAY.ADDR", conf.Addr),
+	return validator.Validate(validator.StringRequired(prefix+"GATEWAY.ADDR", conf.Addr),
 		validator.NumberGreaterThanOrEqual(prefix+"GATEWAY.TIMEOUT", conf.Timeout, 1000),
 		validator.SliceRequired(prefix+"GATEWAY.ORIGINS", conf.Origins),
 	)

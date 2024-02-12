@@ -3,8 +3,8 @@ package usecase
 import (
 	"context"
 
+	"github.com/kanthorlabs/common/validator"
 	"github.com/kanthorlabs/kanthor/internal/entities"
-	"github.com/kanthorlabs/kanthor/pkg/validator"
 )
 
 type ApplicationUpdateIn struct {
@@ -15,7 +15,6 @@ type ApplicationUpdateIn struct {
 
 func (in *ApplicationUpdateIn) Validate() error {
 	return validator.Validate(
-		validator.DefaultConfig,
 		validator.StringStartsWith("ws_id", in.WsId, entities.IdNsWs),
 		validator.StringStartsWith("id", in.Id, entities.IdNsApp),
 		validator.StringRequired("name", in.Name),

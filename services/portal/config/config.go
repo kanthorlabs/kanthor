@@ -1,7 +1,7 @@
 package config
 
 import (
-	"github.com/kanthorlabs/kanthor/configuration"
+	"github.com/kanthorlabs/common/configuration"
 	"github.com/kanthorlabs/kanthor/gateway"
 )
 

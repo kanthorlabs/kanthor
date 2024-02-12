@@ -8,12 +8,12 @@ import (
 	"sync"
 	"time"
 
-	natscore "github.com/nats-io/nats.go"
-	"github.com/kanthorlabs/kanthor/logging"
+	"github.com/kanthorlabs/common/logging"
+	"github.com/kanthorlabs/common/project"
+	"github.com/kanthorlabs/common/utils"
 	"github.com/kanthorlabs/kanthor/patterns"
-	"github.com/kanthorlabs/kanthor/pkg/utils"
-	"github.com/kanthorlabs/kanthor/project"
 	"github.com/kanthorlabs/kanthor/telemetry"
+	natscore "github.com/nats-io/nats.go"
 	"github.com/sourcegraph/conc"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/propagation"
@@ -96,8 +96,8 @@ func (subscriber *NatsSubscriber) Disconnect(ctx context.Context) error {
 
 func (subscriber *NatsSubscriber) Sub(ctx context.Context, topic string, handler SubHandler) error {
 	// @TODO: validate topic
-	topic = project.Subject(topic)
-	consumer, err := subscriber.consumer(ctx, subscriber.name, topic)
+	subject := project.Subject(topic)
+	consumer, err := subscriber.consumer(ctx, subscriber.name, subject)
 	if err != nil {
 		return err
 	}

@@ -1,7 +1,7 @@
 package idempotency
 
 import (
-	"github.com/kanthorlabs/kanthor/pkg/validator"
+	"github.com/kanthorlabs/common/validator"
 )
 
 type Config struct {
@@ -11,7 +11,6 @@ type Config struct {
 
 func (conf *Config) Validate() error {
 	return validator.Validate(
-		validator.DefaultConfig,
 		validator.StringUri("IDEMPOTENCY.CONFIG.URI", conf.Uri),
 		validator.NumberGreaterThanOrEqual("IDEMPOTENCY.CONFIG.TIME_TO_LIVE", conf.TimeToLive, 1000),
 	)

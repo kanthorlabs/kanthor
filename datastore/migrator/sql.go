@@ -5,11 +5,11 @@ import (
 	"errors"
 	"fmt"
 	"io/fs"
+	"net/url"
 
 	"github.com/golang-migrate/migrate/v4"
+	"github.com/kanthorlabs/common/project"
 	"github.com/kanthorlabs/kanthor/datastore/config"
-	"github.com/kanthorlabs/kanthor/pkg/utils"
-	"github.com/kanthorlabs/kanthor/project"
 
 	"github.com/golang-migrate/migrate/v4/database"
 	"github.com/golang-migrate/migrate/v4/database/postgres"
@@ -34,7 +34,7 @@ func NewSql(conf *config.Config) (Migrator, error) {
 }
 
 func driver(conf *config.Config) (string, database.Driver, error) {
-	scheme, err := utils.UrlScheme(conf.Uri)
+	u, err := url.Parse(conf.Uri)
 	if err != nil {
 		return "", nil, err
 	}
@@ -44,7 +44,7 @@ func driver(conf *config.Config) (string, database.Driver, error) {
 		return "", nil, err
 	}
 	d, err := postgres.WithInstance(db, &postgres.Config{MigrationsTable: project.Name(TableMigration)})
-	return scheme, d, err
+	return u.Scheme, d, err
 }
 
 type sql struct {

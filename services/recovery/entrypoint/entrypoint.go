@@ -1,10 +1,10 @@
 package entrypoint
 
 import (
+	"github.com/kanthorlabs/common/logging"
 	"github.com/kanthorlabs/kanthor/database"
 	"github.com/kanthorlabs/kanthor/datastore"
 	"github.com/kanthorlabs/kanthor/infrastructure"
-	"github.com/kanthorlabs/kanthor/logging"
 	"github.com/kanthorlabs/kanthor/patterns"
 	"github.com/kanthorlabs/kanthor/services/recovery/config"
 	"github.com/kanthorlabs/kanthor/services/recovery/entrypoint/consumer"
@@ -19,7 +19,7 @@ func Cronjob(
 	db database.Database,
 	ds datastore.Datastore,
 	uc usecase.Recovery,
-) patterns.Runnable {
+) (patterns.Runnable, error) {
 	return cronjob.New(conf, logger, infra, db, ds, uc)
 }
 
@@ -30,6 +30,6 @@ func Consumer(
 	db database.Database,
 	ds datastore.Datastore,
 	uc usecase.Recovery,
-) patterns.Runnable {
+) (patterns.Runnable, error) {
 	return consumer.New(conf, logger, infra, db, ds, uc)
 }

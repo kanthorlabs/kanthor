@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/kanthorlabs/common/validator"
 	"github.com/kanthorlabs/kanthor/infrastructure/circuitbreaker"
 	"github.com/kanthorlabs/kanthor/infrastructure/sender"
 	"github.com/kanthorlabs/kanthor/infrastructure/streaming"
@@ -13,7 +14,6 @@ import (
 	"github.com/kanthorlabs/kanthor/internal/transformation"
 	"github.com/kanthorlabs/kanthor/pkg/identifier"
 	"github.com/kanthorlabs/kanthor/pkg/safe"
-	"github.com/kanthorlabs/kanthor/pkg/validator"
 	"github.com/kanthorlabs/kanthor/telemetry"
 	"github.com/sourcegraph/conc/pool"
 )
@@ -25,7 +25,6 @@ type ForwarderSendIn struct {
 
 func ValidateForwarderSendInRequest(prefix string, item *entities.Request) error {
 	return validator.Validate(
-		validator.DefaultConfig,
 		validator.StringStartsWith("request.id", item.Id, entities.IdNsReq),
 		validator.StringStartsWith("request.msg_id", item.MsgId, entities.IdNsMsg),
 		validator.StringStartsWith("request.ep_id", item.EpId, entities.IdNsEp),
@@ -40,7 +39,6 @@ func ValidateForwarderSendInRequest(prefix string, item *entities.Request) error
 
 func (in *ForwarderSendIn) Validate() error {
 	return validator.Validate(
-		validator.DefaultConfig,
 		validator.MapRequired("requests", in.Requests),
 		validator.NumberGreaterThan("concurrency", in.Concurrency, 0),
 		validator.Map(in.Requests, func(refId string, item *entities.Request) error {

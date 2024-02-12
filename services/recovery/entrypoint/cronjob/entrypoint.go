@@ -5,17 +5,19 @@ import (
 	"errors"
 	"sync"
 
-	"github.com/robfig/cron/v3"
+	hcconfig "github.com/kanthorlabs/common/healthcheck/config"
+
+	"github.com/kanthorlabs/common/healthcheck"
+	"github.com/kanthorlabs/common/healthcheck/background"
+	"github.com/kanthorlabs/common/logging"
+	"github.com/kanthorlabs/common/project"
 	"github.com/kanthorlabs/kanthor/database"
 	"github.com/kanthorlabs/kanthor/datastore"
 	"github.com/kanthorlabs/kanthor/infrastructure"
-	"github.com/kanthorlabs/kanthor/logging"
 	"github.com/kanthorlabs/kanthor/patterns"
-	"github.com/kanthorlabs/kanthor/pkg/healthcheck"
-	"github.com/kanthorlabs/kanthor/pkg/healthcheck/background"
-	"github.com/kanthorlabs/kanthor/project"
 	"github.com/kanthorlabs/kanthor/services/recovery/config"
 	"github.com/kanthorlabs/kanthor/services/recovery/usecase"
+	"github.com/robfig/cron/v3"
 )
 
 func New(
@@ -25,7 +27,12 @@ func New(
 	db database.Database,
 	ds datastore.Datastore,
 	uc usecase.Recovery,
-) patterns.Runnable {
+) (patterns.Runnable, error) {
+	healthcheck, err := background.NewServer(hcconfig.Default("attempt.cronjob", 5000))
+	if err != nil {
+		return nil, err
+	}
+
 	logger = logger.With("service", "recovery", "entrypoint", "cronjob")
 	return &cronjob{
 		conf:   conf,
@@ -35,12 +42,9 @@ func New(
 		ds:     ds,
 		uc:     uc,
 
-		cron: cron.New(),
-		healthcheck: background.NewServer(
-			healthcheck.DefaultConfig("recovery.cronjob"),
-			logger.With("healthcheck", "background"),
-		),
-	}
+		cron:        cron.New(),
+		healthcheck: healthcheck,
+	}, nil
 }
 
 type cronjob struct {

@@ -1,10 +1,10 @@
 package entrypoint
 
 import (
+	"github.com/kanthorlabs/common/logging"
 	"github.com/kanthorlabs/kanthor/database"
 	"github.com/kanthorlabs/kanthor/datastore"
 	"github.com/kanthorlabs/kanthor/infrastructure"
-	"github.com/kanthorlabs/kanthor/logging"
 	"github.com/kanthorlabs/kanthor/patterns"
 	"github.com/kanthorlabs/kanthor/services/attempt/config"
 	"github.com/kanthorlabs/kanthor/services/attempt/entrypoint/consumer"
@@ -22,7 +22,7 @@ func Cronjob(
 	db database.Database,
 	ds datastore.Datastore,
 	uc usecase.Attempt,
-) patterns.Runnable {
+) (patterns.Runnable, error) {
 	return cronjob.New(conf, logger, infra, db, ds, uc)
 }
 
@@ -33,7 +33,7 @@ func Consumer(
 	db database.Database,
 	ds datastore.Datastore,
 	uc usecase.Attempt,
-) patterns.Runnable {
+) (patterns.Runnable, error) {
 	return consumer.New(conf, logger, infra, db, ds, uc)
 }
 
@@ -44,7 +44,7 @@ func Trigger(
 	db database.Database,
 	ds datastore.Datastore,
 	uc usecase.Attempt,
-) patterns.Runnable {
+) (patterns.Runnable, error) {
 	return trigger.New(conf, logger, infra, db, ds, uc)
 }
 
@@ -55,7 +55,7 @@ func Selector(
 	db database.Database,
 	ds datastore.Datastore,
 	uc usecase.Attempt,
-) patterns.Runnable {
+) (patterns.Runnable, error) {
 	return selector.New(conf, logger, infra, db, ds, uc)
 }
 
@@ -66,6 +66,6 @@ func Endeavor(
 	db database.Database,
 	ds datastore.Datastore,
 	uc usecase.Attempt,
-) patterns.Runnable {
+) (patterns.Runnable, error) {
 	return endeavor.New(conf, logger, infra, db, ds, uc)
 }

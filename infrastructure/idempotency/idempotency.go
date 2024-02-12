@@ -6,9 +6,8 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/kanthorlabs/kanthor/logging"
+	"github.com/kanthorlabs/common/logging"
 	"github.com/kanthorlabs/kanthor/patterns"
-	"github.com/kanthorlabs/kanthor/project"
 )
 
 type Idempotency interface {
@@ -32,5 +31,5 @@ func New(conf *Config, logger logging.Logger) (Idempotency, error) {
 }
 
 func Key(key string) string {
-	return project.Key(fmt.Sprintf("idempotency/%s", key))
+	return fmt.Sprintf("idempotency/%s", key)
 }

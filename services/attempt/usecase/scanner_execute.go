@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/kanthorlabs/common/validator"
 	"github.com/kanthorlabs/kanthor/infrastructure/streaming"
 	"github.com/kanthorlabs/kanthor/internal/entities"
 	"github.com/kanthorlabs/kanthor/internal/status"
 	"github.com/kanthorlabs/kanthor/internal/transformation"
 	"github.com/kanthorlabs/kanthor/pkg/safe"
-	"github.com/kanthorlabs/kanthor/pkg/validator"
 )
 
 type ScannerExecuteIn struct {
@@ -20,7 +20,6 @@ type ScannerExecuteIn struct {
 
 func ValidateScannerExecuteAttemptTask(prefix string, attempt *entities.AttemptTask) error {
 	return validator.Validate(
-		validator.DefaultConfig,
 		validator.StringStartsWith(prefix+".ep_id", attempt.EpId, entities.IdNsEp),
 		validator.NumberGreaterThanOrEqual(prefix+".to", attempt.From, 0),
 		validator.NumberGreaterThan(prefix+".to", attempt.To, attempt.From),
@@ -29,7 +28,6 @@ func ValidateScannerExecuteAttemptTask(prefix string, attempt *entities.AttemptT
 
 func (in *ScannerExecuteIn) Validate() error {
 	return validator.Validate(
-		validator.DefaultConfig,
 		validator.NumberGreaterThan("batch_size", in.BatchSize, 0),
 		validator.MapRequired("tasks", in.Tasks),
 		validator.Map(in.Tasks, func(refId string, item *entities.AttemptTask) error {

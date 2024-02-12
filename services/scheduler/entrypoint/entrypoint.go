@@ -1,9 +1,9 @@
 package entrypoint
 
 import (
+	"github.com/kanthorlabs/common/logging"
 	"github.com/kanthorlabs/kanthor/database"
 	"github.com/kanthorlabs/kanthor/infrastructure"
-	"github.com/kanthorlabs/kanthor/logging"
 	"github.com/kanthorlabs/kanthor/patterns"
 	"github.com/kanthorlabs/kanthor/services/scheduler/config"
 	"github.com/kanthorlabs/kanthor/services/scheduler/entrypoint/consumer"
@@ -16,6 +16,6 @@ func Consumer(
 	infra *infrastructure.Infrastructure,
 	db database.Database,
 	uc usecase.Scheduler,
-) patterns.Runnable {
+) (patterns.Runnable, error) {
 	return consumer.New(conf, logger, infra, db, uc)
 }

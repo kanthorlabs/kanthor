@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/kanthorlabs/kanthor/pkg/utils"
-	"github.com/kanthorlabs/kanthor/pkg/validator"
+	"github.com/kanthorlabs/common/utils"
+	"github.com/kanthorlabs/common/validator"
 )
 
 type Endpoint struct {
@@ -38,7 +38,6 @@ func (entity *Endpoint) GenSecretKey() {
 
 func (entity *Endpoint) Validate() error {
 	return validator.Validate(
-		validator.DefaultConfig,
 		validator.StringStartsWith("app_id", entity.AppId, IdNsApp),
 		validator.StringRequired("name", entity.Name),
 		validator.StringRequired("secret_key", entity.SecretKey),
@@ -79,7 +78,6 @@ func (entity *EndpointRule) TableName() string {
 
 func (entity *EndpointRule) Validate() error {
 	return validator.Validate(
-		validator.DefaultConfig,
 		validator.StringStartsWith("ep_id", entity.EpId, IdNsEp),
 		validator.StringRequired("name", entity.Name),
 		validator.NumberGreaterThan("priority", entity.Priority, 0),

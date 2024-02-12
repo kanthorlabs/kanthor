@@ -3,8 +3,8 @@ package db
 import (
 	"sync"
 
+	"github.com/kanthorlabs/common/logging"
 	"github.com/kanthorlabs/kanthor/database"
-	"github.com/kanthorlabs/kanthor/logging"
 	"gorm.io/gorm"
 )
 

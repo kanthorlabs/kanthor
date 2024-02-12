@@ -3,8 +3,8 @@ package usecase
 import (
 	"context"
 
+	"github.com/kanthorlabs/common/validator"
 	"github.com/kanthorlabs/kanthor/internal/entities"
-	"github.com/kanthorlabs/kanthor/pkg/validator"
 )
 
 type WorkspaceListIn struct {
@@ -13,7 +13,6 @@ type WorkspaceListIn struct {
 
 func (in *WorkspaceListIn) Validate() error {
 	return validator.Validate(
-		validator.DefaultConfig,
 		validator.StringRequired("acc_id", in.AccId),
 	)
 }

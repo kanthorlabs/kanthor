@@ -1,6 +1,6 @@
 package cipher
 
-import "github.com/kanthorlabs/kanthor/pkg/validator"
+import "github.com/kanthorlabs/common/validator"
 
 type Config struct {
 	Secret string `json:"secret" yaml:"secret" mapstructure:"secret"`
@@ -8,7 +8,6 @@ type Config struct {
 
 func (conf *Config) Validate() error {
 	return validator.Validate(
-		validator.DefaultConfig,
 		validator.StringLen("CIPHER.CONFIG.SECRET", conf.Secret, 32, 32),
 	)
 }

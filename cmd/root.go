@@ -1,11 +1,11 @@
 package cmd
 
 import (
+	"github.com/kanthorlabs/common/configuration"
 	"github.com/kanthorlabs/kanthor/cmd/check"
 	"github.com/kanthorlabs/kanthor/cmd/config"
 	"github.com/kanthorlabs/kanthor/cmd/migrate"
 	"github.com/kanthorlabs/kanthor/cmd/serve"
-	"github.com/kanthorlabs/kanthor/configuration"
 	"github.com/spf13/cobra"
 )
 

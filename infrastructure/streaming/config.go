@@ -5,7 +5,7 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/kanthorlabs/kanthor/pkg/validator"
+	"github.com/kanthorlabs/common/validator"
 )
 
 type Config struct {
@@ -18,7 +18,6 @@ type Config struct {
 
 func (conf *Config) Validate() error {
 	err := validator.Validate(
-		validator.DefaultConfig,
 		validator.StringRequired("STREAMING.CONFIG.NAME", conf.Name),
 		validator.StringUri("STREAMING.CONFIG.URI", conf.Uri),
 	)
@@ -60,7 +59,6 @@ type NatsConfig struct {
 
 func (conf *NatsConfig) Validate() error {
 	return validator.Validate(
-		validator.DefaultConfig,
 		validator.NumberGreaterThanOrEqual("STREAMING.CONFIG.NATS.REPLICAS", conf.Replicas, 0),
 		validator.NumberGreaterThanOrEqual("STREAMING.CONFIG.NATS.LIMITS.SIZE", conf.Limits.Size, 0),
 		validator.NumberGreaterThanOrEqual("STREAMING.CONFIG.NATS.LIMITS.MSG_SIZE", conf.Limits.MsgSize, 0),
@@ -75,7 +73,6 @@ type PublisherConfig struct {
 
 func (conf *PublisherConfig) Validate() error {
 	return validator.Validate(
-		validator.DefaultConfig,
 		validator.NumberGreaterThan("STREAMING.CONFIG.PUBLISHER.RATE_LIMIT", conf.RateLimit, 0),
 	)
 }
@@ -89,7 +86,6 @@ type SubscriberConfig struct {
 
 func (conf *SubscriberConfig) Validate() error {
 	return validator.Validate(
-		validator.DefaultConfig,
 		validator.NumberGreaterThanOrEqual("STREAMING.CONFIG.SUBSCRIBER.MAX_RETRY", conf.MaxRetry, 1),
 		validator.NumberGreaterThan("STREAMING.CONFIG.SUBSCRIBER.CONCURRENCY", conf.Concurrency, 0),
 		validator.NumberGreaterThanOrEqual("STREAMING.CONFIG.SUBSCRIBER.THOUGHPUT", conf.Throughput, conf.Concurrency),

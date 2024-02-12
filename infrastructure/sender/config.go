@@ -1,6 +1,6 @@
 package sender
 
-import "github.com/kanthorlabs/kanthor/pkg/validator"
+import "github.com/kanthorlabs/common/validator"
 
 type Config struct {
 	Trace   bool              `json:"trace" yaml:"trace" mapstructure:"trace"`
@@ -11,7 +11,6 @@ type Config struct {
 
 func (conf *Config) Validate() error {
 	err := validator.Validate(
-		validator.DefaultConfig,
 		validator.NumberGreaterThanOrEqual("SENDER.CONFIG.TIMEOUT", conf.Timeout, 0),
 	)
 	if err != nil {
@@ -28,7 +27,6 @@ type Retry struct {
 
 func (conf *Retry) Validate() error {
 	return validator.Validate(
-		validator.DefaultConfig,
 		validator.NumberGreaterThanOrEqual("SENDER.CONFIG.RETRY.COUNT", conf.Count, 0),
 		validator.NumberGreaterThanOrEqual("SENDER.CONFIG.RETRY.WAIT_TIME", conf.WaitTime, 100),
 	)

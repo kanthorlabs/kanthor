@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"sync"
 
+	"github.com/kanthorlabs/common/logging"
 	"github.com/kanthorlabs/kanthor/infrastructure/circuitbreaker"
 	"github.com/kanthorlabs/kanthor/infrastructure/sender"
-	"github.com/kanthorlabs/kanthor/logging"
 )
 
 var (

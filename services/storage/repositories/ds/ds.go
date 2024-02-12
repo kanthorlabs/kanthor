@@ -1,8 +1,8 @@
 package ds
 
 import (
+	"github.com/kanthorlabs/common/logging"
 	"github.com/kanthorlabs/kanthor/datastore"
-	"github.com/kanthorlabs/kanthor/logging"
 )
 
 func New(logger logging.Logger, ds datastore.Datastore) Datastore {

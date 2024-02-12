@@ -3,8 +3,8 @@ package ds
 import (
 	"sync"
 
+	"github.com/kanthorlabs/common/logging"
 	"github.com/kanthorlabs/kanthor/datastore"
-	"github.com/kanthorlabs/kanthor/logging"
 	"gorm.io/gorm"
 )
 

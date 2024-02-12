@@ -3,7 +3,7 @@ package streaming
 import (
 	"context"
 
-	"github.com/kanthorlabs/kanthor/logging"
+	"github.com/kanthorlabs/common/logging"
 	"github.com/kanthorlabs/kanthor/patterns"
 )
 

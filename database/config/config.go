@@ -1,8 +1,8 @@
 package config
 
 import (
-	"github.com/kanthorlabs/kanthor/configuration"
-	"github.com/kanthorlabs/kanthor/pkg/validator"
+	"github.com/kanthorlabs/common/configuration"
+	"github.com/kanthorlabs/common/validator"
 )
 
 func New(provider configuration.Provider) (*Config, error) {
@@ -34,9 +34,7 @@ type Config struct {
 }
 
 func (conf *Config) Validate() error {
-	err := validator.Validate(
-		validator.DefaultConfig,
-		validator.StringUri("DATABASE.CONFIG.URI", conf.Uri),
+	err := validator.Validate(validator.StringUri("DATABASE.CONFIG.URI", conf.Uri),
 		validator.StringStartsWithOneOf("DATABASE.CONFIG.URI", conf.Uri, []string{"postgres"}),
 	)
 	if err != nil {
@@ -55,8 +53,5 @@ type Migration struct {
 }
 
 func (conf *Migration) Validate() error {
-	return validator.Validate(
-		validator.DefaultConfig,
-		validator.StringUri("DATABASE.CONFIG.MIGRATION.SOURCE", conf.Source),
-	)
+	return validator.Validate(validator.StringUri("DATABASE.CONFIG.MIGRATION.SOURCE", conf.Source))
 }

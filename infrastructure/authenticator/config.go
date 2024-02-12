@@ -3,7 +3,7 @@ package authenticator
 import (
 	"fmt"
 
-	"github.com/kanthorlabs/kanthor/pkg/validator"
+	"github.com/kanthorlabs/common/validator"
 )
 
 type Config struct {
@@ -13,7 +13,6 @@ type Config struct {
 
 func (conf *Config) Validate() error {
 	err := validator.Validate(
-		validator.DefaultConfig,
 		validator.StringOneOf("AUTHENTICATOR.ENGINE", conf.Engine, []string{EngineAsk}),
 	)
 	if err != nil {
@@ -33,7 +32,6 @@ type Ask struct {
 
 func (conf *Ask) Validate() error {
 	return validator.Validate(
-		validator.DefaultConfig,
 		validator.SliceRequired("AUTHENTICATOR.ASK.USERS", conf.Users),
 		validator.Slice(conf.Users, func(i int, item *AskUser) error {
 			return item.Validate(fmt.Sprintf("AUTHENTICATOR.ASK.USERS[%d]", i))
@@ -48,7 +46,6 @@ type AskUser struct {
 
 func (conf *AskUser) Validate(prefix string) error {
 	return validator.Validate(
-		validator.DefaultConfig,
 		validator.StringRequired(prefix+".USERNAME", conf.Username),
 		validator.StringRequired(prefix+".PASSWORD", conf.Password),
 	)

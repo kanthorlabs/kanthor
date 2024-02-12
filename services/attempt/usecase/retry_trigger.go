@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/kanthorlabs/common/validator"
 	"github.com/kanthorlabs/kanthor/infrastructure/streaming"
 	"github.com/kanthorlabs/kanthor/internal/entities"
 	"github.com/kanthorlabs/kanthor/internal/transformation"
-	"github.com/kanthorlabs/kanthor/pkg/validator"
 	"github.com/kanthorlabs/kanthor/services/attempt/config"
 )
 
@@ -18,7 +18,6 @@ type RetryTriggerIn struct {
 
 func (in *RetryTriggerIn) Validate() error {
 	return validator.Validate(
-		validator.DefaultConfig,
 		validator.Slice(in.Buckets, func(i int, item *config.AttemptBucket) error {
 			return item.Validate(fmt.Sprintf("buckets[%d]", i))
 		}),

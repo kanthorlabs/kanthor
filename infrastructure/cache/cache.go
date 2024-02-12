@@ -7,9 +7,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/kanthorlabs/kanthor/logging"
+	"github.com/kanthorlabs/common/logging"
 	"github.com/kanthorlabs/kanthor/patterns"
-	"github.com/kanthorlabs/kanthor/project"
 )
 
 func New(conf *Config, logger logging.Logger) (Cache, error) {
@@ -26,7 +25,7 @@ func New(conf *Config, logger logging.Logger) (Cache, error) {
 }
 
 func Key(key string) string {
-	return project.Key(fmt.Sprintf("cache/%s", key))
+	return fmt.Sprintf("cache/%s", key)
 }
 
 type Cache interface {

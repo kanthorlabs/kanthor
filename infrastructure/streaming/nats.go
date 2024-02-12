@@ -7,9 +7,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/kanthorlabs/kanthor/logging"
+	"github.com/kanthorlabs/common/logging"
+	"github.com/kanthorlabs/common/project"
 	"github.com/kanthorlabs/kanthor/patterns"
-	"github.com/kanthorlabs/kanthor/project"
 	natscore "github.com/nats-io/nats.go"
 )
 

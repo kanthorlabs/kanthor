@@ -1,8 +1,8 @@
 package repositories
 
 import (
+	"github.com/kanthorlabs/common/logging"
 	"github.com/kanthorlabs/kanthor/datastore"
-	"github.com/kanthorlabs/kanthor/logging"
 	"github.com/kanthorlabs/kanthor/services/storage/repositories/ds"
 )
 

@@ -5,14 +5,15 @@ import (
 	"errors"
 	"sync"
 
+	"github.com/kanthorlabs/common/healthcheck"
+	"github.com/kanthorlabs/common/healthcheck/background"
+	hcconfig "github.com/kanthorlabs/common/healthcheck/config"
+	"github.com/kanthorlabs/common/logging"
+	"github.com/kanthorlabs/common/project"
 	"github.com/kanthorlabs/kanthor/infrastructure"
 	"github.com/kanthorlabs/kanthor/infrastructure/streaming"
 	"github.com/kanthorlabs/kanthor/internal/constants"
-	"github.com/kanthorlabs/kanthor/logging"
 	"github.com/kanthorlabs/kanthor/patterns"
-	"github.com/kanthorlabs/kanthor/pkg/healthcheck"
-	"github.com/kanthorlabs/kanthor/pkg/healthcheck/background"
-	"github.com/kanthorlabs/kanthor/project"
 	"github.com/kanthorlabs/kanthor/services/dispatcher/config"
 	"github.com/kanthorlabs/kanthor/services/dispatcher/usecase"
 	"github.com/kanthorlabs/kanthor/telemetry"
@@ -23,7 +24,12 @@ func New(
 	logger logging.Logger,
 	infra *infrastructure.Infrastructure,
 	uc usecase.Dispatcher,
-) patterns.Runnable {
+) (patterns.Runnable, error) {
+	healthcheck, err := background.NewServer(hcconfig.Default("attempt.cronjob", 5000))
+	if err != nil {
+		return nil, err
+	}
+
 	logger = logger.With("service", "dispatcher", "entrypoint", "consumer")
 	return &dispatcher{
 		conf:       conf,
@@ -32,11 +38,8 @@ func New(
 		infra:      infra,
 		uc:         uc,
 
-		healthcheck: background.NewServer(
-			healthcheck.DefaultConfig("dispatcher.consumer"),
-			logger.With("healthcheck", "background"),
-		),
-	}
+		healthcheck: healthcheck,
+	}, nil
 }
 
 type dispatcher struct {

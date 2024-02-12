@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/kanthorlabs/common/project"
 	"github.com/kanthorlabs/kanthor/infrastructure/streaming"
 	"github.com/kanthorlabs/kanthor/internal/constants"
 	"github.com/kanthorlabs/kanthor/internal/entities"
 	"github.com/kanthorlabs/kanthor/internal/transformation"
-	"github.com/kanthorlabs/kanthor/project"
 	"github.com/kanthorlabs/kanthor/services/storage/usecase"
 )
 

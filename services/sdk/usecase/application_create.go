@@ -3,9 +3,9 @@ package usecase
 import (
 	"context"
 
+	"github.com/kanthorlabs/common/validator"
 	"github.com/kanthorlabs/kanthor/internal/entities"
 	"github.com/kanthorlabs/kanthor/pkg/identifier"
-	"github.com/kanthorlabs/kanthor/pkg/validator"
 )
 
 type ApplicationCreateIn struct {
@@ -15,7 +15,6 @@ type ApplicationCreateIn struct {
 
 func (in *ApplicationCreateIn) Validate() error {
 	return validator.Validate(
-		validator.DefaultConfig,
 		validator.StringStartsWith("ws_id", in.WsId, entities.IdNsWs),
 		validator.StringRequired("name", in.Name),
 	)

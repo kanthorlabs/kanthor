@@ -1,6 +1,6 @@
 package authenticator
 
-import "github.com/kanthorlabs/kanthor/pkg/validator"
+import "github.com/kanthorlabs/common/validator"
 
 // Account is followed the document of https://www.iana.org/assignments/jwt/jwt.xhtml#claims
 type Account struct {
@@ -10,9 +10,7 @@ type Account struct {
 }
 
 func (acc *Account) Validate() error {
-	return validator.Validate(
-		validator.DefaultConfig,
-		validator.StringRequired("sub", acc.Sub),
+	return validator.Validate(validator.StringRequired("sub", acc.Sub),
 		validator.StringRequired("name", acc.Name),
 	)
 }

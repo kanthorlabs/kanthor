@@ -3,7 +3,7 @@ package streaming
 import (
 	"encoding/json"
 
-	"github.com/kanthorlabs/kanthor/pkg/validator"
+	"github.com/kanthorlabs/common/validator"
 )
 
 var (
@@ -21,7 +21,6 @@ type Event struct {
 
 func (e *Event) Validate() error {
 	return validator.Validate(
-		validator.DefaultConfig,
 		validator.StringRequired("subject", e.Subject),
 		validator.StringRequired("id", e.Id),
 		validator.SliceRequired("data", e.Data),

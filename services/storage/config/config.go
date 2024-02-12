@@ -1,9 +1,9 @@
 package config
 
 import (
-	"github.com/kanthorlabs/kanthor/configuration"
+	"github.com/kanthorlabs/common/configuration"
+	"github.com/kanthorlabs/common/validator"
 	"github.com/kanthorlabs/kanthor/internal/constants"
-	"github.com/kanthorlabs/kanthor/pkg/validator"
 )
 
 func New(provider configuration.Provider) (*Config, error) {
@@ -34,7 +34,6 @@ type Config struct {
 
 func (conf *Config) Validate() error {
 	err := validator.Validate(
-		validator.DefaultConfig,
 		validator.StringOneOf(
 			"STORAGE.CONFIG.TOPIC",
 			conf.Topic,
@@ -75,7 +74,6 @@ type StorageWarehousePut struct {
 
 func (conf *StorageWarehousePut) Validate() error {
 	return validator.Validate(
-		validator.DefaultConfig,
 		validator.NumberGreaterThanOrEqual("STORAGE.CONFIG.WAREHOUSE.PUT.TIMEOUT", conf.Timeout, 1000),
 		validator.NumberGreaterThan("STORAGE.CONFIG.WAREHOUSE.PUT.BATCH_SIZE", conf.BatchSize, 0),
 	)

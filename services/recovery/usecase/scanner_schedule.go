@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/kanthorlabs/common/validator"
 	"github.com/kanthorlabs/kanthor/infrastructure/streaming"
 	"github.com/kanthorlabs/kanthor/internal/entities"
 	"github.com/kanthorlabs/kanthor/internal/transformation"
-	"github.com/kanthorlabs/kanthor/pkg/validator"
 	"github.com/kanthorlabs/kanthor/services/recovery/config"
 )
 
@@ -19,7 +19,6 @@ type ScannerScheduleIn struct {
 
 func (in *ScannerScheduleIn) Validate() error {
 	return validator.Validate(
-		validator.DefaultConfig,
 		validator.NumberGreaterThan("batch_size", in.BatchSize, 0),
 		validator.Slice(in.Buckets, func(i int, item *config.RecoveryCronjobBucket) error {
 			return item.Validate(fmt.Sprintf("buckets[%d]", i))

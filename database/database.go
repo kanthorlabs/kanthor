@@ -1,9 +1,9 @@
 package database
 
 import (
-	"github.com/kanthorlabs/kanthor/configuration"
+	"github.com/kanthorlabs/common/configuration"
+	"github.com/kanthorlabs/common/logging"
 	"github.com/kanthorlabs/kanthor/database/config"
-	"github.com/kanthorlabs/kanthor/logging"
 	"github.com/kanthorlabs/kanthor/patterns"
 )
 

@@ -3,9 +3,9 @@ package repositories
 import (
 	"sync"
 
+	"github.com/kanthorlabs/common/logging"
 	"github.com/kanthorlabs/kanthor/database"
 	"github.com/kanthorlabs/kanthor/datastore"
-	"github.com/kanthorlabs/kanthor/logging"
 	"github.com/kanthorlabs/kanthor/services/recovery/repositories/db"
 	"github.com/kanthorlabs/kanthor/services/recovery/repositories/ds"
 )

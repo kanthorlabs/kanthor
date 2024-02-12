@@ -3,8 +3,8 @@ package usecase
 import (
 	"context"
 
+	"github.com/kanthorlabs/common/validator"
 	"github.com/kanthorlabs/kanthor/internal/entities"
-	"github.com/kanthorlabs/kanthor/pkg/validator"
 )
 
 type EndpointDeleteIn struct {
@@ -14,7 +14,6 @@ type EndpointDeleteIn struct {
 
 func (in *EndpointDeleteIn) Validate() error {
 	return validator.Validate(
-		validator.DefaultConfig,
 		validator.StringStartsWith("ws_id", in.WsId, entities.IdNsWs),
 		validator.StringStartsWith("id", in.Id, entities.IdNsEp),
 	)

@@ -1,8 +1,8 @@
 package config
 
 import (
-	"github.com/kanthorlabs/kanthor/configuration"
-	"github.com/kanthorlabs/kanthor/pkg/validator"
+	"github.com/kanthorlabs/common/configuration"
+	"github.com/kanthorlabs/common/validator"
 )
 
 func New(provider configuration.Provider) (*Config, error) {
@@ -53,7 +53,6 @@ type SchedulerRequestSchedule struct {
 
 func (conf *SchedulerRequestSchedule) Validate() error {
 	return validator.Validate(
-		validator.DefaultConfig,
 		validator.NumberGreaterThanOrEqual("SCHEDULER.CONFIG.REQUEST.SCHEDULE.TIMEOUT", conf.Timeout, 1000),
 	)
 }

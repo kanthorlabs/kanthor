@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/kanthorlabs/common/utils"
 	"github.com/kanthorlabs/kanthor/internal/entities"
-	"github.com/kanthorlabs/kanthor/pkg/utils"
 	"gorm.io/gorm"
 )
 

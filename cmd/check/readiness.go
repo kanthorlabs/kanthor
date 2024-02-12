@@ -1,8 +1,8 @@
 package check
 
 import (
-	"github.com/kanthorlabs/kanthor/pkg/healthcheck"
-	"github.com/kanthorlabs/kanthor/pkg/healthcheck/background"
+	"github.com/kanthorlabs/common/healthcheck/background"
+	"github.com/kanthorlabs/common/healthcheck/config"
 	"github.com/kanthorlabs/kanthor/services"
 	"github.com/spf13/cobra"
 )
@@ -15,7 +15,10 @@ func NewReadiness() *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			serviceName := args[0]
 
-			client := background.NewClient(healthcheck.DefaultConfig(serviceName))
+			client, err := background.NewClient(config.Default(serviceName, 5000))
+			if err != nil {
+				return err
+			}
 			if err := client.Readiness(); err != nil {
 				return err
 			}

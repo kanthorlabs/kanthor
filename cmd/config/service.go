@@ -3,8 +3,8 @@ package config
 import (
 	"slices"
 
-	"github.com/kanthorlabs/kanthor/configuration"
-	"github.com/kanthorlabs/kanthor/pkg/validator"
+	"github.com/kanthorlabs/common/configuration"
+	"github.com/kanthorlabs/common/validator"
 	"github.com/kanthorlabs/kanthor/services"
 	attempt "github.com/kanthorlabs/kanthor/services/attempt/config"
 	dispatcher "github.com/kanthorlabs/kanthor/services/dispatcher/config"

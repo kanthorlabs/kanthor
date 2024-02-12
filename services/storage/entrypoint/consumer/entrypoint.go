@@ -5,14 +5,15 @@ import (
 	"errors"
 	"sync"
 
+	"github.com/kanthorlabs/common/healthcheck"
+	"github.com/kanthorlabs/common/healthcheck/background"
+	hcconfig "github.com/kanthorlabs/common/healthcheck/config"
+	"github.com/kanthorlabs/common/logging"
+	"github.com/kanthorlabs/common/project"
 	"github.com/kanthorlabs/kanthor/datastore"
 	"github.com/kanthorlabs/kanthor/infrastructure"
 	"github.com/kanthorlabs/kanthor/infrastructure/streaming"
-	"github.com/kanthorlabs/kanthor/logging"
 	"github.com/kanthorlabs/kanthor/patterns"
-	"github.com/kanthorlabs/kanthor/pkg/healthcheck"
-	"github.com/kanthorlabs/kanthor/pkg/healthcheck/background"
-	"github.com/kanthorlabs/kanthor/project"
 	"github.com/kanthorlabs/kanthor/services/storage/config"
 	"github.com/kanthorlabs/kanthor/services/storage/usecase"
 	"github.com/kanthorlabs/kanthor/telemetry"
@@ -24,7 +25,12 @@ func New(
 	infra *infrastructure.Infrastructure,
 	ds datastore.Datastore,
 	uc usecase.Storage,
-) patterns.Runnable {
+) (patterns.Runnable, error) {
+	healthcheck, err := background.NewServer(hcconfig.Default("attempt.cronjob", 5000))
+	if err != nil {
+		return nil, err
+	}
+
 	logger = logger.With("service", "storage", "entrypoint", "consumer")
 	return &storage{
 		conf:       conf,
@@ -34,11 +40,8 @@ func New(
 		ds:         ds,
 		uc:         uc,
 
-		healthcheck: background.NewServer(
-			healthcheck.DefaultConfig("storage"),
-			logger.With("healthcheck", "background"),
-		),
-	}
+		healthcheck: healthcheck,
+	}, nil
 }
 
 type storage struct {

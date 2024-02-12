@@ -7,11 +7,11 @@
 package ioc
 
 import (
-	"github.com/kanthorlabs/kanthor/configuration"
+	"github.com/kanthorlabs/common/configuration"
+	"github.com/kanthorlabs/common/logging"
 	"github.com/kanthorlabs/kanthor/database"
 	"github.com/kanthorlabs/kanthor/datastore"
 	"github.com/kanthorlabs/kanthor/infrastructure"
-	"github.com/kanthorlabs/kanthor/logging"
 	"github.com/kanthorlabs/kanthor/patterns"
 	"github.com/kanthorlabs/kanthor/services/attempt/config"
 	"github.com/kanthorlabs/kanthor/services/attempt/entrypoint"
@@ -67,7 +67,10 @@ func AttemptCronjob(provider configuration.Provider) (patterns.Runnable, error) 
 	}
 	repositoriesRepositories := repositories.New(logger, databaseDatabase, datastoreDatastore)
 	attempt := usecase.New(configConfig, logger, infrastructureInfrastructure, repositoriesRepositories)
-	runnable := entrypoint.Cronjob(configConfig, logger, infrastructureInfrastructure, databaseDatabase, datastoreDatastore, attempt)
+	runnable, err := entrypoint.Cronjob(configConfig, logger, infrastructureInfrastructure, databaseDatabase, datastoreDatastore, attempt)
+	if err != nil {
+		return nil, err
+	}
 	return runnable, nil
 }
 
@@ -94,7 +97,10 @@ func AttemptConsumer(provider configuration.Provider) (patterns.Runnable, error)
 	}
 	repositoriesRepositories := repositories.New(logger, databaseDatabase, datastoreDatastore)
 	attempt := usecase.New(configConfig, logger, infrastructureInfrastructure, repositoriesRepositories)
-	runnable := entrypoint.Consumer(configConfig, logger, infrastructureInfrastructure, databaseDatabase, datastoreDatastore, attempt)
+	runnable, err := entrypoint.Consumer(configConfig, logger, infrastructureInfrastructure, databaseDatabase, datastoreDatastore, attempt)
+	if err != nil {
+		return nil, err
+	}
 	return runnable, nil
 }
 
@@ -121,7 +127,10 @@ func AttemptTrigger(provider configuration.Provider) (patterns.Runnable, error) 
 	}
 	repositoriesRepositories := repositories.New(logger, databaseDatabase, datastoreDatastore)
 	attempt := usecase.New(configConfig, logger, infrastructureInfrastructure, repositoriesRepositories)
-	runnable := entrypoint.Trigger(configConfig, logger, infrastructureInfrastructure, databaseDatabase, datastoreDatastore, attempt)
+	runnable, err := entrypoint.Trigger(configConfig, logger, infrastructureInfrastructure, databaseDatabase, datastoreDatastore, attempt)
+	if err != nil {
+		return nil, err
+	}
 	return runnable, nil
 }
 
@@ -148,7 +157,10 @@ func AttemptSelector(provider configuration.Provider) (patterns.Runnable, error)
 	}
 	repositoriesRepositories := repositories.New(logger, databaseDatabase, datastoreDatastore)
 	attempt := usecase.New(configConfig, logger, infrastructureInfrastructure, repositoriesRepositories)
-	runnable := entrypoint.Selector(configConfig, logger, infrastructureInfrastructure, databaseDatabase, datastoreDatastore, attempt)
+	runnable, err := entrypoint.Selector(configConfig, logger, infrastructureInfrastructure, databaseDatabase, datastoreDatastore, attempt)
+	if err != nil {
+		return nil, err
+	}
 	return runnable, nil
 }
 
@@ -175,7 +187,10 @@ func AttemptEndeavor(provider configuration.Provider) (patterns.Runnable, error)
 	}
 	repositoriesRepositories := repositories.New(logger, databaseDatabase, datastoreDatastore)
 	attempt := usecase.New(configConfig, logger, infrastructureInfrastructure, repositoriesRepositories)
-	runnable := entrypoint.Endeavor(configConfig, logger, infrastructureInfrastructure, databaseDatabase, datastoreDatastore, attempt)
+	runnable, err := entrypoint.Endeavor(configConfig, logger, infrastructureInfrastructure, databaseDatabase, datastoreDatastore, attempt)
+	if err != nil {
+		return nil, err
+	}
 	return runnable, nil
 }
 
@@ -195,7 +210,10 @@ func Dispatcher(provider configuration.Provider) (patterns.Runnable, error) {
 		return nil, err
 	}
 	dispatcher := usecase2.New(configConfig, logger, infrastructureInfrastructure)
-	runnable := entrypoint2.Consumer(configConfig, logger, infrastructureInfrastructure, dispatcher)
+	runnable, err := entrypoint2.Consumer(configConfig, logger, infrastructureInfrastructure, dispatcher)
+	if err != nil {
+		return nil, err
+	}
 	return runnable, nil
 }
 
@@ -253,7 +271,10 @@ func RecoveryCronjob(provider configuration.Provider) (patterns.Runnable, error)
 	}
 	repositoriesRepositories := repositories3.New(logger, databaseDatabase, datastoreDatastore)
 	recovery := usecase4.New(configConfig, logger, infrastructureInfrastructure, repositoriesRepositories)
-	runnable := entrypoint4.Cronjob(configConfig, logger, infrastructureInfrastructure, databaseDatabase, datastoreDatastore, recovery)
+	runnable, err := entrypoint4.Cronjob(configConfig, logger, infrastructureInfrastructure, databaseDatabase, datastoreDatastore, recovery)
+	if err != nil {
+		return nil, err
+	}
 	return runnable, nil
 }
 
@@ -280,7 +301,10 @@ func RecoveryConsumer(provider configuration.Provider) (patterns.Runnable, error
 	}
 	repositoriesRepositories := repositories3.New(logger, databaseDatabase, datastoreDatastore)
 	recovery := usecase4.New(configConfig, logger, infrastructureInfrastructure, repositoriesRepositories)
-	runnable := entrypoint4.Consumer(configConfig, logger, infrastructureInfrastructure, databaseDatabase, datastoreDatastore, recovery)
+	runnable, err := entrypoint4.Consumer(configConfig, logger, infrastructureInfrastructure, databaseDatabase, datastoreDatastore, recovery)
+	if err != nil {
+		return nil, err
+	}
 	return runnable, nil
 }
 
@@ -305,7 +329,10 @@ func Scheduler(provider configuration.Provider) (patterns.Runnable, error) {
 	}
 	repositoriesRepositories := repositories4.New(logger, databaseDatabase)
 	scheduler := usecase5.New(configConfig, logger, infrastructureInfrastructure, repositoriesRepositories)
-	runnable := entrypoint5.Consumer(configConfig, logger, infrastructureInfrastructure, databaseDatabase, scheduler)
+	runnable, err := entrypoint5.Consumer(configConfig, logger, infrastructureInfrastructure, databaseDatabase, scheduler)
+	if err != nil {
+		return nil, err
+	}
 	return runnable, nil
 }
 
@@ -355,6 +382,9 @@ func Storage(provider configuration.Provider) (patterns.Runnable, error) {
 	}
 	repositoriesRepositories := repositories6.New(logger, datastoreDatastore)
 	storage := usecase7.New(configConfig, logger, infrastructureInfrastructure, repositoriesRepositories)
-	runnable := entrypoint7.Consumer(configConfig, logger, infrastructureInfrastructure, datastoreDatastore, storage)
+	runnable, err := entrypoint7.Consumer(configConfig, logger, infrastructureInfrastructure, datastoreDatastore, storage)
+	if err != nil {
+		return nil, err
+	}
 	return runnable, nil
 }

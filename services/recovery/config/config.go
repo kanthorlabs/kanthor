@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/kanthorlabs/kanthor/configuration"
-	"github.com/kanthorlabs/kanthor/pkg/validator"
+	"github.com/kanthorlabs/common/configuration"
+	"github.com/kanthorlabs/common/validator"
 )
 
 func New(provider configuration.Provider) (*Config, error) {
@@ -52,7 +52,6 @@ type RecoveryCronjob struct {
 
 func (conf *RecoveryCronjob) Validate() error {
 	return validator.Validate(
-		validator.DefaultConfig,
 		validator.StringRequired("RECOVERY.CONFIG.CRONJOB.SCHEDULER", conf.Scheduler),
 		validator.NumberGreaterThanOrEqual("RECOVERY.CONFIG.CRONJOB.TIMEOUT", conf.Timeout, 1000),
 		validator.NumberGreaterThan("RECOVERY.CONFIG.CRONJOB.BATCH_SIZE", conf.BatchSize, 0),
@@ -70,7 +69,6 @@ type RecoveryCronjobBucket struct {
 
 func (conf *RecoveryCronjobBucket) Validate(prefix string) error {
 	return validator.Validate(
-		validator.DefaultConfig,
 		validator.NumberGreaterThanOrEqual(prefix+".OFFSET", conf.Offset, 0),
 		validator.NumberGreaterThan(prefix+".DURATION", conf.Duration, 0),
 	)
@@ -83,12 +81,10 @@ type RecoveryConsumer struct {
 
 func (conf *RecoveryConsumer) Validate() error {
 	log.Println(validator.Validate(
-		validator.DefaultConfig,
 		validator.NumberGreaterThanOrEqual("RECOVERY.CONFIG.CRONJOB.TIMEOUT", conf.Timeout, 1000),
 		validator.NumberGreaterThan("RECOVERY.CONFIG.CRONJOB.BATCH_SIZE", conf.BatchSize, 0),
 	))
 	return validator.Validate(
-		validator.DefaultConfig,
 		validator.NumberGreaterThanOrEqual("RECOVERY.CONFIG.CRONJOB.TIMEOUT", conf.Timeout, 1000),
 		validator.NumberGreaterThan("RECOVERY.CONFIG.CRONJOB.BATCH_SIZE", conf.BatchSize, 0),
 	)

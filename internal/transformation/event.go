@@ -3,10 +3,10 @@ package transformation
 import (
 	"fmt"
 
+	"github.com/kanthorlabs/common/project"
 	"github.com/kanthorlabs/kanthor/infrastructure/streaming"
 	"github.com/kanthorlabs/kanthor/internal/constants"
 	"github.com/kanthorlabs/kanthor/internal/entities"
-	"github.com/kanthorlabs/kanthor/project"
 )
 
 func EventFromMessage(msg *entities.Message) (*streaming.Event, error) {

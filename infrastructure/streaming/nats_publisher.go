@@ -3,10 +3,10 @@ package streaming
 import (
 	"context"
 
-	"github.com/kanthorlabs/kanthor/logging"
+	"github.com/kanthorlabs/common/logging"
+	"github.com/kanthorlabs/common/project"
+	"github.com/kanthorlabs/common/utils"
 	"github.com/kanthorlabs/kanthor/pkg/safe"
-	"github.com/kanthorlabs/kanthor/pkg/utils"
-	"github.com/kanthorlabs/kanthor/project"
 	"github.com/kanthorlabs/kanthor/telemetry"
 	natscore "github.com/nats-io/nats.go"
 	"github.com/sourcegraph/conc/pool"

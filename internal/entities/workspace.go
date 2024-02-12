@@ -1,6 +1,6 @@
 package entities
 
-import "github.com/kanthorlabs/kanthor/pkg/validator"
+import "github.com/kanthorlabs/common/validator"
 
 type Workspace struct {
 	Entity
@@ -17,7 +17,6 @@ func (entity *Workspace) TableName() string {
 
 func (entity *Workspace) Validate() error {
 	return validator.Validate(
-		validator.DefaultConfig,
 		validator.StringRequired("owner_id", entity.OwnerId),
 		validator.StringRequired("name", entity.Name),
 		validator.StringRequired("tier", entity.Tier),
@@ -40,7 +39,6 @@ func (entity *WorkspaceCredentials) TableName() string {
 
 func (entity *WorkspaceCredentials) Validate() error {
 	return validator.Validate(
-		validator.DefaultConfig,
 		validator.StringRequired("ws_id", entity.WsId),
 		validator.StringRequired("name", entity.Name),
 		validator.StringRequired("hash", entity.Hash),

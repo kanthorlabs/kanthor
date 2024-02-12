@@ -1,6 +1,6 @@
 package cache
 
-import "github.com/kanthorlabs/kanthor/pkg/validator"
+import "github.com/kanthorlabs/common/validator"
 
 type Config struct {
 	Uri        string `json:"uri" yaml:"uri" mapstructure:"uri"`
@@ -9,7 +9,6 @@ type Config struct {
 
 func (conf *Config) Validate() error {
 	return validator.Validate(
-		validator.DefaultConfig,
 		validator.StringUri("CACHE.CONFIG.URI", conf.Uri),
 		validator.NumberGreaterThanOrEqual("CACHE.CONFIG.TIME_TO_LIVE", conf.TimeToLive, 1000),
 	)

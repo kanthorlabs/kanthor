@@ -3,8 +3,8 @@ package config
 import (
 	"fmt"
 
-	"github.com/kanthorlabs/kanthor/configuration"
-	"github.com/kanthorlabs/kanthor/pkg/validator"
+	"github.com/kanthorlabs/common/configuration"
+	"github.com/kanthorlabs/common/validator"
 )
 
 func New(provider configuration.Provider) (*Config, error) {
@@ -63,7 +63,6 @@ type AttemptCronjob struct {
 
 func (conf *AttemptCronjob) Validate() error {
 	return validator.Validate(
-		validator.DefaultConfig,
 		validator.StringRequired("ATTEMPT.CONFIG.CRONJOB.SCHEDULER", conf.Scheduler),
 		validator.NumberGreaterThanOrEqual("ATTEMPT.CONFIG.CRONJOB.TIMEOUT", conf.Timeout, 1000),
 		validator.NumberGreaterThan("ATTEMPT.CONFIG.CRONJOB.BATCH_SIZE", conf.BatchSize, 0),
@@ -81,7 +80,6 @@ type AttemptBucket struct {
 
 func (conf *AttemptBucket) Validate(prefix string) error {
 	return validator.Validate(
-		validator.DefaultConfig,
 		validator.NumberGreaterThanOrEqual(prefix+".OFFSET", conf.Offset, 0),
 		validator.NumberGreaterThan(prefix+".DURATION", conf.Duration, 0),
 	)
@@ -95,7 +93,6 @@ type AttemptConsumer struct {
 
 func (conf *AttemptConsumer) Validate() error {
 	return validator.Validate(
-		validator.DefaultConfig,
 		validator.NumberGreaterThanOrEqual("ATTEMPT.CONFIG.CRONJOB.TIMEOUT", conf.Timeout, 1000),
 		validator.NumberGreaterThan("ATTEMPT.CONFIG.CRONJOB.BATCH_SIZE", conf.BatchSize, 0),
 		validator.NumberGreaterThan("ATTEMPT.CONFIG.CRONJOB.SCHEDULE_DELAY", conf.ScheduleDelay, 0),
@@ -110,7 +107,6 @@ type AttemptTrigger struct {
 
 func (conf *AttemptTrigger) Validate() error {
 	return validator.Validate(
-		validator.DefaultConfig,
 		validator.StringRequired("ATTEMPT.CONFIG.TRIGGER.SCHEDULER", conf.Scheduler),
 		validator.NumberGreaterThanOrEqual("ATTEMPT.CONFIG.TRIGGER.TIMEOUT", conf.Timeout, 1000),
 		validator.SliceRequired("ATTEMPT.CONFIG.TRIGGER.BUCKETS", conf.Buckets),
@@ -128,7 +124,6 @@ type AttemptSelector struct {
 
 func (conf *AttemptSelector) Validate() error {
 	return validator.Validate(
-		validator.DefaultConfig,
 		validator.NumberGreaterThanOrEqual("ATTEMPT.CONFIG.SELECTOR.TIMEOUT", conf.Timeout, 1000),
 		validator.NumberGreaterThan("ATTEMPT.CONFIG.SELECTOR.BATCH_SIZE", conf.BatchSize, 0),
 		validator.NumberGreaterThan("ATTEMPT.CONFIG.SELECTOR.COUNTER", conf.Counter, 0),
@@ -142,7 +137,6 @@ type AttemptEndeavor struct {
 
 func (conf *AttemptEndeavor) Validate() error {
 	return validator.Validate(
-		validator.DefaultConfig,
 		validator.NumberGreaterThanOrEqual("ATTEMPT.CONFIG.ENDEAVOR.CONCURRENCY", conf.Concurrency, 0),
 		validator.NumberGreaterThanOrEqual("ATTEMPT.CONFIG.ENDEAVOR.RETRY_DELAY", conf.RetryDelay, 1000),
 	)

@@ -1,8 +1,8 @@
 package config
 
 import (
-	"github.com/kanthorlabs/kanthor/configuration"
-	"github.com/kanthorlabs/kanthor/pkg/validator"
+	"github.com/kanthorlabs/common/configuration"
+	"github.com/kanthorlabs/common/validator"
 )
 
 func New(provider configuration.Provider) (*Config, error) {
@@ -53,7 +53,6 @@ type DispatcherForwarderSend struct {
 
 func (conf *DispatcherForwarderSend) Validate() error {
 	return validator.Validate(
-		validator.DefaultConfig,
 		validator.NumberGreaterThan("DISPATCHER.CONFIG.FORWARDER.SEND.CONCURRENCY", conf.Concurrency, 0),
 	)
 }

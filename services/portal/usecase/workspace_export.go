@@ -3,8 +3,8 @@ package usecase
 import (
 	"context"
 
+	"github.com/kanthorlabs/common/validator"
 	"github.com/kanthorlabs/kanthor/internal/entities"
-	"github.com/kanthorlabs/kanthor/pkg/validator"
 )
 
 type WorkspaceExportIn struct {
@@ -13,7 +13,6 @@ type WorkspaceExportIn struct {
 
 func (in *WorkspaceExportIn) Validate() error {
 	return validator.Validate(
-		validator.DefaultConfig,
 		validator.StringStartsWith("id", in.Id, entities.IdNsWs),
 	)
 }

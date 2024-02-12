@@ -3,8 +3,8 @@ package usecase
 import (
 	"context"
 
+	"github.com/kanthorlabs/common/validator"
 	"github.com/kanthorlabs/kanthor/internal/entities"
-	"github.com/kanthorlabs/kanthor/pkg/validator"
 )
 
 type EndpointListIn struct {
@@ -19,7 +19,6 @@ func (in *EndpointListIn) Validate() error {
 	}
 
 	return validator.Validate(
-		validator.DefaultConfig,
 		validator.StringStartsWith("ws_id", in.WsId, entities.IdNsWs),
 		validator.StringStartsWithIfNotEmpty("app_id", in.AppId, entities.IdNsApp),
 	)

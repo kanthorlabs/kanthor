@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/kanthorlabs/kanthor/logging"
+	"github.com/kanthorlabs/common/logging"
 	"gorm.io/gorm/logger"
 )
 

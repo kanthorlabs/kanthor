@@ -5,8 +5,8 @@ import (
 	"errors"
 	"time"
 
+	"github.com/kanthorlabs/common/validator"
 	"github.com/kanthorlabs/kanthor/internal/entities"
-	"github.com/kanthorlabs/kanthor/pkg/validator"
 )
 
 type WorkspaceCredentialsExpireIn struct {
@@ -17,7 +17,6 @@ type WorkspaceCredentialsExpireIn struct {
 
 func (in *WorkspaceCredentialsExpireIn) Validate() error {
 	return validator.Validate(
-		validator.DefaultConfig,
 		validator.StringStartsWith("ws_id", in.WsId, entities.IdNsWs),
 		validator.StringStartsWith("id", in.Id, entities.IdNsWsc),
 		validator.NumberGreaterThanOrEqual("duration", in.Duration, 0),

@@ -4,8 +4,8 @@ import (
 	"context"
 	"errors"
 
+	"github.com/kanthorlabs/common/validator"
 	"github.com/kanthorlabs/kanthor/internal/entities"
-	"github.com/kanthorlabs/kanthor/pkg/validator"
 	"github.com/kanthorlabs/kanthor/telemetry"
 	"go.opentelemetry.io/otel/trace"
 )
@@ -17,7 +17,6 @@ type WorkspaceGetIn struct {
 
 func (in *WorkspaceGetIn) Validate() error {
 	return validator.Validate(
-		validator.DefaultConfig,
 		validator.StringRequired("acc_id", in.AccId),
 		validator.StringStartsWith("id", in.Id, entities.IdNsWs),
 	)

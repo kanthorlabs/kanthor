@@ -4,13 +4,13 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/kanthorlabs/common/utils"
+	"github.com/kanthorlabs/common/validator"
 	"github.com/kanthorlabs/kanthor/infrastructure/streaming"
 	"github.com/kanthorlabs/kanthor/internal/entities"
 	"github.com/kanthorlabs/kanthor/internal/routing"
 	"github.com/kanthorlabs/kanthor/internal/transformation"
 	"github.com/kanthorlabs/kanthor/pkg/safe"
-	"github.com/kanthorlabs/kanthor/pkg/utils"
-	"github.com/kanthorlabs/kanthor/pkg/validator"
 	"github.com/kanthorlabs/kanthor/telemetry"
 )
 
@@ -20,7 +20,6 @@ type RequestScheduleIn struct {
 
 func ValidateRequestScheduleInMessage(prefix string, message *entities.Message) error {
 	return validator.Validate(
-		validator.DefaultConfig,
 		validator.StringStartsWith(prefix+".id", message.Id, entities.IdNsMsg),
 		validator.StringRequired(prefix+".tier", message.Tier),
 		validator.StringStartsWith(prefix+".app_id", message.AppId, entities.IdNsApp),
@@ -31,7 +30,6 @@ func ValidateRequestScheduleInMessage(prefix string, message *entities.Message) 
 
 func (in *RequestScheduleIn) Validate() error {
 	return validator.Validate(
-		validator.DefaultConfig,
 		validator.MapRequired("messages", in.Messages),
 		validator.Map(in.Messages, func(refId string, item *entities.Message) error {
 			prefix := fmt.Sprintf("messages.%s", refId)

@@ -8,12 +8,11 @@ import (
 	"slices"
 	"syscall"
 
-	"github.com/kanthorlabs/kanthor/cmd/utils"
-	"github.com/kanthorlabs/kanthor/configuration"
+	"github.com/kanthorlabs/common/configuration"
+	"github.com/kanthorlabs/common/logging"
+	"github.com/kanthorlabs/common/utils"
 	"github.com/kanthorlabs/kanthor/internal/debugging"
-	"github.com/kanthorlabs/kanthor/logging"
 	"github.com/kanthorlabs/kanthor/patterns"
-	"github.com/kanthorlabs/kanthor/project"
 	"github.com/kanthorlabs/kanthor/services"
 	"github.com/kanthorlabs/kanthor/telemetry"
 	"github.com/spf13/cobra"
@@ -33,7 +32,7 @@ func New(provider configuration.Provider) *cobra.Command {
 		ValidArgs: append(services.SERVICES, services.ALL),
 		Args:      cobra.MatchAll(cobra.MinimumNArgs(1), cobra.OnlyValidArgs),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			ctx := context.WithValue(cmd.Context(), telemetry.CtxService, project.Topic(args...))
+			ctx := context.WithValue(cmd.Context(), telemetry.CtxService, utils.Key(args...))
 			telemetry.Start(ctx)
 			defer telemetry.Stop(ctx)
 
@@ -75,7 +74,7 @@ func single(provider configuration.Provider, name string) error {
 	}
 
 	defer func() {
-		if err := utils.Stop(service, debug); err != nil {
+		if err := Stop(service, debug); err != nil {
 			logger.Error(err)
 		}
 	}()
@@ -110,11 +109,11 @@ func multiple(provider configuration.Provider, names []string) error {
 	}
 
 	defer func() {
-		var items []utils.Stoppable
+		var items []Stoppable
 		for _, instance := range instances {
-			items = append(items, instance.(utils.Stoppable))
+			items = append(items, instance.(Stoppable))
 		}
-		if err := utils.Stop(items...); err != nil {
+		if err := Stop(items...); err != nil {
 			logger.Error(err)
 		}
 	}()

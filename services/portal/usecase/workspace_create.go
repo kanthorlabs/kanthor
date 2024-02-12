@@ -3,10 +3,10 @@ package usecase
 import (
 	"context"
 
+	"github.com/kanthorlabs/common/project"
+	"github.com/kanthorlabs/common/validator"
 	"github.com/kanthorlabs/kanthor/internal/entities"
 	"github.com/kanthorlabs/kanthor/pkg/identifier"
-	"github.com/kanthorlabs/kanthor/pkg/validator"
-	"github.com/kanthorlabs/kanthor/project"
 )
 
 type WorkspaceCreateIn struct {
@@ -16,7 +16,6 @@ type WorkspaceCreateIn struct {
 
 func (in *WorkspaceCreateIn) Validate() error {
 	return validator.Validate(
-		validator.DefaultConfig,
 		validator.StringRequired("acc_id", in.AccId),
 		validator.StringRequired("name", in.Name),
 	)

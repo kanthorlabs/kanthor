@@ -3,9 +3,9 @@ package usecase
 import (
 	"context"
 
+	"github.com/kanthorlabs/common/validator"
 	"github.com/kanthorlabs/kanthor/internal/entities"
 	"github.com/kanthorlabs/kanthor/pkg/identifier"
-	"github.com/kanthorlabs/kanthor/pkg/validator"
 )
 
 type EndpointRuleCreateIn struct {
@@ -21,7 +21,6 @@ type EndpointRuleCreateIn struct {
 
 func (in *EndpointRuleCreateIn) Validate() error {
 	return validator.Validate(
-		validator.DefaultConfig,
 		validator.StringStartsWith("ws_id", in.WsId, entities.IdNsWs),
 		validator.StringStartsWith("ep_id", in.EpId, entities.IdNsEp),
 		validator.StringRequired("name", in.Name),

@@ -3,7 +3,7 @@ package entities
 import (
 	"encoding/json"
 
-	"github.com/kanthorlabs/kanthor/pkg/validator"
+	"github.com/kanthorlabs/common/validator"
 )
 
 type Application struct {
@@ -35,7 +35,6 @@ func (entity *Application) String() string {
 
 func (entity *Application) Validate() error {
 	return validator.Validate(
-		validator.DefaultConfig,
 		validator.StringStartsWith("ws_id", entity.WsId, IdNsWs),
 		validator.StringRequired("name", entity.Name),
 	)

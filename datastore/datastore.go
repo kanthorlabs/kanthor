@@ -1,9 +1,9 @@
 package datastore
 
 import (
-	"github.com/kanthorlabs/kanthor/configuration"
+	"github.com/kanthorlabs/common/configuration"
+	"github.com/kanthorlabs/common/logging"
 	"github.com/kanthorlabs/kanthor/datastore/config"
-	"github.com/kanthorlabs/kanthor/logging"
 	"github.com/kanthorlabs/kanthor/patterns"
 )
 

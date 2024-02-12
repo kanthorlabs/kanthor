@@ -4,11 +4,11 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/kanthorlabs/common/validator"
 	"github.com/kanthorlabs/kanthor/infrastructure/streaming"
 	"github.com/kanthorlabs/kanthor/internal/entities"
 	"github.com/kanthorlabs/kanthor/internal/transformation"
 	"github.com/kanthorlabs/kanthor/pkg/safe"
-	"github.com/kanthorlabs/kanthor/pkg/validator"
 )
 
 type RetrySelectIn struct {
@@ -19,7 +19,6 @@ type RetrySelectIn struct {
 
 func ValidateRetrySelectAttemptTrigger(prefix string, attempt *entities.AttemptTrigger) error {
 	return validator.Validate(
-		validator.DefaultConfig,
 		validator.NumberGreaterThanOrEqual(prefix+".to", attempt.From, 0),
 		validator.NumberGreaterThan(prefix+".to", attempt.From, attempt.From),
 	)
@@ -27,7 +26,6 @@ func ValidateRetrySelectAttemptTrigger(prefix string, attempt *entities.AttemptT
 
 func (in *RetrySelectIn) Validate() error {
 	return validator.Validate(
-		validator.DefaultConfig,
 		validator.NumberGreaterThan("batch_size", in.BatchSize, 0),
 		validator.MapRequired("triggers", in.Triggers),
 		validator.Map(in.Triggers, func(refId string, item *entities.AttemptTrigger) error {

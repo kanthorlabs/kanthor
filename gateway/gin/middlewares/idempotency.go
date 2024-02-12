@@ -6,9 +6,9 @@ import (
 	"slices"
 
 	"github.com/gin-gonic/gin"
+	"github.com/kanthorlabs/common/logging"
 	"github.com/kanthorlabs/kanthor/gateway"
 	"github.com/kanthorlabs/kanthor/infrastructure/idempotency"
-	"github.com/kanthorlabs/kanthor/logging"
 )
 
 var HeaderIdempotencyKey = "idempotency-key"

@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/kanthorlabs/common/utils"
+	"github.com/kanthorlabs/common/validator"
 	"github.com/kanthorlabs/kanthor/internal/entities"
-	"github.com/kanthorlabs/kanthor/pkg/utils"
-	"github.com/kanthorlabs/kanthor/pkg/validator"
 )
 
 type WorkspaceImportIn struct {
@@ -17,26 +17,22 @@ type WorkspaceImportIn struct {
 
 func (in *WorkspaceImportIn) Validate() error {
 	return validator.Validate(
-		validator.DefaultConfig,
 		validator.StringStartsWith("id", in.Id, entities.IdNsWs),
 		validator.PointerNotNil("snapshot", in.Snapshot),
 		validator.MapRequired("snapshot.applications", in.Snapshot.Applications),
 		validator.Map(in.Snapshot.Applications, func(appId string, app entities.WorkspaceSnapshotApp) error {
 			appPrefix := fmt.Sprintf("snapshot[%s]", appId)
 			return validator.Validate(
-				validator.DefaultConfig,
 				validator.StringRequired(appPrefix+".name", app.Name),
 				validator.Map(app.Endpoints, func(epId string, ep entities.WorkspaceSnapshotEp) error {
 					epPrefix := fmt.Sprintf(appPrefix+".endpoints[%s]", epId)
 					return validator.Validate(
-						validator.DefaultConfig,
 						validator.StringRequired(epPrefix+".name", ep.Name),
 						validator.StringOneOf(epPrefix+".method", ep.Method, []string{http.MethodPost, http.MethodPut}),
 						validator.StringUri(epPrefix+".uri", ep.Uri),
 						validator.Map(ep.Rules, func(ruleId string, rule entities.WorkspaceSnapshotEpr) error {
 							eprPrefix := fmt.Sprintf(epPrefix+".rules[%s]", ruleId)
 							return validator.Validate(
-								validator.DefaultConfig,
 								validator.StringRequired(eprPrefix+".name", rule.Name),
 								validator.NumberGreaterThan(eprPrefix+".priority", rule.Priority, 0),
 								validator.StringRequired(eprPrefix+".condition_source", rule.ConditionSource),

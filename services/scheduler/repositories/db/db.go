@@ -1,8 +1,8 @@
 package db
 
 import (
+	"github.com/kanthorlabs/common/logging"
 	"github.com/kanthorlabs/kanthor/database"
-	"github.com/kanthorlabs/kanthor/logging"
 )
 
 func New(logger logging.Logger, db database.Database) Database {

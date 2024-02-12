@@ -4,12 +4,12 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/kanthorlabs/common/project"
+	"github.com/kanthorlabs/common/utils"
+	"github.com/kanthorlabs/common/validator"
 	"github.com/kanthorlabs/kanthor/internal/constants"
 	"github.com/kanthorlabs/kanthor/internal/entities"
 	"github.com/kanthorlabs/kanthor/pkg/identifier"
-	"github.com/kanthorlabs/kanthor/pkg/utils"
-	"github.com/kanthorlabs/kanthor/pkg/validator"
-	"github.com/kanthorlabs/kanthor/project"
 )
 
 type WorkspaceCredentialsGenerateIn struct {
@@ -20,7 +20,6 @@ type WorkspaceCredentialsGenerateIn struct {
 
 func (in *WorkspaceCredentialsGenerateIn) Validate() error {
 	return validator.Validate(
-		validator.DefaultConfig,
 		validator.StringStartsWith("ws_id", in.WsId, entities.IdNsWs),
 		validator.StringRequired("name", in.Name),
 		validator.NumberGreaterThanOrEqual("expired_at", in.ExpiredAt, 0),
@@ -42,7 +41,7 @@ func (uc *workspaceCredentials) Generate(ctx context.Context, in *WorkspaceCrede
 	doc.Id = identifier.New(entities.IdNsWsc)
 	doc.SetAT(now)
 
-	password := fmt.Sprintf("%s.%s", project.RegionCode(), utils.RandomString(constants.PasswordLength))
+	password := fmt.Sprintf("%s.%s", project.Region(), utils.RandomString(constants.PasswordLength))
 	// once we got error, reject entirely request instead of do a partial success request
 	hash, err := uc.infra.Cipher.Password.HashString(password)
 	if err != nil {

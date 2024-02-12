@@ -5,15 +5,16 @@ import (
 	"errors"
 	"sync"
 
+	"github.com/kanthorlabs/common/healthcheck"
+	"github.com/kanthorlabs/common/healthcheck/background"
+	hcconfig "github.com/kanthorlabs/common/healthcheck/config"
+	"github.com/kanthorlabs/common/logging"
+	"github.com/kanthorlabs/common/project"
 	"github.com/kanthorlabs/kanthor/database"
 	"github.com/kanthorlabs/kanthor/infrastructure"
 	"github.com/kanthorlabs/kanthor/infrastructure/streaming"
 	"github.com/kanthorlabs/kanthor/internal/constants"
-	"github.com/kanthorlabs/kanthor/logging"
 	"github.com/kanthorlabs/kanthor/patterns"
-	"github.com/kanthorlabs/kanthor/pkg/healthcheck"
-	"github.com/kanthorlabs/kanthor/pkg/healthcheck/background"
-	"github.com/kanthorlabs/kanthor/project"
 	"github.com/kanthorlabs/kanthor/services/scheduler/config"
 	"github.com/kanthorlabs/kanthor/services/scheduler/usecase"
 	"github.com/kanthorlabs/kanthor/telemetry"
@@ -25,7 +26,12 @@ func New(
 	infra *infrastructure.Infrastructure,
 	db database.Database,
 	uc usecase.Scheduler,
-) patterns.Runnable {
+) (patterns.Runnable, error) {
+	healthcheck, err := background.NewServer(hcconfig.Default("attempt.cronjob", 5000))
+	if err != nil {
+		return nil, err
+	}
+
 	logger = logger.With("service", "scheduler", "entrypoint", "consumer")
 	return &scheduler{
 		conf:       conf,
@@ -35,11 +41,8 @@ func New(
 		db:         db,
 		uc:         uc,
 
-		healthcheck: background.NewServer(
-			healthcheck.DefaultConfig("scheduler"),
-			logger.With("healthcheck", "background"),
-		),
-	}
+		healthcheck: healthcheck,
+	}, nil
 }
 
 type scheduler struct {

@@ -6,9 +6,9 @@ import (
 	"sync"
 	"time"
 
-	goredis "github.com/redis/go-redis/v9"
-	"github.com/kanthorlabs/kanthor/logging"
+	"github.com/kanthorlabs/common/logging"
 	"github.com/kanthorlabs/kanthor/patterns"
+	goredis "github.com/redis/go-redis/v9"
 )
 
 func NewRedis(conf *Config, logger logging.Logger) (Cache, error) {

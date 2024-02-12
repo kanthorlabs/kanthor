@@ -1,6 +1,6 @@
 package circuitbreaker
 
-import "github.com/kanthorlabs/kanthor/pkg/validator"
+import "github.com/kanthorlabs/common/validator"
 
 type Config struct {
 	Close Close `json:"close" yaml:"close" mapstructure:"close"`
@@ -27,7 +27,6 @@ type Close struct {
 
 func (conf *Close) Validate() error {
 	return validator.Validate(
-		validator.DefaultConfig,
 		validator.NumberGreaterThan("CIRCUIT_BREAKER.CONFIG.CLOSE.CLEANUP_INTERVAL", conf.CleanupInterval, 1000),
 	)
 }
@@ -38,7 +37,6 @@ type Half struct {
 
 func (conf *Half) Validate() error {
 	return validator.Validate(
-		validator.DefaultConfig,
 		validator.NumberGreaterThan("CIRCUIT_BREAKER.CONFIG.HALF.PASSTHROUGH_REQUESTS", conf.PassthroughRequests, 0),
 	)
 }
@@ -50,7 +48,6 @@ type Open struct {
 
 func (conf *Open) Validate() error {
 	err := validator.Validate(
-		validator.DefaultConfig,
 		validator.NumberGreaterThan("CIRCUIT_BREAKER.CONFIG.OPEN.DURATION", conf.Duration, 1000),
 	)
 	if err != nil {
@@ -71,7 +68,6 @@ type OpenConditions struct {
 
 func (conf *OpenConditions) Validate() error {
 	return validator.Validate(
-		validator.DefaultConfig,
 		validator.NumberGreaterThan("CIRCUIT_BREAKER.CONFIG.OPEN.CONDITION.ERROR_CONSECUTIVE", conf.ErrorConsecutive, 1),
 		validator.NumberGreaterThan("CIRCUIT_BREAKER.CONFIG.OPEN.CONDITION.ERROR_RATIO", conf.ErrorRatio, 0.0),
 		validator.NumberLessThan("CIRCUIT_BREAKER.CONFIG.OPEN.CONDITION.ERROR_RATIO", conf.ErrorRatio, 1.0),

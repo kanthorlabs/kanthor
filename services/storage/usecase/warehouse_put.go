@@ -4,10 +4,10 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/kanthorlabs/common/utils"
+	"github.com/kanthorlabs/common/validator"
 	"github.com/kanthorlabs/kanthor/internal/entities"
 	"github.com/kanthorlabs/kanthor/pkg/safe"
-	"github.com/kanthorlabs/kanthor/pkg/utils"
-	"github.com/kanthorlabs/kanthor/pkg/validator"
 	"github.com/kanthorlabs/kanthor/telemetry"
 	"github.com/sourcegraph/conc/pool"
 	"go.opentelemetry.io/otel/attribute"
@@ -27,7 +27,6 @@ func (in *WarehousePutIn) Count() int {
 
 func (in *WarehousePutIn) Validate() error {
 	err := validator.Validate(
-		validator.DefaultConfig,
 		validator.NumberGreaterThan("batch_size", in.BatchSize, 0),
 	)
 	if err != nil {
@@ -35,7 +34,6 @@ func (in *WarehousePutIn) Validate() error {
 	}
 
 	err = validator.Validate(
-		validator.DefaultConfig,
 		validator.Map(in.Messages, func(refId string, item *entities.Message) error {
 			prefix := fmt.Sprintf("messages.%s", item.Id)
 			return ValidateWarehousePutInMessage(prefix, item)
@@ -46,7 +44,6 @@ func (in *WarehousePutIn) Validate() error {
 	}
 
 	err = validator.Validate(
-		validator.DefaultConfig,
 		validator.Map(in.Requests, func(refId string, item *entities.Request) error {
 			prefix := fmt.Sprintf("requests.%s", item.Id)
 			return ValidateWarehousePutInRequest(prefix, item)
@@ -57,7 +54,6 @@ func (in *WarehousePutIn) Validate() error {
 	}
 
 	err = validator.Validate(
-		validator.DefaultConfig,
 		validator.Map(in.Responses, func(refId string, item *entities.Response) error {
 			prefix := fmt.Sprintf("responses.%s", item.Id)
 			return ValidateWarehousePutInResponse(prefix, item)
@@ -72,7 +68,6 @@ func (in *WarehousePutIn) Validate() error {
 
 func ValidateWarehousePutInMessage(prefix string, message *entities.Message) error {
 	return validator.Validate(
-		validator.DefaultConfig,
 		validator.StringStartsWith(prefix+".id", message.Id, entities.IdNsMsg),
 		validator.NumberGreaterThan(prefix+".timestamp", message.Timestamp, 0),
 		validator.StringRequired(prefix+".tier", message.Tier),
@@ -84,7 +79,6 @@ func ValidateWarehousePutInMessage(prefix string, message *entities.Message) err
 
 func ValidateWarehousePutInRequest(prefix string, request *entities.Request) error {
 	return validator.Validate(
-		validator.DefaultConfig,
 		validator.StringStartsWith(prefix+".id", request.Id, entities.IdNsReq),
 		validator.NumberGreaterThan(prefix+".timestamp", request.Timestamp, 0),
 		validator.StringStartsWith(prefix+".msg_id", request.MsgId, entities.IdNsMsg),
@@ -100,7 +94,6 @@ func ValidateWarehousePutInRequest(prefix string, request *entities.Request) err
 
 func ValidateWarehousePutInResponse(prefix string, response *entities.Response) error {
 	return validator.Validate(
-		validator.DefaultConfig,
 		validator.StringStartsWith(prefix+".id", response.Id, entities.IdNsRes),
 		validator.NumberGreaterThan(prefix+".timestamp", response.Timestamp, 0),
 		validator.StringStartsWith(prefix+".msg_id", response.MsgId, entities.IdNsMsg),
@@ -114,7 +107,6 @@ func ValidateWarehousePutInResponse(prefix string, response *entities.Response) 
 
 func ValidateWarehousePutInAttempt(prefix string, attempt *entities.Attempt) error {
 	return validator.Validate(
-		validator.DefaultConfig,
 		validator.StringStartsWith(prefix+".req_id", attempt.ReqId, entities.IdNsReq),
 		validator.StringStartsWith(prefix+".msg_id", attempt.MsgId, entities.IdNsMsg),
 		validator.StringStartsWith(prefix+".app_id", attempt.AppId, entities.IdNsApp),

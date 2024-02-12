@@ -1,7 +1,7 @@
 package migrator
 
 import (
-	"github.com/kanthorlabs/kanthor/configuration"
+	"github.com/kanthorlabs/common/configuration"
 	"github.com/kanthorlabs/kanthor/datastore/config"
 )
 

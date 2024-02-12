@@ -5,11 +5,11 @@ import (
 	"net/http"
 
 	"github.com/jaswdr/faker"
+	"github.com/kanthorlabs/common/project"
+	"github.com/kanthorlabs/common/utils"
 	"github.com/kanthorlabs/kanthor/internal/entities"
 	"github.com/kanthorlabs/kanthor/pkg/identifier"
 	"github.com/kanthorlabs/kanthor/pkg/timer"
-	"github.com/kanthorlabs/kanthor/pkg/utils"
-	"github.com/kanthorlabs/kanthor/project"
 )
 
 var fake = faker.New()

@@ -1,10 +1,13 @@
 package serve
 
 import (
+	"context"
+	"errors"
 	"fmt"
 	"slices"
+	"time"
 
-	"github.com/kanthorlabs/kanthor/configuration"
+	"github.com/kanthorlabs/common/configuration"
 	"github.com/kanthorlabs/kanthor/patterns"
 	"github.com/kanthorlabs/kanthor/services"
 	"github.com/kanthorlabs/kanthor/services/ioc"
@@ -67,4 +70,34 @@ func Services(provider configuration.Provider, names []string) ([]patterns.Runna
 	}
 
 	return instances, nil
+}
+
+type Stoppable interface {
+	Stop(ctx context.Context) error
+}
+
+func Stop(instances ...Stoppable) error {
+	// wait a little to stop our service
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	errc := make(chan error, 1)
+	defer close(errc)
+	go func() {
+		var returning error
+		for _, instance := range instances {
+			if err := instance.Stop(ctx); err != nil {
+				returning = errors.Join(returning, err)
+			}
+		}
+
+		errc <- returning
+	}()
+
+	select {
+	case err := <-errc:
+		return err
+	case <-ctx.Done():
+		return ctx.Err()
+	}
 }

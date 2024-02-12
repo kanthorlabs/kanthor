@@ -3,10 +3,10 @@ package entities
 import (
 	"time"
 
+	"github.com/kanthorlabs/common/utils"
+	"github.com/kanthorlabs/common/validator"
 	"github.com/kanthorlabs/kanthor/gateway"
 	"github.com/kanthorlabs/kanthor/pkg/timer"
-	"github.com/kanthorlabs/kanthor/pkg/utils"
-	"github.com/kanthorlabs/kanthor/pkg/validator"
 )
 
 var DefaultPagingLimitMin = 5
@@ -28,7 +28,6 @@ type PagingQuery struct {
 
 func (q *PagingQuery) Validate() error {
 	return validator.Validate(
-		validator.DefaultConfig,
 		validator.StringLenIfNotEmpty("search", q.Search, 3, 100),
 		validator.NumberInRange("limit", q.Limit, DefaultPagingLimitMin, DefaultPagingLimitMax),
 		validator.NumberInRange("page", q.Page, DefaultPagingPageMin, DefaultPagingPageMax),
@@ -54,7 +53,6 @@ type ScanningQuery struct {
 
 func (q *ScanningQuery) Validate() error {
 	return validator.Validate(
-		validator.DefaultConfig,
 		validator.StringLenIfNotEmpty("search", q.Search, 27, 100),
 		validator.NumberInRange("size", q.Size, 5, 100),
 		validator.NumberGreaterThan("start", q.From.UnixMilli(), 0),

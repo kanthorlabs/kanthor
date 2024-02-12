@@ -4,8 +4,8 @@ import (
 	"context"
 	"errors"
 
+	"github.com/kanthorlabs/common/validator"
 	"github.com/kanthorlabs/kanthor/internal/entities"
-	"github.com/kanthorlabs/kanthor/pkg/validator"
 	"github.com/kanthorlabs/kanthor/services/portal/repositories/ds"
 )
 
@@ -17,7 +17,6 @@ type EndpointGetMessageIn struct {
 
 func (in *EndpointGetMessageIn) Validate() error {
 	return validator.Validate(
-		validator.DefaultConfig,
 		validator.StringStartsWith("ws_id", in.WsId, entities.IdNsWs),
 		validator.StringStartsWith("ep_id", in.EpId, entities.IdNsEp),
 		validator.StringStartsWith("msg_id", in.MsgId, entities.IdNsMsg),

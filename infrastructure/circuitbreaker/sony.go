@@ -5,7 +5,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/kanthorlabs/kanthor/logging"
+	"github.com/kanthorlabs/common/logging"
 	"github.com/sony/gobreaker"
 )
 

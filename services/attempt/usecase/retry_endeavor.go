@@ -7,6 +7,8 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/kanthorlabs/common/utils"
+	"github.com/kanthorlabs/common/validator"
 	"github.com/kanthorlabs/kanthor/infrastructure/circuitbreaker"
 	"github.com/kanthorlabs/kanthor/infrastructure/sender"
 	"github.com/kanthorlabs/kanthor/infrastructure/streaming"
@@ -15,8 +17,6 @@ import (
 	"github.com/kanthorlabs/kanthor/internal/transformation"
 	"github.com/kanthorlabs/kanthor/pkg/identifier"
 	"github.com/kanthorlabs/kanthor/pkg/safe"
-	"github.com/kanthorlabs/kanthor/pkg/utils"
-	"github.com/kanthorlabs/kanthor/pkg/validator"
 	"github.com/sourcegraph/conc/pool"
 )
 
@@ -27,7 +27,6 @@ type RetryEndeavorIn struct {
 
 func ValidateRetryEndeavorInAttempt(prefix string, attempt *entities.Attempt) error {
 	return validator.Validate(
-		validator.DefaultConfig,
 		validator.StringStartsWith(prefix+".req_id", attempt.ReqId, entities.IdNsReq),
 		validator.StringStartsWith(prefix+".msg_id", attempt.MsgId, entities.IdNsMsg),
 		validator.StringStartsWith(prefix+".app_id", attempt.AppId, entities.IdNsApp),
@@ -37,7 +36,6 @@ func ValidateRetryEndeavorInAttempt(prefix string, attempt *entities.Attempt) er
 
 func (in *RetryEndeavorIn) Validate() error {
 	return validator.Validate(
-		validator.DefaultConfig,
 		validator.MapRequired("attempts", in.Attempts),
 		validator.Map(in.Attempts, func(refId string, item *entities.Attempt) error {
 			prefix := fmt.Sprintf("attempts.%s", refId)

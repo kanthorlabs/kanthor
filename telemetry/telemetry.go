@@ -3,7 +3,7 @@ package telemetry
 import (
 	"context"
 
-	"github.com/kanthorlabs/kanthor/project"
+	"github.com/kanthorlabs/common/project"
 	"github.com/uptrace/uptrace-go/uptrace"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"

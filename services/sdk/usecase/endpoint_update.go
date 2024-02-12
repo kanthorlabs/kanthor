@@ -4,8 +4,8 @@ import (
 	"context"
 	"net/http"
 
+	"github.com/kanthorlabs/common/validator"
 	"github.com/kanthorlabs/kanthor/internal/entities"
-	"github.com/kanthorlabs/kanthor/pkg/validator"
 )
 
 type EndpointUpdateIn struct {
@@ -17,7 +17,6 @@ type EndpointUpdateIn struct {
 
 func (in *EndpointUpdateIn) Validate() error {
 	return validator.Validate(
-		validator.DefaultConfig,
 		validator.StringStartsWith("ws_id", in.WsId, entities.IdNsWs),
 		validator.StringStartsWith("id", in.Id, entities.IdNsEp),
 		validator.StringRequired("name", in.Name),

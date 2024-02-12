@@ -3,9 +3,9 @@ package usecase
 import (
 	"context"
 
+	"github.com/kanthorlabs/common/logging"
 	"github.com/kanthorlabs/kanthor/infrastructure"
 	"github.com/kanthorlabs/kanthor/infrastructure/streaming"
-	"github.com/kanthorlabs/kanthor/logging"
 	"github.com/kanthorlabs/kanthor/services/attempt/config"
 	"github.com/kanthorlabs/kanthor/services/attempt/repositories"
 )

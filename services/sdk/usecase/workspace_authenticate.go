@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/kanthorlabs/common/validator"
 	"github.com/kanthorlabs/kanthor/internal/entities"
-	"github.com/kanthorlabs/kanthor/pkg/validator"
 	"github.com/kanthorlabs/kanthor/telemetry"
 	"go.opentelemetry.io/otel/trace"
 )
@@ -18,7 +18,6 @@ type WorkspaceAuthenticateIn struct {
 
 func (in *WorkspaceAuthenticateIn) Validate() error {
 	return validator.Validate(
-		validator.DefaultConfig,
 		validator.StringStartsWith("user", in.User, entities.IdNsWsc),
 		validator.StringRequired("pass", in.Pass),
 	)

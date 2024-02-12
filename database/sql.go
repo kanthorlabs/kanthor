@@ -6,8 +6,8 @@ import (
 	"sync"
 	"time"
 
+	"github.com/kanthorlabs/common/logging"
 	"github.com/kanthorlabs/kanthor/database/config"
-	"github.com/kanthorlabs/kanthor/logging"
 	"github.com/kanthorlabs/kanthor/patterns"
 	postgresdriver "gorm.io/driver/postgres"
 	"gorm.io/gorm"

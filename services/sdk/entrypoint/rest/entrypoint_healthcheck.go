@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
-	"github.com/kanthorlabs/kanthor/project"
+	"github.com/kanthorlabs/common/project"
 )
 
 func RegisterHealthcheck(router gin.IRoutes, service *sdk) {
