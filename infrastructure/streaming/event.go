@@ -25,7 +25,6 @@ func (e *Event) Validate() error {
 		validator.StringRequired("subject", e.Subject),
 		validator.StringRequired("id", e.Id),
 		validator.SliceRequired("data", e.Data),
-		validator.MapNotNil("metadata", e.Metadata),
 	)
 }
 

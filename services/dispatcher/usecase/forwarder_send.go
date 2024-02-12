@@ -32,7 +32,6 @@ func ValidateForwarderSendInRequest(prefix string, item *entities.Request) error
 		validator.StringRequired("request.tier", item.Tier),
 		validator.StringStartsWith("request.app_id", item.AppId, entities.IdNsApp),
 		validator.StringRequired("request.type", item.Type),
-		validator.MapNotNil[string, string]("request.metadata", item.Metadata),
 		validator.StringRequired("request.body", item.Body),
 		validator.StringUri("request.uri", item.Uri),
 		validator.StringRequired("request.method", item.Method),
