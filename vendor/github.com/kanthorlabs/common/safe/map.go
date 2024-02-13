@@ -8,7 +8,7 @@ type Map[T any] struct {
 	sample T
 }
 
-func (sm *Map[T]) int() {
+func (sm *Map[T]) init() {
 	if sm.data == nil {
 		sm.data = make(map[string]T)
 	}
@@ -18,7 +18,7 @@ func (sm *Map[T]) Set(key string, value T) {
 	sm.mu.Lock()
 	defer sm.mu.Unlock()
 
-	sm.int()
+	sm.init()
 
 	sm.data[key] = value
 	sm.sample = value
@@ -28,7 +28,7 @@ func (sm *Map[T]) Get(key string) (T, bool) {
 	sm.mu.Lock()
 	defer sm.mu.Unlock()
 
-	sm.int()
+	sm.init()
 
 	value, ok := sm.data[key]
 	return value, ok

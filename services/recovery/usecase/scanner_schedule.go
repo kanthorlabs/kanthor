@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/kanthorlabs/common/persistence/datastore"
 	"github.com/kanthorlabs/common/validator"
 	"github.com/kanthorlabs/kanthor/infrastructure/streaming"
 	"github.com/kanthorlabs/kanthor/internal/entities"
@@ -32,7 +33,7 @@ type ScannerScheduleOut struct {
 }
 
 func (uc *scanner) Schedule(ctx context.Context, in *ScannerScheduleIn) (*ScannerScheduleOut, error) {
-	query := &entities.ScanningQuery{
+	query := &datastore.ScanningQuery{
 		Size: in.BatchSize,
 	}
 	ch := uc.repositories.Database().Application().Scan(ctx, query)

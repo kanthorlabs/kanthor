@@ -30,6 +30,10 @@ func (entity *Endpoint) TableName() string {
 	return TableEp
 }
 
+func (entity *Endpoint) ColName(col string) string {
+	return fmt.Sprintf(`"%s"."%s"`, TableEp, col)
+}
+
 func (entity *Endpoint) GenSecretKey() {
 	if entity.SecretKey == "" {
 		entity.SecretKey = fmt.Sprintf("epsk_%s", utils.RandomString(32))
@@ -74,6 +78,10 @@ type EndpointRule struct {
 
 func (entity *EndpointRule) TableName() string {
 	return TableEpr
+}
+
+func (entity *EndpointRule) ColName(col string) string {
+	return fmt.Sprintf(`"%s"."%s"`, TableEpr, col)
 }
 
 func (entity *EndpointRule) Validate() error {

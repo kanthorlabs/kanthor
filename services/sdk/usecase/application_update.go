@@ -26,19 +26,17 @@ type ApplicationUpdateOut struct {
 }
 
 func (uc *application) Update(ctx context.Context, in *ApplicationUpdateIn) (*ApplicationUpdateOut, error) {
-	app, err := uc.repositories.Database().Transaction(ctx, func(txctx context.Context) (interface{}, error) {
-		app, err := uc.repositories.Database().Application().Get(txctx, in.WsId, in.Id)
-		if err != nil {
-			return nil, err
-		}
-
-		app.Name = in.Name
-		app.SetAT(uc.infra.Timer.Now())
-		return uc.repositories.Database().Application().Update(txctx, app)
-	})
+	app, err := uc.repositories.Database().Application().Get(ctx, in.WsId, in.Id)
 	if err != nil {
 		return nil, err
 	}
 
-	return &ApplicationUpdateOut{Doc: app.(*entities.Application)}, nil
+	app.Name = in.Name
+	app.SetAT(uc.infra.Timer.Now())
+	doc, err := uc.repositories.Database().Application().Update(ctx, app)
+	if err != nil {
+		return nil, err
+	}
+
+	return &ApplicationUpdateOut{Doc: doc}, nil
 }

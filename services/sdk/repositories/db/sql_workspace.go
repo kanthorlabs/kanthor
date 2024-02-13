@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/kanthorlabs/kanthor/database"
 	"github.com/kanthorlabs/kanthor/internal/entities"
 	"github.com/kanthorlabs/kanthor/telemetry"
 	"go.opentelemetry.io/otel/attribute"
@@ -24,9 +23,7 @@ func (sql *SqlWorkspace) Get(ctx context.Context, id string) (*entities.Workspac
 	}()
 
 	ws := &entities.Workspace{}
-
-	transaction := database.SqlTxnFromContext(subctx, sql.client)
-	tx := transaction.WithContext(subctx).Model(&ws).
+	tx := sql.client.WithContext(subctx).Model(&ws).
 		Where(fmt.Sprintf(`"%s"."id" = ?`, entities.TableWs), id).
 		First(ws)
 	if tx.Error != nil {

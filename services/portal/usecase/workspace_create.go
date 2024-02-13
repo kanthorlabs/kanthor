@@ -26,25 +26,18 @@ type WorkspaceCreateOut struct {
 }
 
 func (uc *workspace) Create(ctx context.Context, in *WorkspaceCreateIn) (*WorkspaceCreateOut, error) {
-	res, err := uc.repositories.Database().Transaction(ctx, func(txctx context.Context) (interface{}, error) {
-		doc := &entities.Workspace{
-			OwnerId: in.AccId,
-			Name:    in.Name,
-			Tier:    project.Tier(),
-		}
-		doc.Id = idx.New(entities.IdNsWs)
-		doc.SetAT(uc.infra.Timer.Now())
+	doc := &entities.Workspace{
+		OwnerId: in.AccId,
+		Name:    in.Name,
+		Tier:    project.Tier(),
+	}
+	doc.Id = idx.New(entities.IdNsWs)
+	doc.SetAT(uc.infra.Timer.Now())
 
-		ws, err := uc.repositories.Database().Workspace().Create(ctx, doc)
-		if err != nil {
-			return nil, err
-		}
-
-		return &WorkspaceCreateOut{Doc: ws}, nil
-	})
-
+	ws, err := uc.repositories.Database().Workspace().Create(ctx, doc)
 	if err != nil {
 		return nil, err
 	}
-	return res.(*WorkspaceCreateOut), nil
+
+	return &WorkspaceCreateOut{Doc: ws}, nil
 }

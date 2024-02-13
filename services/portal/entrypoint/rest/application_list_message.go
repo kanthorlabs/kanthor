@@ -26,8 +26,14 @@ type ApplicationListMessageRes struct {
 // @Security	WorkspaceId
 func UseApplicationListMessage(service *portal) gin.HandlerFunc {
 	return func(ginctx *gin.Context) {
-		var req gateway.Query
-		if err := ginctx.BindQuery(&req); err != nil {
+		var query gateway.Query
+		if err := ginctx.BindQuery(&query); err != nil {
+			ginctx.AbortWithStatusJSON(http.StatusBadRequest, gateway.Error(err))
+			return
+		}
+
+		scanningQuery, err := query.ScanningQuery(service.infra.Timer)
+		if err != nil {
 			ginctx.AbortWithStatusJSON(http.StatusBadRequest, gateway.Error(err))
 			return
 		}
@@ -36,7 +42,7 @@ func UseApplicationListMessage(service *portal) gin.HandlerFunc {
 
 		ws := ctx.Value(gateway.CtxWorkspace).(*entities.Workspace)
 		in := &usecase.ApplicationListMessageIn{
-			ScanningQuery: entities.ScanningQueryFromGatewayQuery(&req, service.infra.Timer),
+			ScanningQuery: scanningQuery,
 			WsId:          ws.Id,
 			AppId:         ginctx.Param("app_id"),
 		}

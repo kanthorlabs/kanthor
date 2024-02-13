@@ -2,7 +2,7 @@ package entrypoint
 
 import (
 	"github.com/kanthorlabs/common/logging"
-	"github.com/kanthorlabs/kanthor/database"
+	"github.com/kanthorlabs/common/persistence/database"
 	"github.com/kanthorlabs/kanthor/infrastructure"
 	"github.com/kanthorlabs/kanthor/patterns"
 	"github.com/kanthorlabs/kanthor/services/scheduler/config"

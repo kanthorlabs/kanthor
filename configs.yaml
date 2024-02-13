@@ -10,14 +10,14 @@ logger:
     env: localhost
 
 database:
-  uri: *postgres_uri
-  migration:
-    source: file://./data/migration/database
+  engine: sqlx
+  sqlx:
+    uri: *postgres_uri
 
 datastore:
-  uri: *postgres_uri
-  migration:
-    source: file://./data/migration/datastore
+  engine: sqlx
+  sqlx:
+    uri: *postgres_uri
 
 # infrastructure
 infrastructure:

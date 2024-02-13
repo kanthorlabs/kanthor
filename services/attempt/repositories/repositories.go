@@ -2,8 +2,8 @@ package repositories
 
 import (
 	"github.com/kanthorlabs/common/logging"
-	"github.com/kanthorlabs/kanthor/database"
-	"github.com/kanthorlabs/kanthor/datastore"
+	"github.com/kanthorlabs/common/persistence/database"
+	"github.com/kanthorlabs/common/persistence/datastore"
 	"github.com/kanthorlabs/kanthor/services/attempt/repositories/db"
 	"github.com/kanthorlabs/kanthor/services/attempt/repositories/ds"
 )

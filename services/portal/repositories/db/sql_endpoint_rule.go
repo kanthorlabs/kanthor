@@ -2,9 +2,8 @@ package db
 
 import (
 	"context"
-	"fmt"
 
-	"github.com/kanthorlabs/kanthor/database"
+	"github.com/kanthorlabs/common/persistence/database"
 	"github.com/kanthorlabs/kanthor/internal/entities"
 	"gorm.io/gorm"
 )
@@ -23,14 +22,13 @@ func (sql *SqlEndpointRule) CreateBatch(ctx context.Context, docs []entities.End
 		ids = append(ids, doc.Id)
 	}
 
-	transaction := database.SqlTxnFromContext(ctx, sql.client)
-	if tx := transaction.WithContext(ctx).Create(docs); tx.Error != nil {
+	if tx := sql.client.WithContext(ctx).Create(docs); tx.Error != nil {
 		return nil, tx.Error
 	}
 	return ids, nil
 }
 
-func (sql *SqlEndpointRule) Count(ctx context.Context, wsId string, query *entities.PagingQuery) (int64, error) {
+func (sql *SqlEndpointRule) Count(ctx context.Context, wsId string, query *database.PagingQuery) (int64, error) {
 	doc := &entities.EndpointRule{}
 
 	tx := sql.client.WithContext(ctx).Model(doc).
@@ -40,15 +38,8 @@ func (sql *SqlEndpointRule) Count(ctx context.Context, wsId string, query *entit
 			UseWsId(wsId, entities.TableApp),
 		)
 
-	if len(query.Ids) > 0 {
-		return int64(len(query.Ids)), nil
-	}
+	tx = query.SqlxCount(tx, "id", []string{doc.ColName("name"), doc.ColName("condition_source")})
 
-	props := []string{
-		fmt.Sprintf(`"%s"."name"`, doc.TableName()),
-		fmt.Sprintf(`"%s"."condition_source"`, doc.TableName()),
-	}
-	tx = database.SqlApplyListQuery(tx, query, props)
 	var count int64
 	return count, tx.Count(&count).Error
 }

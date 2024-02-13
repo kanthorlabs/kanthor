@@ -8,9 +8,9 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/kanthorlabs/common/logging"
+	"github.com/kanthorlabs/common/persistence/database"
+	"github.com/kanthorlabs/common/persistence/datastore"
 	"github.com/kanthorlabs/common/project"
-	"github.com/kanthorlabs/kanthor/database"
-	"github.com/kanthorlabs/kanthor/datastore"
 	"github.com/kanthorlabs/kanthor/gateway/httpx/middlewares"
 	"github.com/kanthorlabs/kanthor/infrastructure"
 	"github.com/kanthorlabs/kanthor/openapi"

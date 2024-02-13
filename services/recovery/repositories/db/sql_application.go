@@ -3,6 +3,7 @@ package db
 import (
 	"context"
 
+	"github.com/kanthorlabs/common/persistence/datastore"
 	"github.com/kanthorlabs/kanthor/internal/entities"
 	"github.com/kanthorlabs/kanthor/internal/routing"
 	"gorm.io/gorm"
@@ -12,44 +13,48 @@ type SqlApplication struct {
 	client *gorm.DB
 }
 
-func (sql *SqlApplication) Scan(ctx context.Context, query *entities.ScanningQuery) chan *entities.ScanningResult[[]entities.Application] {
-	ch := make(chan *entities.ScanningResult[[]entities.Application], 1)
+func (sql *SqlApplication) Scan(ctx context.Context, query *datastore.ScanningQuery) chan *datastore.ScanningRecord[[]entities.Application] {
+	ch := make(chan *datastore.ScanningRecord[[]entities.Application], 1)
 	go sql.scan(ctx, query, ch)
 	return ch
 }
 
-func (sql *SqlApplication) scan(ctx context.Context, query *entities.ScanningQuery, ch chan *entities.ScanningResult[[]entities.Application]) {
+func (sql *SqlApplication) scan(ctx context.Context, query *datastore.ScanningQuery, ch chan *datastore.ScanningRecord[[]entities.Application]) {
 	defer close(ch)
 
-	var cursor string
+	// cache the cursor here to use it next round
+	cursor := query.Cursor
 	for {
 		if ctx.Err() != nil {
 			return
 		}
 
-		tx := sql.client.
-			Model(&entities.Application{}).
-			Order("id ASC").
-			Limit(query.Size)
-		if query.Search != "" {
-			tx = tx.Where("id = ? ", query.Search)
-		}
-		if cursor != "" {
-			tx = tx.Where("id < ?", cursor)
-		}
+		scanQuery := query.Clone()
+		// use previous cursor
+		scanQuery.Cursor = cursor
+
+		tx := scanQuery.Sqlx(
+			sql.client.Model(&entities.Application{}),
+			&datastore.ScanningCondition{
+				PrimaryKeyNs:  entities.IdNsEp,
+				PrimaryKeyCol: "id",
+			},
+		)
 
 		var data []entities.Application
 		if tx := tx.Find(&data); tx.Error != nil {
-			ch <- &entities.ScanningResult[[]entities.Application]{Error: tx.Error}
+			ch <- &datastore.ScanningRecord[[]entities.Application]{Error: tx.Error}
 			return
 		}
 
-		ch <- &entities.ScanningResult[[]entities.Application]{Data: data}
+		ch <- &datastore.ScanningRecord[[]entities.Application]{Data: data}
 
 		if len(data) < query.Size {
 			return
 		}
 
+		// refresh cursor for next round
+		// by default datastore.ScanningOrderDesc will be used, so the last item must be use as cursor
 		cursor = data[len(data)-1].Id
 	}
 }

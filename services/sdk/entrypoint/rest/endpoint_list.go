@@ -35,11 +35,17 @@ func UseEndpointList(service *sdk) gin.HandlerFunc {
 			return
 		}
 
+		pagingQuery, err := query.PagingQuery()
+		if err != nil {
+			ginctx.AbortWithStatusJSON(http.StatusBadRequest, gateway.Error(err))
+			return
+		}
+
 		ctx := ginctx.MustGet(gateway.Ctx).(context.Context)
 		ws := ctx.Value(gateway.CtxWorkspace).(*entities.Workspace)
 
 		in := &usecase.EndpointListIn{
-			PagingQuery: entities.PagingQueryFromGatewayQuery(&query),
+			PagingQuery: pagingQuery,
 			WsId:        ws.Id,
 			AppId:       ginctx.Query("app_id"),
 		}

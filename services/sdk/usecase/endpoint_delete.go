@@ -24,20 +24,17 @@ type EndpointDeleteOut struct {
 }
 
 func (uc *endpoint) Delete(ctx context.Context, in *EndpointDeleteIn) (*EndpointDeleteOut, error) {
-	ep, err := uc.repositories.Database().Transaction(ctx, func(txctx context.Context) (interface{}, error) {
-		ep, err := uc.repositories.Database().Endpoint().Get(ctx, in.WsId, in.Id)
-		if err != nil {
-			return nil, err
-		}
-
-		if err := uc.repositories.Database().Endpoint().Delete(txctx, ep); err != nil {
-			return nil, err
-		}
-		return ep, nil
-	})
+	ep, err := uc.repositories.Database().Endpoint().Get(ctx, in.WsId, in.Id)
 	if err != nil {
 		return nil, err
 	}
 
-	return &EndpointDeleteOut{Doc: ep.(*entities.Endpoint)}, nil
+	if err := uc.repositories.Database().Endpoint().Delete(ctx, ep); err != nil {
+		return nil, err
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	return &EndpointDeleteOut{Doc: ep}, nil
 }

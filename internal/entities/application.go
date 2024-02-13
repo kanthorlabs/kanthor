@@ -2,6 +2,7 @@ package entities
 
 import (
 	"encoding/json"
+	"fmt"
 
 	"github.com/kanthorlabs/common/validator"
 )
@@ -18,6 +19,10 @@ type Application struct {
 
 func (entity *Application) TableName() string {
 	return TableApp
+}
+
+func (entity *Application) ColName(col string) string {
+	return fmt.Sprintf(`"%s"."%s"`, TableApp, col)
 }
 
 func (entity *Application) Marshal() ([]byte, error) {

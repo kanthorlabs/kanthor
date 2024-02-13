@@ -1,11 +1,10 @@
 package db
 
 import (
-	"context"
 	"sync"
 
 	"github.com/kanthorlabs/common/logging"
-	"github.com/kanthorlabs/kanthor/database"
+	"github.com/kanthorlabs/common/persistence/database"
 	"gorm.io/gorm"
 )
 
@@ -21,14 +20,6 @@ type sql struct {
 	endpoint *SqlEndpoint
 
 	mu sync.Mutex
-}
-
-func (repo *sql) Transaction(ctx context.Context, handler func(txctx context.Context) (interface{}, error)) (res interface{}, err error) {
-	err = repo.db.Client().(*gorm.DB).Transaction(func(tx *gorm.DB) error {
-		res, err = handler(context.WithValue(ctx, database.CtxTransaction, tx))
-		return err
-	})
-	return
 }
 
 func (repo *sql) Endpoint() Endpoint {

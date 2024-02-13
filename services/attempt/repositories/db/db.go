@@ -1,10 +1,8 @@
 package db
 
 import (
-	"context"
-
 	"github.com/kanthorlabs/common/logging"
-	"github.com/kanthorlabs/kanthor/database"
+	"github.com/kanthorlabs/common/persistence/database"
 )
 
 func New(logger logging.Logger, db database.Database) Database {
@@ -12,6 +10,5 @@ func New(logger logging.Logger, db database.Database) Database {
 }
 
 type Database interface {
-	Transaction(ctx context.Context, handler func(txctx context.Context) (interface{}, error)) (res interface{}, err error)
 	Endpoint() Endpoint
 }

@@ -3,6 +3,7 @@ package usecase
 import (
 	"context"
 
+	"github.com/kanthorlabs/common/persistence/database"
 	"github.com/kanthorlabs/common/validator"
 	"github.com/kanthorlabs/kanthor/internal/entities"
 )
@@ -25,20 +26,20 @@ type AnalyticsGetOverviewOut struct {
 }
 
 func (uc *analytics) GetOverview(ctx context.Context, in *AnalyticsGetOverviewIn) (*AnalyticsGetOverviewOut, error) {
-	credCount, err := uc.repositories.Database().WorkspaceCredentials().Count(ctx, in.WsId, entities.DefaultPagingQuery)
+	credCount, err := uc.repositories.Database().WorkspaceCredentials().Count(ctx, in.WsId, database.DefaultPagingQuery)
 	if err != nil {
 		return nil, err
 	}
-	appCount, err := uc.repositories.Database().Application().Count(ctx, in.WsId, entities.DefaultPagingQuery)
+	appCount, err := uc.repositories.Database().Application().Count(ctx, in.WsId, database.DefaultPagingQuery)
 	if err != nil {
 		return nil, err
 	}
-	epCount, err := uc.repositories.Database().Endpoint().Count(ctx, in.WsId, entities.DefaultPagingQuery)
+	epCount, err := uc.repositories.Database().Endpoint().Count(ctx, in.WsId, database.DefaultPagingQuery)
 	if err != nil {
 		return nil, err
 	}
 
-	eprCount, err := uc.repositories.Database().EndpointRule().Count(ctx, in.WsId, entities.DefaultPagingQuery)
+	eprCount, err := uc.repositories.Database().EndpointRule().Count(ctx, in.WsId, database.DefaultPagingQuery)
 	if err != nil {
 		return nil, err
 	}

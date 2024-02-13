@@ -3,21 +3,18 @@ package usecase
 import (
 	"context"
 
+	"github.com/kanthorlabs/common/persistence/datastore"
 	"github.com/kanthorlabs/common/validator"
 	"github.com/kanthorlabs/kanthor/internal/entities"
 )
 
 type EndpointListMessageIn struct {
-	*entities.ScanningQuery
+	*datastore.ScanningQuery
 	WsId string
 	EpId string
 }
 
 func (in *EndpointListMessageIn) Validate() error {
-	if err := in.ScanningQuery.Validate(); err != nil {
-		return err
-	}
-
 	return validator.Validate(
 		validator.StringStartsWith("ws_id", in.WsId, entities.IdNsWs),
 		validator.StringStartsWith("ep_id", in.EpId, entities.IdNsEp),

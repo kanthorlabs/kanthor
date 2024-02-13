@@ -5,9 +5,9 @@ import (
 	"fmt"
 
 	"github.com/kanthorlabs/common/configuration"
+	database "github.com/kanthorlabs/common/persistence/database/config"
+	datastore "github.com/kanthorlabs/common/persistence/datastore/config"
 	"github.com/kanthorlabs/common/utils"
-	database "github.com/kanthorlabs/kanthor/database/config"
-	datastore "github.com/kanthorlabs/kanthor/datastore/config"
 	infrastructure "github.com/kanthorlabs/kanthor/infrastructure/config"
 	"github.com/kanthorlabs/kanthor/services"
 	"github.com/spf13/cobra"

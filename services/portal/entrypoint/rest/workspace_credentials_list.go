@@ -34,11 +34,17 @@ func UseWorkspaceCredentialsList(service *portal) gin.HandlerFunc {
 			return
 		}
 
+		pagingQuery, err := query.PagingQuery()
+		if err != nil {
+			ginctx.AbortWithStatusJSON(http.StatusBadRequest, gateway.Error(err))
+			return
+		}
+
 		ctx := ginctx.MustGet(gateway.Ctx).(context.Context)
 
 		ws := ctx.Value(gateway.CtxWorkspace).(*entities.Workspace)
 		in := &usecase.WorkspaceCredentialsListIn{
-			PagingQuery: entities.PagingQueryFromGatewayQuery(&query),
+			PagingQuery: pagingQuery,
 			WsId:        ws.Id,
 		}
 		if err := in.Validate(); err != nil {

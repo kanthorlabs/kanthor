@@ -6,13 +6,13 @@ import (
 	"sync"
 
 	hcconfig "github.com/kanthorlabs/common/healthcheck/config"
+	"github.com/kanthorlabs/common/persistence/database"
+	"github.com/kanthorlabs/common/persistence/datastore"
 
 	"github.com/kanthorlabs/common/healthcheck"
 	"github.com/kanthorlabs/common/healthcheck/background"
 	"github.com/kanthorlabs/common/logging"
 	"github.com/kanthorlabs/common/project"
-	"github.com/kanthorlabs/kanthor/database"
-	"github.com/kanthorlabs/kanthor/datastore"
 	"github.com/kanthorlabs/kanthor/infrastructure"
 	"github.com/kanthorlabs/kanthor/infrastructure/streaming"
 	"github.com/kanthorlabs/kanthor/internal/constants"

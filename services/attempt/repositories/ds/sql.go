@@ -4,7 +4,7 @@ import (
 	"sync"
 
 	"github.com/kanthorlabs/common/logging"
-	"github.com/kanthorlabs/kanthor/datastore"
+	"github.com/kanthorlabs/common/persistence/datastore"
 	"gorm.io/gorm"
 )
 

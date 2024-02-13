@@ -3,7 +3,7 @@ package ds
 import (
 	"context"
 
-	"github.com/kanthorlabs/common/idx"
+	"github.com/kanthorlabs/common/persistence/datastore"
 	"github.com/kanthorlabs/kanthor/internal/entities"
 	"gorm.io/gorm"
 )
@@ -12,50 +12,54 @@ type SqlMessage struct {
 	client *gorm.DB
 }
 
-func (sql *SqlMessage) Scan(ctx context.Context, appId string, query *entities.ScanningQuery) chan *entities.ScanningResult[[]entities.Message] {
-	ch := make(chan *entities.ScanningResult[[]entities.Message], 1)
+func (sql *SqlMessage) Scan(ctx context.Context, appId string, query *datastore.ScanningQuery) chan *datastore.ScanningRecord[[]entities.Message] {
+	ch := make(chan *datastore.ScanningRecord[[]entities.Message], 1)
 	go sql.scan(ctx, appId, query, ch)
 	return ch
 }
 
-func (sql *SqlMessage) scan(ctx context.Context, appId string, query *entities.ScanningQuery, ch chan *entities.ScanningResult[[]entities.Message]) {
+func (sql *SqlMessage) scan(ctx context.Context, appId string, query *datastore.ScanningQuery, ch chan *datastore.ScanningRecord[[]entities.Message]) {
 	defer close(ch)
 
-	low := idx.Build(entities.IdNsMsg, idx.BeforeTime(query.From))
-	high := idx.Build(entities.IdNsMsg, idx.AfterTime(query.To))
-	var cursor string
+	// cache the cursor here to use it next round
+	cursor := query.Cursor
 	for {
 		if ctx.Err() != nil {
 			return
 		}
 
-		tx := sql.client.
-			Model(&entities.Message{}).
+		tx := sql.client.Model(&entities.Message{}).
 			Where("app_id = ?", appId).
-			Where("id > ?", low).
-			Order("app_id DESC, id DESC").
-			Limit(query.Size)
+			// the primary key is combined from app_id and id, so to let the database use primary for scanning
+			// we need to order by the column app_id DESC first
+			// then inside .Sqlx function, the column id DESC will be used to order
+			Order("app_id DESC")
 
-		if query.Search != "" {
-			tx = tx.Where("id = ?", query.Search)
-		}
+		scanQuery := query.Clone()
+		// use previous cursor
+		scanQuery.Cursor = cursor
 
-		if cursor == "" {
-			tx = tx.Where("id < ?", high)
-		} else {
-			tx = tx.Where("id < ?", cursor)
-		}
-
+		tx = scanQuery.Sqlx(
+			tx,
+			&datastore.ScanningCondition{
+				PrimaryKeyNs:  entities.IdNsEp,
+				PrimaryKeyCol: "id",
+			},
+		)
 		var data []entities.Message
 		if tx := tx.Find(&data); tx.Error != nil {
-			ch <- &entities.ScanningResult[[]entities.Message]{Error: tx.Error}
+			ch <- &datastore.ScanningRecord[[]entities.Message]{Error: tx.Error}
 			return
 		}
 
-		ch <- &entities.ScanningResult[[]entities.Message]{Data: data}
+		ch <- &datastore.ScanningRecord[[]entities.Message]{Data: data}
 
 		if len(data) < query.Size {
 			return
 		}
+
+		// refresh cursor for next round
+		// by default datastore.ScanningOrderDesc will be used, so the last item must be use as cursor
+		cursor = data[len(data)-1].Id
 	}
 }

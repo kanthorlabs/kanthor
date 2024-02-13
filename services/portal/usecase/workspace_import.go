@@ -54,74 +54,66 @@ type WorkspaceImportOut struct {
 }
 
 func (uc *workspace) Import(ctx context.Context, in *WorkspaceImportIn) (*WorkspaceImportOut, error) {
-	out, err := uc.repositories.Database().Transaction(ctx, func(txctx context.Context) (interface{}, error) {
-		applications := []entities.Application{}
-		endpoints := []entities.Endpoint{}
-		rules := []entities.EndpointRule{}
+	applications := []entities.Application{}
+	endpoints := []entities.Endpoint{}
+	rules := []entities.EndpointRule{}
 
-		for appId, app := range in.Snapshot.Applications {
-			application := entities.Application{
-				WsId: in.Id,
-				Name: app.Name,
+	for appId, app := range in.Snapshot.Applications {
+		application := entities.Application{
+			WsId: in.Id,
+			Name: app.Name,
+		}
+		application.Id = appId
+		application.SetAT(uc.infra.Timer.Now())
+		applications = append(applications, application)
+
+		for epId, ep := range app.Endpoints {
+			endpoint := entities.Endpoint{
+				SecretKey: utils.RandomString(32),
+				AppId:     application.Id,
+				Name:      ep.Name,
+				Method:    ep.Method,
+				Uri:       ep.Uri,
 			}
-			application.Id = appId
-			application.SetAT(uc.infra.Timer.Now())
-			applications = append(applications, application)
+			endpoint.Id = epId
+			endpoint.SetAT(uc.infra.Timer.Now())
+			endpoints = append(endpoints, endpoint)
 
-			for epId, ep := range app.Endpoints {
-				endpoint := entities.Endpoint{
-					SecretKey: utils.RandomString(32),
-					AppId:     application.Id,
-					Name:      ep.Name,
-					Method:    ep.Method,
-					Uri:       ep.Uri,
+			for eprId, epr := range ep.Rules {
+				rule := entities.EndpointRule{
+					EpId:                endpoint.Id,
+					Name:                epr.Name,
+					Priority:            epr.Priority,
+					Exclusionary:        epr.Exclusionary,
+					ConditionSource:     epr.ConditionSource,
+					ConditionExpression: epr.ConditionExpression,
 				}
-				endpoint.Id = epId
-				endpoint.SetAT(uc.infra.Timer.Now())
-				endpoints = append(endpoints, endpoint)
-
-				for eprId, epr := range ep.Rules {
-					rule := entities.EndpointRule{
-						EpId:                endpoint.Id,
-						Name:                epr.Name,
-						Priority:            epr.Priority,
-						Exclusionary:        epr.Exclusionary,
-						ConditionSource:     epr.ConditionSource,
-						ConditionExpression: epr.ConditionExpression,
-					}
-					rule.Id = eprId
-					rule.SetAT(uc.infra.Timer.Now())
-					rules = append(rules, rule)
-				}
+				rule.Id = eprId
+				rule.SetAT(uc.infra.Timer.Now())
+				rules = append(rules, rule)
 			}
 		}
+	}
 
-		o := &WorkspaceImportOut{}
+	out := &WorkspaceImportOut{}
 
-		appIds, err := uc.repositories.Database().Application().CreateBatch(txctx, applications)
-		if err != nil {
-			return nil, err
-		}
-		o.AppIds = appIds
-
-		epIds, err := uc.repositories.Database().Endpoint().CreateBatch(txctx, endpoints)
-		if err != nil {
-			return nil, err
-		}
-		o.EpIds = epIds
-
-		eprIds, err := uc.repositories.Database().EndpointRule().CreateBatch(txctx, rules)
-		if err != nil {
-			return nil, err
-		}
-		o.EprIds = eprIds
-
-		return o, nil
-
-	})
+	appIds, err := uc.repositories.Database().Application().CreateBatch(ctx, applications)
 	if err != nil {
 		return nil, err
 	}
+	out.AppIds = appIds
 
-	return out.(*WorkspaceImportOut), nil
+	epIds, err := uc.repositories.Database().Endpoint().CreateBatch(ctx, endpoints)
+	if err != nil {
+		return nil, err
+	}
+	out.EpIds = epIds
+
+	eprIds, err := uc.repositories.Database().EndpointRule().CreateBatch(ctx, rules)
+	if err != nil {
+		return nil, err
+	}
+	out.EprIds = eprIds
+
+	return out, nil
 }

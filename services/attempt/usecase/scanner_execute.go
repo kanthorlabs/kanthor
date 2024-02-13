@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/kanthorlabs/common/persistence/datastore"
 	"github.com/kanthorlabs/common/safe"
 	"github.com/kanthorlabs/common/validator"
 	"github.com/kanthorlabs/kanthor/infrastructure/streaming"
@@ -98,7 +99,7 @@ func (uc *scanner) Execute(ctx context.Context, in *ScannerExecuteIn) (*ScannerE
 }
 
 func (uc *scanner) execute(ctx context.Context, attempt *entities.AttemptTask, size int) ([]string, error) {
-	query := &entities.ScanningQuery{
+	query := &datastore.ScanningQuery{
 		Size: size,
 		From: uc.infra.Timer.UnixMilli(attempt.From),
 		To:   uc.infra.Timer.UnixMilli(attempt.To),

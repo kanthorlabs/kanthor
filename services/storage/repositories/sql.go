@@ -4,7 +4,7 @@ import (
 	"sync"
 
 	"github.com/kanthorlabs/common/logging"
-	"github.com/kanthorlabs/kanthor/datastore"
+	"github.com/kanthorlabs/common/persistence/datastore"
 	"github.com/kanthorlabs/kanthor/services/storage/repositories/ds"
 )
 

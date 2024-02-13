@@ -1,6 +1,10 @@
 package entities
 
-import "github.com/kanthorlabs/common/validator"
+import (
+	"fmt"
+
+	"github.com/kanthorlabs/common/validator"
+)
 
 type Workspace struct {
 	Entity
@@ -13,6 +17,10 @@ type Workspace struct {
 
 func (entity *Workspace) TableName() string {
 	return TableWs
+}
+
+func (entity *Workspace) ColName(col string) string {
+	return fmt.Sprintf(`"%s"."%s"`, TableWs, col)
 }
 
 func (entity *Workspace) Validate() error {
@@ -35,6 +43,10 @@ type WorkspaceCredentials struct {
 
 func (entity *WorkspaceCredentials) TableName() string {
 	return TableWsc
+}
+
+func (entity *WorkspaceCredentials) ColName(col string) string {
+	return fmt.Sprintf(`"%s"."%s"`, TableWsc, col)
 }
 
 func (entity *WorkspaceCredentials) Validate() error {

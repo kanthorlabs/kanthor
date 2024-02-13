@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/kanthorlabs/kanthor/database"
 	"github.com/kanthorlabs/kanthor/internal/entities"
 	"gorm.io/gorm"
 )
@@ -18,8 +17,7 @@ func (sql *SqlWorkspace) Create(ctx context.Context, doc *entities.Workspace) (*
 		return nil, err
 	}
 
-	transaction := database.SqlTxnFromContext(ctx, sql.client)
-	if tx := transaction.Create(doc); tx.Error != nil {
+	if tx := sql.client.Create(doc); tx.Error != nil {
 		return nil, tx.Error
 	}
 
@@ -31,13 +29,8 @@ func (sql *SqlWorkspace) Update(ctx context.Context, doc *entities.Workspace) (*
 		return nil, err
 	}
 
-	transaction := database.SqlTxnFromContext(ctx, sql.client)
-
-	updates := []string{
-		"name",
-		"updated_at",
-	}
-	tx := transaction.
+	updates := []string{"name", "updated_at"}
+	tx := sql.client.
 		Where(fmt.Sprintf(`"%s"."id" = ?`, doc.TableName()), doc.Id).
 		// When update with struct, GORM will only update non-zero fields,
 		// you might want to use map to update attributes or use Select to specify fields to update
@@ -63,9 +56,7 @@ func (sql *SqlWorkspace) ListByIds(ctx context.Context, ids []string) ([]entitie
 
 func (sql *SqlWorkspace) Get(ctx context.Context, id string) (*entities.Workspace, error) {
 	doc := &entities.Workspace{}
-	transaction := database.SqlTxnFromContext(ctx, sql.client)
-
-	tx := transaction.WithContext(ctx).Model(doc).
+	tx := sql.client.WithContext(ctx).Model(doc).
 		Where(fmt.Sprintf(`"%s"."id" = ?`, doc.TableName()), id).
 		First(doc)
 	if tx.Error != nil {
@@ -78,8 +69,7 @@ func (sql *SqlWorkspace) Get(ctx context.Context, id string) (*entities.Workspac
 func (sql *SqlWorkspace) ListOwned(ctx context.Context, owner string) ([]entities.Workspace, error) {
 	var docs []entities.Workspace
 
-	transaction := database.SqlTxnFromContext(ctx, sql.client)
-	tx := transaction.WithContext(ctx).Model(&entities.Workspace{}).
+	tx := sql.client.WithContext(ctx).Model(&entities.Workspace{}).
 		Where("owner_id = ?", owner).
 		Order("id DESC").
 		Find(&docs)

@@ -54,7 +54,7 @@ func (uc *endpoint) GetMessage(ctx context.Context, in *EndpointGetMessageIn) (*
 	}
 
 	if len(msgses) == 0 {
-		return nil, errors.New("message was not found")
+		return nil, errors.New("PORTAL.USECASE.ENDPOINT.GET_MESSAGE.NOT_FOUND.ERROR")
 	}
 
 	msg := msgses[0]

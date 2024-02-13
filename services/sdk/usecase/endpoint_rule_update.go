@@ -34,24 +34,23 @@ type EndpointRuleUpdateOut struct {
 }
 
 func (uc *endpointRule) Update(ctx context.Context, in *EndpointRuleUpdateIn) (*EndpointRuleUpdateOut, error) {
-	epr, err := uc.repositories.Database().Transaction(ctx, func(txctx context.Context) (interface{}, error) {
-		epr, err := uc.repositories.Database().EndpointRule().Get(ctx, in.WsId, in.Id)
-		if err != nil {
-			return nil, err
-		}
-
-		epr.Name = in.Name
-		epr.Priority = in.Priority
-		epr.Exclusionary = in.Exclusionary
-		epr.ConditionSource = in.ConditionSource
-		epr.ConditionExpression = in.ConditionExpression
-		epr.SetAT(uc.infra.Timer.Now())
-		return uc.repositories.Database().EndpointRule().Update(txctx, epr)
-	})
+	epr, err := uc.repositories.Database().EndpointRule().Get(ctx, in.WsId, in.Id)
 	if err != nil {
 		return nil, err
 	}
 
-	res := &EndpointRuleUpdateOut{Doc: epr.(*entities.EndpointRule)}
+	epr.Name = in.Name
+	epr.Priority = in.Priority
+	epr.Exclusionary = in.Exclusionary
+	epr.ConditionSource = in.ConditionSource
+	epr.ConditionExpression = in.ConditionExpression
+	epr.SetAT(uc.infra.Timer.Now())
+
+	doc, err := uc.repositories.Database().EndpointRule().Update(ctx, epr)
+	if err != nil {
+		return nil, err
+	}
+
+	res := &EndpointRuleUpdateOut{Doc: doc}
 	return res, nil
 }

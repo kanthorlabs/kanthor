@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/kanthorlabs/common/idx"
+	"github.com/kanthorlabs/common/persistence/datastore"
 	"github.com/kanthorlabs/common/safe"
 	"github.com/kanthorlabs/kanthor/internal/entities"
 	"github.com/sourcegraph/conc"
@@ -16,51 +16,50 @@ type SqlAttempt struct {
 	client *gorm.DB
 }
 
-func (sql *SqlAttempt) Scan(ctx context.Context, query *entities.ScanningQuery, next int64, count int) chan *entities.ScanningResult[[]entities.Attempt] {
-	ch := make(chan *entities.ScanningResult[[]entities.Attempt], 1)
+func (sql *SqlAttempt) Scan(ctx context.Context, query *datastore.ScanningQuery, next int64, count int) chan *datastore.ScanningRecord[[]entities.Attempt] {
+	ch := make(chan *datastore.ScanningRecord[[]entities.Attempt], 1)
 	go sql.scan(ctx, query, next, count, ch)
 	return ch
 }
 
-func (sql *SqlAttempt) scan(ctx context.Context, query *entities.ScanningQuery, next int64, count int, ch chan *entities.ScanningResult[[]entities.Attempt]) {
+func (sql *SqlAttempt) scan(ctx context.Context, query *datastore.ScanningQuery, next int64, count int, ch chan *datastore.ScanningRecord[[]entities.Attempt]) {
 	defer close(ch)
 
-	low := idx.Build(entities.IdNsReq, idx.BeforeTime(query.From))
-	high := idx.Build(entities.IdNsReq, idx.AfterTime(query.To))
-	var cursor string
+	// cache the cursor here to use it next round
+	cursor := query.Cursor
 	for {
 		if ctx.Err() != nil {
 			return
 		}
+		tx := sql.client.Model(&entities.Attempt{}).
+			Where("completed_at = 0 AND schedule_next <= ? AND schedule_counter < ?", next, count)
 
-		tx := sql.client.
-			Model(&entities.Attempt{}).
-			Where("req_id > ?", low).
-			Where("completed_at = 0 AND schedule_next <= ? AND schedule_counter < ?", next, count).
-			Order("req_id DESC").
-			Limit(query.Size)
-
-		if query.Search != "" {
-			tx = tx.Where("req_id = ?", query.Search)
-		}
-
-		if cursor == "" {
-			tx = tx.Where("req_id < ?", high)
-		} else {
-			tx = tx.Where("req_id < ?", cursor)
-		}
+		scanQuery := query.Clone()
+		// use previous cursor
+		scanQuery.Cursor = cursor
+		tx = scanQuery.Sqlx(
+			tx,
+			&datastore.ScanningCondition{
+				PrimaryKeyNs:  entities.IdNsEp,
+				PrimaryKeyCol: "req_id",
+			},
+		)
 
 		var data []entities.Attempt
 		if tx := tx.Find(&data); tx.Error != nil {
-			ch <- &entities.ScanningResult[[]entities.Attempt]{Error: tx.Error}
+			ch <- &datastore.ScanningRecord[[]entities.Attempt]{Error: tx.Error}
 			return
 		}
 
-		ch <- &entities.ScanningResult[[]entities.Attempt]{Data: data}
+		ch <- &datastore.ScanningRecord[[]entities.Attempt]{Data: data}
 
 		if len(data) < query.Size {
 			return
 		}
+
+		// refresh cursor for next round
+		// by default datastore.ScanningOrderDesc will be used, so the last item must be use as cursor
+		cursor = data[len(data)-1].ReqId
 	}
 }
 

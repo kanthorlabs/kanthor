@@ -3,20 +3,17 @@ package usecase
 import (
 	"context"
 
+	"github.com/kanthorlabs/common/persistence/database"
 	"github.com/kanthorlabs/common/validator"
 	"github.com/kanthorlabs/kanthor/internal/entities"
 )
 
 type WorkspaceCredentialsListIn struct {
-	*entities.PagingQuery
+	*database.PagingQuery
 	WsId string
 }
 
 func (in *WorkspaceCredentialsListIn) Validate() error {
-	if err := in.PagingQuery.Validate(); err != nil {
-		return err
-	}
-
 	return validator.Validate(
 		validator.StringStartsWith("ws_id", in.WsId, entities.IdNsWs),
 	)

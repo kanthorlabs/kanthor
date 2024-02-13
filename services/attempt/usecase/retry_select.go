@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/kanthorlabs/common/persistence/datastore"
 	"github.com/kanthorlabs/common/safe"
 	"github.com/kanthorlabs/common/validator"
 	"github.com/kanthorlabs/kanthor/infrastructure/streaming"
@@ -96,7 +97,7 @@ func (uc *retry) Select(ctx context.Context, in *RetrySelectIn) (*RetrySelectOut
 }
 
 func (uc *retry) choose(ctx context.Context, trigger *entities.AttemptTrigger, size, counter int) ([]string, error) {
-	query := &entities.ScanningQuery{
+	query := &datastore.ScanningQuery{
 		Size: size,
 		From: uc.infra.Timer.UnixMilli(trigger.From),
 		To:   uc.infra.Timer.UnixMilli(trigger.To),

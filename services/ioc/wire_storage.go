@@ -7,7 +7,7 @@ import (
 	"github.com/google/wire"
 	"github.com/kanthorlabs/common/configuration"
 	"github.com/kanthorlabs/common/logging"
-	"github.com/kanthorlabs/kanthor/datastore"
+	"github.com/kanthorlabs/common/persistence/datastore"
 	"github.com/kanthorlabs/kanthor/infrastructure"
 	"github.com/kanthorlabs/kanthor/patterns"
 	"github.com/kanthorlabs/kanthor/services/storage/config"

@@ -3,6 +3,7 @@ package db
 import (
 	"context"
 
+	"github.com/kanthorlabs/common/persistence/database"
 	"github.com/kanthorlabs/kanthor/internal/entities"
 )
 
@@ -18,7 +19,7 @@ type Workspace interface {
 type WorkspaceCredentials interface {
 	Create(ctx context.Context, doc *entities.WorkspaceCredentials) (*entities.WorkspaceCredentials, error)
 	Update(ctx context.Context, doc *entities.WorkspaceCredentials) (*entities.WorkspaceCredentials, error)
-	List(ctx context.Context, wsId string, query *entities.PagingQuery) ([]entities.WorkspaceCredentials, error)
-	Count(ctx context.Context, wsId string, query *entities.PagingQuery) (int64, error)
+	List(ctx context.Context, wsId string, query *database.PagingQuery) ([]entities.WorkspaceCredentials, error)
+	Count(ctx context.Context, wsId string, query *database.PagingQuery) (int64, error)
 	Get(ctx context.Context, wsId, id string) (*entities.WorkspaceCredentials, error)
 }

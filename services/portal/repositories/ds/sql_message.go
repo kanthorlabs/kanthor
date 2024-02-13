@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/kanthorlabs/kanthor/datastore"
+	"github.com/kanthorlabs/common/persistence/datastore"
 	"github.com/kanthorlabs/kanthor/internal/entities"
 	"gorm.io/gorm"
 )
@@ -49,23 +49,26 @@ func (sql *SqlMessage) GetByIds(ctx context.Context, appId string, ids []string)
 	return docs, nil
 }
 
-func (sql *SqlMessage) Scan(ctx context.Context, appId string, query *entities.ScanningQuery) ([]entities.Message, error) {
+func (sql *SqlMessage) Scan(ctx context.Context, appId string, query *datastore.ScanningQuery) ([]entities.Message, error) {
 	doc := &entities.Message{}
 
 	tx := sql.client.WithContext(ctx).Model(doc).
 		Where(fmt.Sprintf(`"%s"."app_id" = ?`, doc.TableName()), appId).
-		Order(fmt.Sprintf(`"%s"."app_id" DESC, "%s"."id" DESC`, doc.TableName(), doc.TableName())).
 		Select([]string{
 			fmt.Sprintf(`"%s"."id"`, doc.TableName()),
 			fmt.Sprintf(`"%s"."timestamp"`, doc.TableName()),
 			fmt.Sprintf(`"%s"."app_id"`, doc.TableName()),
 			fmt.Sprintf(`"%s"."type"`, doc.TableName()),
-		})
-	condition := &datastore.ScanningCondition{
+		}).
+		// the primary key is combined from app_id and id, so to let the database use primary for scanning
+		// we need to order by the column app_id DESC first
+		// then inside .Sqlx function, the column id DESC will be used to order
+		Order(fmt.Sprintf(`"%s"."app_id" DESC`, doc.TableName()))
+
+	tx = query.Sqlx(tx, &datastore.ScanningCondition{
 		PrimaryKeyNs:  entities.IdNsMsg,
 		PrimaryKeyCol: fmt.Sprintf(`"%s"."id"`, doc.TableName()),
-	}
-	tx = datastore.SqlApplyScanQuery(tx, query, condition)
+	})
 
 	var docs []entities.Message
 	if tx = tx.Find(&docs); tx.Error != nil {

@@ -24,20 +24,14 @@ type EndpointRuleDeleteOut struct {
 }
 
 func (uc *endpointRule) Delete(ctx context.Context, in *EndpointRuleDeleteIn) (*EndpointRuleDeleteOut, error) {
-	epr, err := uc.repositories.Database().Transaction(ctx, func(txctx context.Context) (interface{}, error) {
-		epr, err := uc.repositories.Database().EndpointRule().Get(ctx, in.WsId, in.Id)
-		if err != nil {
-			return nil, err
-		}
-
-		if err := uc.repositories.Database().EndpointRule().Delete(txctx, epr); err != nil {
-			return nil, err
-		}
-		return epr, nil
-	})
+	epr, err := uc.repositories.Database().EndpointRule().Get(ctx, in.WsId, in.Id)
 	if err != nil {
 		return nil, err
 	}
 
-	return &EndpointRuleDeleteOut{Doc: epr.(*entities.EndpointRule)}, nil
+	if err := uc.repositories.Database().EndpointRule().Delete(ctx, epr); err != nil {
+		return nil, err
+	}
+
+	return &EndpointRuleDeleteOut{Doc: epr}, nil
 }

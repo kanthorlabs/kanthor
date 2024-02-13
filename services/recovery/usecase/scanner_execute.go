@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/kanthorlabs/common/persistence/datastore"
 	"github.com/kanthorlabs/common/safe"
 	"github.com/kanthorlabs/common/validator"
 	"github.com/kanthorlabs/kanthor/infrastructure/streaming"
@@ -105,7 +106,7 @@ func (uc *scanner) execute(ctx context.Context, recovery *entities.RecoveryTask,
 		return []string{}, nil
 	}
 
-	query := &entities.ScanningQuery{
+	query := &datastore.ScanningQuery{
 		Size: size,
 		From: uc.infra.Timer.UnixMilli(recovery.From),
 		To:   uc.infra.Timer.UnixMilli(recovery.To),
