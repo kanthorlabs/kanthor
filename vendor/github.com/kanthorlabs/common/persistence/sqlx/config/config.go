@@ -5,6 +5,11 @@ import "github.com/kanthorlabs/common/validator"
 var (
 	TypePostgres = "postgres"
 	TypeSqlite   = "file"
+
+	DefaultConnMaxLifetime  int64 = 300000
+	DefaultConnMaxIdletime  int64 = 60000
+	DefaultConnMaxIdleCount int   = 1
+	DefaultConnMaxOpenCount int   = 10
 )
 
 type Config struct {
@@ -38,9 +43,9 @@ type Connection struct {
 
 func (conf *Connection) Validate() error {
 	return validator.Validate(
-		validator.NumberInRange("SQLX.CONFIG.CONNECTION.MAX_LIFETIME", conf.MaxLifetime, 300000, 3600000),
-		validator.NumberInRange("SQLX.CONFIG.CONNECTION.MAX_IDLETIME", conf.MaxIdletime, 60000, 3600000),
-		validator.NumberGreaterThan("SQLX.CONFIG.CONNECTION.MAX_IDLE_COUNT", conf.MaxIdleCount, 1),
-		validator.NumberGreaterThan("SQLX.CONFIG.CONNECTION.MAX_OPEN_COUNT", conf.MaxOpenCount, 1),
+		validator.NumberInRange("SQLX.CONFIG.CONNECTION.MAX_LIFETIME", conf.MaxLifetime, DefaultConnMaxLifetime, 3600000),
+		validator.NumberInRange("SQLX.CONFIG.CONNECTION.MAX_IDLETIME", conf.MaxIdletime, DefaultConnMaxIdletime, 3600000),
+		validator.NumberGreaterThanOrEqual("SQLX.CONFIG.CONNECTION.MAX_IDLE_COUNT", conf.MaxIdleCount, DefaultConnMaxIdleCount),
+		validator.NumberGreaterThanOrEqual("SQLX.CONFIG.CONNECTION.MAX_OPEN_COUNT", conf.MaxOpenCount, DefaultConnMaxOpenCount),
 	)
 }

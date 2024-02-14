@@ -4,7 +4,7 @@ import (
 	"github.com/kanthorlabs/common/configuration"
 	"github.com/kanthorlabs/common/logging"
 	"github.com/kanthorlabs/common/persistence"
-	"github.com/kanthorlabs/common/persistence/datastore/config"
+	"github.com/kanthorlabs/common/persistence/database/config"
 	"github.com/kanthorlabs/common/persistence/sqlx"
 )
 

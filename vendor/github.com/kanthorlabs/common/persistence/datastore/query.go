@@ -9,11 +9,10 @@ import (
 )
 
 var (
-	SearchMaxChar     = 256
-	SizeMin           = 5
-	SizeMax           = 100
-	ScanningOrderDesc = 0
-	ScanningOrderAsc  = -1
+	SearchMaxChar = 256
+	SearchMinChar = 3
+	SizeMin       = 5
+	SizeMax       = 100
 )
 
 type ScanningCondition struct {
@@ -23,7 +22,6 @@ type ScanningCondition struct {
 
 type ScanningQuery struct {
 	Cursor string
-	Order  int
 	Search string
 	Size   int
 	From   time.Time
@@ -33,7 +31,6 @@ type ScanningQuery struct {
 func (query *ScanningQuery) Clone() *ScanningQuery {
 	return &ScanningQuery{
 		Cursor: query.Cursor,
-		Order:  query.Order,
 		Search: query.Search,
 		Size:   query.Size,
 		From:   query.From,
@@ -48,6 +45,7 @@ func (query *ScanningQuery) Sqlx(tx *gorm.DB, condition *ScanningCondition) *gor
 	tx = tx.
 		Where(fmt.Sprintf(`%s > ?`, condition.PrimaryKeyCol), low).
 		Where(fmt.Sprintf(`%s < ?`, condition.PrimaryKeyCol), high).
+		Order(fmt.Sprintf(`%s DESC`, condition.PrimaryKeyCol)).
 		Limit(query.Size)
 
 	if query.Search != "" {
@@ -62,18 +60,8 @@ func (query *ScanningQuery) Sqlx(tx *gorm.DB, condition *ScanningCondition) *gor
 		tx = tx.Where(fmt.Sprintf(`%s = ?`, condition.PrimaryKeyCol), query.Search)
 	}
 
-	if query.Order == ScanningOrderDesc {
-		tx = tx.Order(fmt.Sprintf(`%s DESC`, condition.PrimaryKeyCol))
-	} else {
-		tx = tx.Order(fmt.Sprintf(`%s ASC`, condition.PrimaryKeyCol))
-	}
-
 	if query.Cursor != "" {
-		if query.Order == ScanningOrderDesc {
-			tx = tx.Where(fmt.Sprintf(`%s < ?`, condition.PrimaryKeyCol), query.Cursor)
-		} else {
-			tx = tx.Where(fmt.Sprintf(`%s > ?`, condition.PrimaryKeyCol), query.Cursor)
-		}
+		tx = tx.Where(fmt.Sprintf(`%s < ?`, condition.PrimaryKeyCol), query.Cursor)
 	}
 
 	return tx

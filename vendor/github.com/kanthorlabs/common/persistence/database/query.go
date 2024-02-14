@@ -35,10 +35,14 @@ func (query *PagingQuery) Clone() *PagingQuery {
 }
 
 func (query *PagingQuery) Sqlx(tx *gorm.DB, primaryCol string, searchCols []string) *gorm.DB {
-	subtx := query.sqlx(tx, primaryCol, searchCols)
+	tx = query.sqlx(tx, primaryCol, searchCols)
 
-	offset := utils.Max((query.Page-1)*query.Limit, 0)
-	return subtx.Limit(query.Limit).Offset(offset)
+	if len(query.Ids) == 0 {
+		offset := utils.Max((query.Page-1)*query.Limit, 0)
+		tx = tx.Limit(query.Limit).Offset(offset)
+	}
+
+	return tx
 }
 
 func (query *PagingQuery) SqlxCount(tx *gorm.DB, primaryCol string, searchCols []string) *gorm.DB {
@@ -50,10 +54,8 @@ func (query *PagingQuery) sqlx(tx *gorm.DB, primaryCol string, searchCols []stri
 		return tx.Where(fmt.Sprintf("%s IN ?", primaryCol), query.Ids)
 	}
 
-	if len(query.Search) >= SearchMinChar && len(searchCols) > 0 {
-		for i := range searchCols {
-			tx = tx.Where(fmt.Sprintf(`%s LIKE ?`, searchCols[i]), "%"+query.Search)
-		}
+	for i := range searchCols {
+		tx = tx.Where(fmt.Sprintf(`%s LIKE ?`, searchCols[i]), query.Search+"%")
 	}
 
 	return tx

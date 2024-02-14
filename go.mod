@@ -1,6 +1,6 @@
 module github.com/kanthorlabs/kanthor
 
-go 1.21.5
+go 1.22.0
 
 require (
 	github.com/gin-contrib/cors v1.5.0
@@ -10,7 +10,7 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/google/wire v0.6.0
 	github.com/jaswdr/faker v1.19.1
-	github.com/kanthorlabs/common v0.0.0-20240213084155-c35d262aee6f
+	github.com/kanthorlabs/common v0.0.0-20240214075202-372cdae86f3f
 	github.com/nats-io/nats.go v1.32.0
 	github.com/redis/go-redis/v9 v9.4.0
 	github.com/robfig/cron/v3 v3.0.1

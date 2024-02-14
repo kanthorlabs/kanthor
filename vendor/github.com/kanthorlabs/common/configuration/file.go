@@ -60,6 +60,8 @@ func (provider *file) Sources() []Source {
 
 func (provider *file) SetDefault(key string, value interface{}) {
 	provider.viper.SetDefault(key, value)
+}
 
-	provider.viper.Debug()
+func (provider *file) Set(key string, value interface{}) {
+	provider.viper.Set(key, value)
 }

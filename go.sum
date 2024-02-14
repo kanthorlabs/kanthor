@@ -127,6 +127,14 @@ github.com/kanthorlabs/common v0.0.0-20240213083251-1fa63780d15b h1:Afb18jPdjSUd
 github.com/kanthorlabs/common v0.0.0-20240213083251-1fa63780d15b/go.mod h1:iJwCT+0hyGzFkuJ2xU5syfiPaqGXzJq5wCmFOnouCns=
 github.com/kanthorlabs/common v0.0.0-20240213084155-c35d262aee6f h1:IJSLAI0vf9/FT6yO8+1Wktv6wVAkiDvLfis+TLcYXCM=
 github.com/kanthorlabs/common v0.0.0-20240213084155-c35d262aee6f/go.mod h1:iJwCT+0hyGzFkuJ2xU5syfiPaqGXzJq5wCmFOnouCns=
+github.com/kanthorlabs/common v0.0.0-20240214073846-b90059935a29 h1:dNZDgJMEqZ79hiVyODzzFh/xGPR2c06yNdGJA9dso1s=
+github.com/kanthorlabs/common v0.0.0-20240214073846-b90059935a29/go.mod h1:Mn8TDjvD4VYKvRjKrjhwHrest1/87bVwa8AhmRGhjpQ=
+github.com/kanthorlabs/common v0.0.0-20240214074815-de1f9b3545e9 h1:AvwpqybgeEKP3N8B6onEHFzk46sP7O3JHzxQEbkg184=
+github.com/kanthorlabs/common v0.0.0-20240214074815-de1f9b3545e9/go.mod h1:Mn8TDjvD4VYKvRjKrjhwHrest1/87bVwa8AhmRGhjpQ=
+github.com/kanthorlabs/common v0.0.0-20240214074947-624ed2c83637 h1:swBR436te0KXVqk0jc9Cn98HA0FJfyBFHxtwV6v6sOk=
+github.com/kanthorlabs/common v0.0.0-20240214074947-624ed2c83637/go.mod h1:Mn8TDjvD4VYKvRjKrjhwHrest1/87bVwa8AhmRGhjpQ=
+github.com/kanthorlabs/common v0.0.0-20240214075202-372cdae86f3f h1:amlYqR9SDyJwuJ7Hte6H5SliTPtuYyjlpZ1NFGe6Dr0=
+github.com/kanthorlabs/common v0.0.0-20240214075202-372cdae86f3f/go.mod h1:Mn8TDjvD4VYKvRjKrjhwHrest1/87bVwa8AhmRGhjpQ=
 github.com/klauspost/compress v1.17.2 h1:RlWWUY/Dr4fL8qk9YG7DTZ7PDgME2V4csBXA8L/ixi4=
 github.com/klauspost/compress v1.17.2/go.mod h1:ntbaceVETuRiXiv4DpjP66DpAtAGkEQskQzEyD//IeE=
 github.com/klauspost/cpuid/v2 v2.0.9/go.mod h1:FInQzS24/EEf25PyTYn52gqo7WaD8xa0213Md/qVLRg=

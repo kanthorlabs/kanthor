@@ -8,13 +8,13 @@ import (
 	"github.com/kanthorlabs/kanthor/internal/entities"
 	"github.com/kanthorlabs/kanthor/internal/routing"
 	"github.com/kanthorlabs/kanthor/internal/tester"
-	"github.com/kanthorlabs/kanthor/mocks"
+	"github.com/kanthorlabs/kanthor/mocks/timer"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestPlanRequests(t *testing.T) {
 	now := time.Now().UTC()
-	timer := mocks.NewTimer(t)
+	timer := timer.NewTimer(t)
 	timer.On("Now").Return(now)
 
 	app := tester.Application(timer)
@@ -98,7 +98,7 @@ func TestPlanRequests(t *testing.T) {
 
 func TestPlanRequest(t *testing.T) {
 	now := time.Now().UTC()
-	timer := mocks.NewTimer(t)
+	timer := timer.NewTimer(t)
 	timer.On("Now").Return(now)
 
 	app := tester.Application(timer)
