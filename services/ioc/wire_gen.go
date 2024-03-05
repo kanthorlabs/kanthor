@@ -7,11 +7,14 @@
 package ioc
 
 import (
+	"github.com/kanthorlabs/common/clock"
 	"github.com/kanthorlabs/common/configuration"
 	"github.com/kanthorlabs/common/logging"
 	"github.com/kanthorlabs/common/patterns"
+	"github.com/kanthorlabs/kanthor/infrastructure"
 	"github.com/kanthorlabs/kanthor/services/portal/config"
 	"github.com/kanthorlabs/kanthor/services/portal/entrypoint"
+	"github.com/kanthorlabs/kanthor/services/portal/usecase"
 )
 
 // Injectors from portal.go:
@@ -25,7 +28,17 @@ func Portal(provider configuration.Provider) (patterns.Runnable, error) {
 	if err != nil {
 		return nil, err
 	}
-	runnable, err := entrypoint.NewApi(configConfig, logger)
+	config2 := &configConfig.Infrastructure
+	infrastructureInfrastructure, err := infrastructure.New(config2, logger)
+	if err != nil {
+		return nil, err
+	}
+	clockClock := clock.New()
+	portal, err := usecase.New(configConfig, logger, infrastructureInfrastructure, clockClock)
+	if err != nil {
+		return nil, err
+	}
+	runnable, err := entrypoint.NewApi(configConfig, logger, infrastructureInfrastructure, portal)
 	if err != nil {
 		return nil, err
 	}

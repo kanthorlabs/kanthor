@@ -1,0 +1,99 @@
+basePath: /api
+consumes:
+- application/json
+definitions:
+  Error:
+    properties:
+      error:
+        type: string
+    required:
+    - error
+    type: object
+  WorkspaceCreateReq:
+    properties:
+      name:
+        example: main workspace
+        type: string
+    required:
+    - name
+    type: object
+  WorkspaceCreateRes:
+    properties:
+      created_at:
+        example: 1728925200000
+        type: integer
+      id:
+        example: ws_2nR9p4W6UmUieJMLIf7ilbXBIRR
+        type: string
+      name:
+        example: main workspace
+        type: string
+      owner_id:
+        example: admin
+        type: string
+      tier:
+        example: default
+        type: string
+      updated_at:
+        example: 1728925200000
+        type: integer
+    required:
+    - created_at
+    - id
+    - name
+    - owner_id
+    - tier
+    - updated_at
+    type: object
+externalDocs:
+  description: OpenAPI
+  url: https://swagger.io/resources/open-api/
+info:
+  contact:
+    email: support@kanthorlabs.com
+    name: Kanthor Support
+    url: http://kanthorlabs.com/support
+  description: Portal API
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://kanthorlabs.com/terms/
+  title: Kanthor Portal API
+  version: v2024.1014.1700
+paths:
+  /workspace:
+    post:
+      parameters:
+      - description: request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/WorkspaceCreateReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/WorkspaceCreateRes'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - Authorization: []
+      tags:
+      - workspace
+produces:
+- application/json
+securityDefinitions:
+  Authorization:
+    description: '[Bearer JWT_TOKEN] or [Basic base64(key:secret)]'
+    in: header
+    name: Authorization
+    type: apiKey
+  TenantId:
+    description: The tenant id
+    in: header
+    name: X-Authorization-Tenant
+    type: apiKey
+swagger: "2.0"

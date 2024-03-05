@@ -11,19 +11,6 @@ CREATE TABLE IF NOT EXISTS kanthor_workspace (
 
 CREATE INDEX IF NOT EXISTS kanthor_ws_owner ON kanthor_workspace(owner_id ASC);
 
-CREATE TABLE IF NOT EXISTS kanthor_workspace_credentials (
-  id VARCHAR(64) NOT NULL PRIMARY KEY,
-  created_at BIGINT NOT NULL DEFAULT 0,
-  updated_at BIGINT NOT NULL DEFAULT 0,
-  ws_id VARCHAR(64) NOT NULL,
-  name VARCHAR(256) NOT NULL,
-  hash VARCHAR(256) NOT NULL,
-  expired_at BIGINT NOT NULL DEFAULT 0,
-  FOREIGN KEY (ws_id) REFERENCES kanthor_workspace (id) ON DELETE CASCADE
-);
-
-CREATE INDEX IF NOT EXISTS kanthor_wsc_ws_ref ON kanthor_workspace_credentials(ws_id ASC);
-
 CREATE TABLE IF NOT EXISTS kanthor_application (
   id VARCHAR(64) NOT NULL PRIMARY KEY,
   created_at BIGINT NOT NULL DEFAULT 0,

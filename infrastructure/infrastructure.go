@@ -8,6 +8,7 @@ import (
 	"github.com/kanthorlabs/common/distributedlockmanager"
 	"github.com/kanthorlabs/common/idempotency"
 	"github.com/kanthorlabs/common/logging"
+	"github.com/kanthorlabs/common/passport"
 	"github.com/kanthorlabs/common/patterns"
 	"github.com/kanthorlabs/common/persistence/database"
 	"github.com/kanthorlabs/common/persistence/datastore"
@@ -17,11 +18,13 @@ import (
 )
 
 func New(conf *config.Config, logger logging.Logger) (Infrastructure, error) {
+	logger = logger.With("component", "infrastructure")
+
 	if err := conf.Validate(); err != nil {
 		return nil, err
 	}
 
-	infra := &infrastructure{}
+	infra := &infrastructure{conf: conf, logger: logger}
 	var err error
 
 	infra.database, err = database.New(&conf.Database, logger)
@@ -57,6 +60,11 @@ func New(conf *config.Config, logger logging.Logger) (Infrastructure, error) {
 		return nil, err
 	}
 
+	infra.passport, err = passport.New(&conf.Passport, logger)
+	if err != nil {
+		return nil, err
+	}
+
 	return infra, nil
 }
 
@@ -69,9 +77,13 @@ type Infrastructure interface {
 	DLM() distributedlockmanager.DistributedLockManager
 	Idempotency() idempotency.Idempotency
 	CircuitBreaker() circuitbreaker.CircuitBreaker
+	Passport() passport.Passport
 }
 
 type infrastructure struct {
+	conf   *config.Config
+	logger logging.Logger
+
 	database               database.Database
 	datastore              datastore.Datastore
 	streaming              streaming.Stream
@@ -79,11 +91,15 @@ type infrastructure struct {
 	distributedlockmanager distributedlockmanager.DistributedLockManager
 	idempotency            idempotency.Idempotency
 	circuitbreaker         circuitbreaker.CircuitBreaker
+	passport               passport.Passport
 }
 
 func (infra *infrastructure) Connect(ctx context.Context) error {
 	p := pool.New().WithContext(ctx)
 
+	p.Go(func(subctx context.Context) error {
+		return infra.database.Connect(subctx)
+	})
 	p.Go(func(subctx context.Context) error {
 		return infra.datastore.Connect(subctx)
 	})
@@ -99,14 +115,25 @@ func (infra *infrastructure) Connect(ctx context.Context) error {
 	p.Go(func(subctx context.Context) error {
 		return infra.idempotency.Connect(subctx)
 	})
+	p.Go(func(subctx context.Context) error {
+		return infra.passport.Connect(subctx)
+	})
 
-	return p.Wait()
+	if err := p.Wait(); err != nil {
+		return err
+	}
+
+	infra.logger.Info("connected")
+	return nil
 }
 
 func (infra *infrastructure) Readiness() error {
 	p := pool.New().WithErrors()
 
 	p.Go(func() error {
+		return infra.database.Readiness()
+	})
+	p.Go(func() error {
 		return infra.datastore.Readiness()
 	})
 	p.Go(func() error {
@@ -121,14 +148,25 @@ func (infra *infrastructure) Readiness() error {
 	p.Go(func() error {
 		return infra.idempotency.Readiness()
 	})
+	p.Go(func() error {
+		return infra.passport.Readiness()
+	})
 
-	return p.Wait()
+	if err := p.Wait(); err != nil {
+		return err
+	}
+
+	infra.logger.Debug("ready")
+	return nil
 }
 
 func (infra *infrastructure) Liveness() error {
 	p := pool.New().WithErrors()
 
 	p.Go(func() error {
+		return infra.database.Readiness()
+	})
+	p.Go(func() error {
 		return infra.datastore.Readiness()
 	})
 	p.Go(func() error {
@@ -143,13 +181,24 @@ func (infra *infrastructure) Liveness() error {
 	p.Go(func() error {
 		return infra.idempotency.Readiness()
 	})
+	p.Go(func() error {
+		return infra.passport.Readiness()
+	})
 
-	return p.Wait()
+	if err := p.Wait(); err != nil {
+		return err
+	}
+
+	infra.logger.Debug("live")
+	return nil
 }
 
 func (infra *infrastructure) Disconnect(ctx context.Context) error {
 	p := pool.New().WithContext(ctx)
 
+	p.Go(func(subctx context.Context) error {
+		return infra.database.Disconnect(subctx)
+	})
 	p.Go(func(subctx context.Context) error {
 		return infra.datastore.Disconnect(subctx)
 	})
@@ -165,8 +214,16 @@ func (infra *infrastructure) Disconnect(ctx context.Context) error {
 	p.Go(func(subctx context.Context) error {
 		return infra.idempotency.Disconnect(subctx)
 	})
+	p.Go(func(subctx context.Context) error {
+		return infra.passport.Disconnect(subctx)
+	})
 
-	return p.Wait()
+	if err := p.Wait(); err != nil {
+		return err
+	}
+
+	infra.logger.Debug("disconnected")
+	return nil
 }
 
 func (infra *infrastructure) Database() database.Database {
@@ -195,4 +252,8 @@ func (infra *infrastructure) Idempotency() idempotency.Idempotency {
 
 func (infra *infrastructure) CircuitBreaker() circuitbreaker.CircuitBreaker {
 	return infra.circuitbreaker
+}
+
+func (infra *infrastructure) Passport() passport.Passport {
+	return infra.passport
 }

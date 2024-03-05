@@ -5,6 +5,7 @@ import (
 	circuitbreaker "github.com/kanthorlabs/common/circuitbreaker/config"
 	distributedlockmanager "github.com/kanthorlabs/common/distributedlockmanager/config"
 	idempotency "github.com/kanthorlabs/common/idempotency/config"
+	passport "github.com/kanthorlabs/common/passport/config"
 	database "github.com/kanthorlabs/common/persistence/database/config"
 	datastore "github.com/kanthorlabs/common/persistence/datastore/config"
 	streaming "github.com/kanthorlabs/common/streaming/config"
@@ -18,6 +19,8 @@ type Config struct {
 	DLM            distributedlockmanager.Config `json:"distributed_lock_manager" yaml:"distributed_lock_manager" mapstructure:"distributed_lock_manager"`
 	Idempotency    idempotency.Config            `json:"idempotency" yaml:"idempotency" mapstructure:"idempotency"`
 	CircuitBreaker circuitbreaker.Config         `json:"circuit_breaker" yaml:"circuit_breaker" mapstructure:"circuit_breaker"`
+
+	Passport passport.Config `json:"passport" yaml:"passport" mapstructure:"passport"`
 }
 
 func (conf *Config) Validate() error {
@@ -40,6 +43,9 @@ func (conf *Config) Validate() error {
 		return err
 	}
 	if err := conf.CircuitBreaker.Validate(); err != nil {
+		return err
+	}
+	if err := conf.Passport.Validate(); err != nil {
 		return err
 	}
 	return nil

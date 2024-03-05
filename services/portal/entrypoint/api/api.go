@@ -10,22 +10,21 @@ import (
 	"github.com/kanthorlabs/common/patterns"
 	"github.com/kanthorlabs/kanthor/infrastructure"
 	"github.com/kanthorlabs/kanthor/services/portal/config"
+	"github.com/kanthorlabs/kanthor/services/portal/usecase"
 	"github.com/sourcegraph/conc/pool"
 )
 
 func New(
 	conf *config.Config,
 	logger logging.Logger,
+	infra infrastructure.Infrastructure,
+	uc usecase.Portal,
 ) (patterns.Runnable, error) {
-	infra, err := infrastructure.New(&conf.Infrastructure, logger)
-	if err != nil {
-		return nil, err
-	}
-
 	entrypoint := &portal{
 		conf:   conf,
 		logger: logger.With("entrypoint", "api"),
 		infra:  infra,
+		uc:     uc,
 	}
 	return entrypoint, nil
 }
@@ -34,6 +33,7 @@ type portal struct {
 	conf   *config.Config
 	logger logging.Logger
 	infra  infrastructure.Infrastructure
+	uc     usecase.Portal
 
 	server gateway.Gateway
 	mu     sync.Mutex

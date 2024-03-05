@@ -8,7 +8,7 @@ infrastructure:
   database:
     engine: sqlx
     sqlx:
-      uri: postgres://postgres:changemenow@localhost:5432/postgres
+      uri: postgres://postgres:changemenow@localhost:5432/postgres?sslmode=disable
       connection:
         max_lifetime: 300000
         max_idletime: 60000
@@ -17,7 +17,7 @@ infrastructure:
   datastore:
     engine: sqlx
     sqlx:
-      uri: postgres://postgres:changemenow@localhost:5432/postgres?skip_default_transaction=true
+      uri: postgres://postgres:changemenow@localhost:5432/postgres?sslmode=disable&skip_default_transaction=true
       connection:
         max_lifetime: 300000
         max_idletime: 60000
@@ -58,6 +58,29 @@ infrastructure:
       conditions:
         error_consecutive: 10
         error_ratio: 0.8
+  passport:
+    strategies:
+      - name: superuser
+        engine: ask
+        ask:
+          accounts:
+            - name: Administrator
+              username: admin
+              password_hash: "$2a$10$qv5Ct.Ee1GY4Fm5fnVS79uQG45q5ruFQoPncUrA29ASY74kIKTLP." #changemenow
+              metadata:
+                role: superuser
+              created_at: 1728925200000
+              updated_at: 1728925200000
+      - name: sdk
+        engine: durability
+        durability:
+          sqlx:
+            uri: postgres://postgres:changemenow@localhost:5432/postgres?sslmode=disable
+            connection:
+              max_lifetime: 300000
+              max_idletime: 60000
+              max_idle_count: 1
+              max_open_count: 3
 
 portal:
   gateway:

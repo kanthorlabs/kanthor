@@ -1,0 +1,23 @@
+package usecase
+
+import (
+	"context"
+
+	"github.com/kanthorlabs/common/clock"
+	"github.com/kanthorlabs/common/logging"
+	"github.com/kanthorlabs/kanthor/infrastructure"
+	"github.com/kanthorlabs/kanthor/internal/repositories/database"
+	"github.com/kanthorlabs/kanthor/services/portal/config"
+)
+
+type Workspace interface {
+	Create(ctx context.Context, in *WorkspaceCreateIn) (*WorkspaceCreateOut, error)
+}
+
+type workspace struct {
+	conf   *config.Config
+	logger logging.Logger
+	watch  clock.Clock
+	infra  infrastructure.Infrastructure
+	repos  database.Database
+}

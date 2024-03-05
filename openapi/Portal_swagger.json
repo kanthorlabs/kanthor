@@ -1,0 +1,144 @@
+{
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "swagger": "2.0",
+    "info": {
+        "description": "Portal API",
+        "title": "Kanthor Portal API",
+        "termsOfService": "http://kanthorlabs.com/terms/",
+        "contact": {
+            "name": "Kanthor Support",
+            "url": "http://kanthorlabs.com/support",
+            "email": "support@kanthorlabs.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "v2024.1014.1700"
+    },
+    "basePath": "/api",
+    "paths": {
+        "/workspace": {
+            "post": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "tags": [
+                    "workspace"
+                ],
+                "parameters": [
+                    {
+                        "description": "request body",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/WorkspaceCreateReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/WorkspaceCreateRes"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "Error": {
+            "type": "object",
+            "required": [
+                "error"
+            ],
+            "properties": {
+                "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "WorkspaceCreateReq": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "example": "main workspace"
+                }
+            }
+        },
+        "WorkspaceCreateRes": {
+            "type": "object",
+            "required": [
+                "created_at",
+                "id",
+                "name",
+                "owner_id",
+                "tier",
+                "updated_at"
+            ],
+            "properties": {
+                "created_at": {
+                    "type": "integer",
+                    "example": 1728925200000
+                },
+                "id": {
+                    "type": "string",
+                    "example": "ws_2nR9p4W6UmUieJMLIf7ilbXBIRR"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "main workspace"
+                },
+                "owner_id": {
+                    "type": "string",
+                    "example": "admin"
+                },
+                "tier": {
+                    "type": "string",
+                    "example": "default"
+                },
+                "updated_at": {
+                    "type": "integer",
+                    "example": 1728925200000
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "Authorization": {
+            "description": "[Bearer JWT_TOKEN] or [Basic base64(key:secret)]",
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        },
+        "TenantId": {
+            "description": "The tenant id",
+            "type": "apiKey",
+            "name": "X-Authorization-Tenant",
+            "in": "header"
+        }
+    },
+    "externalDocs": {
+        "description": "OpenAPI",
+        "url": "https://swagger.io/resources/open-api/"
+    }
+}

@@ -12,10 +12,6 @@ DROP INDEX IF EXISTS kanthor_app_ws_ref;
 
 DROP TABLE IF EXISTS kanthor_application;
 
-DROP INDEX IF EXISTS kanthor_wsc_ws_ref;
-
-DROP TABLE IF EXISTS kanthor_workspace_credentials;
-
 DROP INDEX IF EXISTS kanthor_ws_owner;
 
 DROP TABLE IF EXISTS kanthor_workspace;
