@@ -5,6 +5,7 @@ definitions:
   Error:
     properties:
       error:
+        example: oops, something went wrong
         type: string
     required:
     - error
@@ -18,6 +19,34 @@ definitions:
     - name
     type: object
   WorkspaceCreateRes:
+    properties:
+      created_at:
+        example: 1728925200000
+        type: integer
+      id:
+        example: ws_2nR9p4W6UmUieJMLIf7ilbXBIRR
+        type: string
+      name:
+        example: main workspace
+        type: string
+      owner_id:
+        example: admin
+        type: string
+      tier:
+        example: default
+        type: string
+      updated_at:
+        example: 1728925200000
+        type: integer
+    required:
+    - created_at
+    - id
+    - name
+    - owner_id
+    - tier
+    - updated_at
+    type: object
+  WorkspaceGetRes:
     properties:
       created_at:
         example: 1728925200000
@@ -75,6 +104,27 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/WorkspaceCreateRes'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - Authorization: []
+      tags:
+      - workspace
+  /workspace/{id}:
+    get:
+      parameters:
+      - description: workspace id
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/WorkspaceGetRes'
         default:
           description: ""
           schema:

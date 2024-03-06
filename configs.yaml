@@ -60,15 +60,15 @@ infrastructure:
         error_ratio: 0.8
   passport:
     strategies:
-      - name: superuser
+      - name: owner
         engine: ask
         ask:
           accounts:
-            - name: Administrator
+            - name: "Super User"
               username: admin
               password_hash: "$2a$10$qv5Ct.Ee1GY4Fm5fnVS79uQG45q5ruFQoPncUrA29ASY74kIKTLP." #changemenow
               metadata:
-                role: superuser
+                role: owner
               created_at: 1728925200000
               updated_at: 1728925200000
       - name: sdk
@@ -81,6 +81,18 @@ infrastructure:
               max_idletime: 60000
               max_idle_count: 1
               max_open_count: 3
+  gatekeeper:
+    engine: rbac
+    definitions:
+      uri: base64://eyJvd25lciI6W3siYWN0aW9uIjoiKiIsIm9iamVjdCI6IioifV19Cg==
+    privilege:
+      sqlx:
+        uri: postgres://postgres:changemenow@localhost:5432/postgres?sslmode=disable
+        connection:
+          max_lifetime: 300000
+          max_idletime: 60000
+          max_idle_count: 1
+          max_open_count: 3
 
 portal:
   gateway:

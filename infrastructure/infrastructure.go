@@ -6,6 +6,7 @@ import (
 	"github.com/kanthorlabs/common/cache"
 	"github.com/kanthorlabs/common/circuitbreaker"
 	"github.com/kanthorlabs/common/distributedlockmanager"
+	"github.com/kanthorlabs/common/gatekeeper"
 	"github.com/kanthorlabs/common/idempotency"
 	"github.com/kanthorlabs/common/logging"
 	"github.com/kanthorlabs/common/passport"
@@ -65,6 +66,11 @@ func New(conf *config.Config, logger logging.Logger) (Infrastructure, error) {
 		return nil, err
 	}
 
+	infra.gatekeeper, err = gatekeeper.New(&conf.Gatekeeper, logger)
+	if err != nil {
+		return nil, err
+	}
+
 	return infra, nil
 }
 
@@ -78,6 +84,7 @@ type Infrastructure interface {
 	Idempotency() idempotency.Idempotency
 	CircuitBreaker() circuitbreaker.CircuitBreaker
 	Passport() passport.Passport
+	Gatekeeper() gatekeeper.Gatekeeper
 }
 
 type infrastructure struct {
@@ -92,6 +99,7 @@ type infrastructure struct {
 	idempotency            idempotency.Idempotency
 	circuitbreaker         circuitbreaker.CircuitBreaker
 	passport               passport.Passport
+	gatekeeper             gatekeeper.Gatekeeper
 }
 
 func (infra *infrastructure) Connect(ctx context.Context) error {
@@ -117,6 +125,9 @@ func (infra *infrastructure) Connect(ctx context.Context) error {
 	})
 	p.Go(func(subctx context.Context) error {
 		return infra.passport.Connect(subctx)
+	})
+	p.Go(func(subctx context.Context) error {
+		return infra.gatekeeper.Connect(subctx)
 	})
 
 	if err := p.Wait(); err != nil {
@@ -151,6 +162,9 @@ func (infra *infrastructure) Readiness() error {
 	p.Go(func() error {
 		return infra.passport.Readiness()
 	})
+	p.Go(func() error {
+		return infra.gatekeeper.Readiness()
+	})
 
 	if err := p.Wait(); err != nil {
 		return err
@@ -184,6 +198,9 @@ func (infra *infrastructure) Liveness() error {
 	p.Go(func() error {
 		return infra.passport.Readiness()
 	})
+	p.Go(func() error {
+		return infra.gatekeeper.Readiness()
+	})
 
 	if err := p.Wait(); err != nil {
 		return err
@@ -216,6 +233,9 @@ func (infra *infrastructure) Disconnect(ctx context.Context) error {
 	})
 	p.Go(func(subctx context.Context) error {
 		return infra.passport.Disconnect(subctx)
+	})
+	p.Go(func(subctx context.Context) error {
+		return infra.gatekeeper.Disconnect(subctx)
 	})
 
 	if err := p.Wait(); err != nil {
@@ -256,4 +276,8 @@ func (infra *infrastructure) CircuitBreaker() circuitbreaker.CircuitBreaker {
 
 func (infra *infrastructure) Passport() passport.Passport {
 	return infra.passport
+}
+
+func (infra *infrastructure) Gatekeeper() gatekeeper.Gatekeeper {
+	return infra.gatekeeper
 }

@@ -3,8 +3,10 @@ package usecase
 import (
 	"context"
 
+	gkentities "github.com/kanthorlabs/common/gatekeeper/entities"
 	"github.com/kanthorlabs/common/validator"
 	"github.com/kanthorlabs/kanthor/internal/repositories/database/entities"
+	"github.com/kanthorlabs/kanthor/services/portal/permissions"
 )
 
 func (uc *workspace) Create(ctx context.Context, in *WorkspaceCreateIn) (*WorkspaceCreateOut, error) {
@@ -20,7 +22,17 @@ func (uc *workspace) Create(ctx context.Context, in *WorkspaceCreateIn) (*Worksp
 	doc.SetId()
 	doc.SetAuditTime(uc.watch.Now())
 
+	// @TODO: add transaction
 	if err := uc.repos.Workspace().Create(ctx, doc); err != nil {
+		return nil, err
+	}
+
+	evaluation := &gkentities.Evaluation{
+		Tenant:   doc.Id,
+		Username: doc.OwnerId,
+		Role:     permissions.RoleOwner,
+	}
+	if err := uc.infra.Gatekeeper().Grant(ctx, evaluation); err != nil {
 		return nil, err
 	}
 
