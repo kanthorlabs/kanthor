@@ -2,12 +2,17 @@ package usecase
 
 import (
 	"context"
+	"errors"
 
 	gkentities "github.com/kanthorlabs/common/gatekeeper/entities"
+	"github.com/kanthorlabs/common/utils"
 	"github.com/kanthorlabs/common/validator"
-	"github.com/kanthorlabs/kanthor/internal/repositories/database/entities"
+	"github.com/kanthorlabs/kanthor/internal/database/entities"
 	"github.com/kanthorlabs/kanthor/services/portal/permissions"
+	"gorm.io/gorm"
 )
+
+var ErrWorkspaceCreate = errors.New("PORTAL.WORKSPACE.CREATE.ERROR")
 
 func (uc *workspace) Create(ctx context.Context, in *WorkspaceCreateIn) (*WorkspaceCreateOut, error) {
 	if err := in.Validate(); err != nil {
@@ -22,17 +27,20 @@ func (uc *workspace) Create(ctx context.Context, in *WorkspaceCreateIn) (*Worksp
 	doc.SetId()
 	doc.SetAuditTime(uc.watch.Now())
 
-	// @TODO: add transaction
-	if err := uc.repos.Workspace().Create(ctx, doc); err != nil {
-		return nil, err
-	}
+	err := uc.db.Transaction(func(tx *gorm.DB) error {
+		if err := tx.Create(doc).Error; err != nil {
+			uc.logger.Errorw(ErrWorkspaceCreate.Error(), "error", err.Error(), "in", utils.Stringify(in))
+			return ErrWorkspaceCreate
+		}
 
-	evaluation := &gkentities.Evaluation{
-		Tenant:   doc.Id,
-		Username: doc.OwnerId,
-		Role:     permissions.RoleOwner,
-	}
-	if err := uc.infra.Gatekeeper().Grant(ctx, evaluation); err != nil {
+		evaluation := &gkentities.Evaluation{
+			Tenant:   doc.Id,
+			Username: doc.OwnerId,
+			Role:     permissions.RoleOwner,
+		}
+		return uc.infra.Gatekeeper().Grant(ctx, evaluation)
+	})
+	if err != nil {
 		return nil, err
 	}
 

@@ -6,8 +6,8 @@ import (
 	"github.com/kanthorlabs/common/clock"
 	"github.com/kanthorlabs/common/logging"
 	"github.com/kanthorlabs/kanthor/infrastructure"
-	"github.com/kanthorlabs/kanthor/internal/repositories/database"
 	"github.com/kanthorlabs/kanthor/services/portal/config"
+	"gorm.io/gorm"
 )
 
 func New(
@@ -50,7 +50,7 @@ func (uc *portal) Workspace() Workspace {
 			logger: uc.logger,
 			watch:  uc.watch,
 			infra:  uc.infra,
-			repos:  database.New(uc.infra.Database()),
+			db:     uc.infra.Database().Client().(*gorm.DB),
 		}
 	}
 
