@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	httpxwriter "github.com/kanthorlabs/common/gateway/httpx/writer"
+	"github.com/kanthorlabs/kanthor/internal/database/entities"
 )
 
 // UseWorkspaceGet
@@ -15,7 +16,8 @@ import (
 // @Security	Authorization
 func UseWorkspaceGet(service *portal) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		httpxwriter.Ok(w, httpxwriter.M{})
+		ws := r.Context().Value(CtxWorksspace).(*entities.Workspace)
+		httpxwriter.Ok(w, ws)
 	}
 }
 

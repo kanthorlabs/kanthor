@@ -50,7 +50,7 @@ func (uc *portal) Workspace() Workspace {
 			logger: uc.logger,
 			watch:  uc.watch,
 			infra:  uc.infra,
-			db:     uc.infra.Database().Client().(*gorm.DB),
+			orm:    uc.infra.Database().Client().(*gorm.DB),
 		}
 	}
 

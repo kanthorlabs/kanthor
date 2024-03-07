@@ -27,7 +27,7 @@ func (uc *workspace) Create(ctx context.Context, in *WorkspaceCreateIn) (*Worksp
 	doc.SetId()
 	doc.SetAuditTime(uc.watch.Now())
 
-	err := uc.db.Transaction(func(tx *gorm.DB) error {
+	err := uc.orm.Transaction(func(tx *gorm.DB) error {
 		if err := tx.Create(doc).Error; err != nil {
 			uc.logger.Errorw(ErrWorkspaceCreate.Error(), "error", err.Error(), "in", utils.Stringify(in))
 			return ErrWorkspaceCreate
@@ -41,6 +41,7 @@ func (uc *workspace) Create(ctx context.Context, in *WorkspaceCreateIn) (*Worksp
 		return uc.infra.Gatekeeper().Grant(ctx, evaluation)
 	})
 	if err != nil {
+		uc.logger.Errorw(ErrWorkspaceCreate.Error(), "error", err.Error(), "in", utils.Stringify(in))
 		return nil, err
 	}
 

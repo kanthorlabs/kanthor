@@ -17,7 +17,8 @@ infrastructure:
   datastore:
     engine: sqlx
     sqlx:
-      uri: postgres://postgres:changemenow@localhost:5432/postgres?sslmode=disable&skip_default_transaction=true
+      uri: postgres://postgres:changemenow@localhost:5432/postgres?sslmode=disable
+      skip_default_transaction: true
       connection:
         max_lifetime: 300000
         max_idletime: 60000

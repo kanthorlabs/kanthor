@@ -12,6 +12,7 @@ import (
 
 type Workspace interface {
 	Create(ctx context.Context, in *WorkspaceCreateIn) (*WorkspaceCreateOut, error)
+	Get(ctx context.Context, in *WorkspaceGetIn) (*WorkspaceGetOut, error)
 }
 
 type workspace struct {
@@ -19,5 +20,5 @@ type workspace struct {
 	logger logging.Logger
 	watch  clock.Clock
 	infra  infrastructure.Infrastructure
-	db     *gorm.DB
+	orm    *gorm.DB
 }

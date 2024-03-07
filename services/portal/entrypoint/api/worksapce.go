@@ -1,28 +1,45 @@
 package api
 
 import (
+	"context"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/kanthorlabs/common/gateway"
 	httpxmw "github.com/kanthorlabs/common/gateway/httpx/middleware"
+	httpxwriter "github.com/kanthorlabs/common/gateway/httpx/writer"
 	"github.com/kanthorlabs/kanthor/services/portal/config"
+	"github.com/kanthorlabs/kanthor/services/portal/usecase"
 )
 
 func RegisterWorkspaceRoutes(router chi.Router, service *portal) {
 	router.Route("/workspace", func(sr chi.Router) {
 		sr.Post("/", UseWorkspaceCreate(service))
 		sr.Route("/{id}", func(ssr chi.Router) {
-			ssr.Use(UseWorkspace())
+			ssr.Use(UseWorkspace(service))
 			ssr.Use(httpxmw.Authz(service.infra.Gatekeeper(), config.ServiceName))
+
 			ssr.Get("/", UseWorkspaceGet(service))
 		})
 	})
 }
 
-func UseWorkspace() httpxmw.Middleware {
+var CtxWorksspace gateway.ContextKey = "portal.workspace"
+
+func UseWorkspace(service *portal) httpxmw.Middleware {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			r.Header.Set(httpxmw.HeaderAuthzTenant, chi.URLParam(r, "id"))
+			in := &usecase.WorkspaceGetIn{Id: chi.URLParam(r, "id")}
+			out, err := service.uc.Workspace().Get(r.Context(), in)
+			if err != nil {
+				httpxwriter.ErrNotFound(w, httpxwriter.Error(err))
+				return
+			}
+
+			// set tenant header for authorization check
+			r.Header.Set(httpxmw.HeaderAuthzTenant, out.Id)
+			// set workspace context for further use
+			r = r.WithContext(context.WithValue(r.Context(), CtxWorksspace, out.Workspace))
 			next.ServeHTTP(w, r)
 		})
 	}

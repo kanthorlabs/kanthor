@@ -131,7 +131,7 @@ github.com/jinzhu/now
 # github.com/josharian/intern v1.0.0
 ## explicit; go 1.5
 github.com/josharian/intern
-# github.com/kanthorlabs/common v0.0.0-20240306140533-73940ef293e4
+# github.com/kanthorlabs/common v0.0.0-20240307072720-8a6147c3b9e4
 ## explicit; go 1.21.7
 github.com/kanthorlabs/common/cache
 github.com/kanthorlabs/common/cache/config

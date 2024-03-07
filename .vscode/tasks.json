@@ -4,7 +4,7 @@
     {
       "label": "make",
       "command": "make",
-      "args": ["all"],
+      "args": ["all", "migrate -source file://data/migration/database/postgres -database "postgres://postgres:changemenow@localhost:5432/postgres?sslmode=disable" up 1"],
       "type": "shell"
     }
   ]

@@ -41,7 +41,12 @@ func (service *portal) httpx() error {
 
 	// protected routes
 	handler.Route("/api", func(router chi.Router) {
-		router.Use(httpxmw.Authn(service.infra.Passport(), service.conf.Infrastructure.Passport.Strategies[0].Name))
+		router.Use(httpxmw.Authn(
+			service.infra.Passport(),
+			httpxmw.AuthnWithCache(service.infra.Cache()),
+			httpxmw.AuthnWithFallback(service.conf.Infrastructure.Passport.Strategies[0].Name),
+			// use default time to live - 1 hour
+		))
 		RegisterWorkspaceRoutes(router, service)
 	})
 
