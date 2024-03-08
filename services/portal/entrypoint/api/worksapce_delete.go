@@ -8,16 +8,16 @@ import (
 	"github.com/kanthorlabs/kanthor/services/portal/usecase"
 )
 
-// UseWorkspaceGet
+// UseWorkspaceDelete
 // @Tags			workspace
-// @Router		/workspace/{id}		[get]
+// @Router		/workspace/{id}		[delete]
 // @Param			id								path			string						true	"workspace id"
-// @Success		200								{object}	WorkspaceGetRes
+// @Success		200								{object}	WorkspaceDeleteRes
 // @Failure		default						{object}	Error
 // @Security	Authorization
-func UseWorkspaceGet(service *portal) http.HandlerFunc {
+func UseWorkspaceDelete(service *portal) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		in := &usecase.WorkspaceGetIn{
+		in := &usecase.WorkspaceDeleteIn{
 			Id: chi.URLParam(r, "id"),
 		}
 		if err := in.Validate(); err != nil {
@@ -25,7 +25,7 @@ func UseWorkspaceGet(service *portal) http.HandlerFunc {
 			return
 		}
 
-		out, err := service.uc.Workspace().Get(r.Context(), in)
+		out, err := service.uc.Workspace().Delete(r.Context(), in)
 		if err != nil {
 			httpxwriter.ErrBadRequest(w, httpxwriter.Error(err))
 			return
@@ -42,11 +42,11 @@ func UseWorkspaceGet(service *portal) http.HandlerFunc {
 	}
 }
 
-type WorkspaceGetRes struct {
+type WorkspaceDeleteRes struct {
 	Id        string `json:"id" example:"ws_2nR9p4W6UmUieJMLIf7ilbXBIRR"`
 	CreatedAt int64  `json:"created_at" example:"1728925200000"`
-	UpdatedAt int64  `json:"updated_at" example:"1728925200000"`
+	DeletedAt int64  `json:"updated_at" example:"1728925200000"`
 	OwnerId   string `json:"owner_id" example:"admin"`
 	Name      string `json:"name" example:"main workspace"`
 	Tier      string `json:"tier" example:"default"`
-} // @name WorkspaceGetRes
+} // @name WorkspaceDeleteRes

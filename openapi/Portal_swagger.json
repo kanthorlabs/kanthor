@@ -93,6 +93,81 @@
                         }
                     }
                 }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "tags": [
+                    "workspace"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "workspace id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/WorkspaceDeleteRes"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "tags": [
+                    "workspace"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "workspace id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "request body",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/WorkspaceUpdateReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/WorkspaceUpdateRes"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
             }
         }
     },
@@ -158,6 +233,43 @@
                 }
             }
         },
+        "WorkspaceDeleteRes": {
+            "type": "object",
+            "required": [
+                "created_at",
+                "id",
+                "name",
+                "owner_id",
+                "tier",
+                "updated_at"
+            ],
+            "properties": {
+                "created_at": {
+                    "type": "integer",
+                    "example": 1728925200000
+                },
+                "id": {
+                    "type": "string",
+                    "example": "ws_2nR9p4W6UmUieJMLIf7ilbXBIRR"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "main workspace"
+                },
+                "owner_id": {
+                    "type": "string",
+                    "example": "admin"
+                },
+                "tier": {
+                    "type": "string",
+                    "example": "default"
+                },
+                "updated_at": {
+                    "type": "integer",
+                    "example": 1728925200000
+                }
+            }
+        },
         "WorkspaceGetRes": {
             "type": "object",
             "required": [
@@ -180,6 +292,55 @@
                 "name": {
                     "type": "string",
                     "example": "main workspace"
+                },
+                "owner_id": {
+                    "type": "string",
+                    "example": "admin"
+                },
+                "tier": {
+                    "type": "string",
+                    "example": "default"
+                },
+                "updated_at": {
+                    "type": "integer",
+                    "example": 1728925200000
+                }
+            }
+        },
+        "WorkspaceUpdateReq": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "example": "anothr workspace name"
+                }
+            }
+        },
+        "WorkspaceUpdateRes": {
+            "type": "object",
+            "required": [
+                "created_at",
+                "id",
+                "name",
+                "owner_id",
+                "tier",
+                "updated_at"
+            ],
+            "properties": {
+                "created_at": {
+                    "type": "integer",
+                    "example": 1728925200000
+                },
+                "id": {
+                    "type": "string",
+                    "example": "ws_2nR9p4W6UmUieJMLIf7ilbXBIRR"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "anothr workspace name"
                 },
                 "owner_id": {
                     "type": "string",

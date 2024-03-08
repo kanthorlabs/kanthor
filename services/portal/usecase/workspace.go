@@ -13,6 +13,8 @@ import (
 type Workspace interface {
 	Create(ctx context.Context, in *WorkspaceCreateIn) (*WorkspaceCreateOut, error)
 	Get(ctx context.Context, in *WorkspaceGetIn) (*WorkspaceGetOut, error)
+	Update(ctx context.Context, in *WorkspaceUpdateIn) (*WorkspaceUpdateOut, error)
+	Delete(ctx context.Context, in *WorkspaceDeleteIn) (*WorkspaceDeleteOut, error)
 }
 
 type workspace struct {

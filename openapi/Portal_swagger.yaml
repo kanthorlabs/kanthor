@@ -46,6 +46,34 @@ definitions:
     - tier
     - updated_at
     type: object
+  WorkspaceDeleteRes:
+    properties:
+      created_at:
+        example: 1728925200000
+        type: integer
+      id:
+        example: ws_2nR9p4W6UmUieJMLIf7ilbXBIRR
+        type: string
+      name:
+        example: main workspace
+        type: string
+      owner_id:
+        example: admin
+        type: string
+      tier:
+        example: default
+        type: string
+      updated_at:
+        example: 1728925200000
+        type: integer
+    required:
+    - created_at
+    - id
+    - name
+    - owner_id
+    - tier
+    - updated_at
+    type: object
   WorkspaceGetRes:
     properties:
       created_at:
@@ -56,6 +84,42 @@ definitions:
         type: string
       name:
         example: main workspace
+        type: string
+      owner_id:
+        example: admin
+        type: string
+      tier:
+        example: default
+        type: string
+      updated_at:
+        example: 1728925200000
+        type: integer
+    required:
+    - created_at
+    - id
+    - name
+    - owner_id
+    - tier
+    - updated_at
+    type: object
+  WorkspaceUpdateReq:
+    properties:
+      name:
+        example: anothr workspace name
+        type: string
+    required:
+    - name
+    type: object
+  WorkspaceUpdateRes:
+    properties:
+      created_at:
+        example: 1728925200000
+        type: integer
+      id:
+        example: ws_2nR9p4W6UmUieJMLIf7ilbXBIRR
+        type: string
+      name:
+        example: anothr workspace name
         type: string
       owner_id:
         example: admin
@@ -113,6 +177,26 @@ paths:
       tags:
       - workspace
   /workspace/{id}:
+    delete:
+      parameters:
+      - description: workspace id
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/WorkspaceDeleteRes'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - Authorization: []
+      tags:
+      - workspace
     get:
       parameters:
       - description: workspace id
@@ -125,6 +209,32 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/WorkspaceGetRes'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - Authorization: []
+      tags:
+      - workspace
+    patch:
+      parameters:
+      - description: workspace id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/WorkspaceUpdateReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/WorkspaceUpdateRes'
         default:
           description: ""
           schema:

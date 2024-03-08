@@ -38,10 +38,14 @@ func (uc *workspace) Create(ctx context.Context, in *WorkspaceCreateIn) (*Worksp
 			Username: doc.OwnerId,
 			Role:     permissions.RoleOwner,
 		}
-		return uc.infra.Gatekeeper().Grant(ctx, evaluation)
+		if err := uc.infra.Gatekeeper().Grant(ctx, evaluation); err != nil {
+			return err
+		}
+
+		return nil
 	})
 	if err != nil {
-		uc.logger.Errorw(ErrWorkspaceCreate.Error(), "error", err.Error(), "in", utils.Stringify(in))
+		// the error is already logged in the transaction
 		return nil, err
 	}
 

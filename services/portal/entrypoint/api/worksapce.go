@@ -20,6 +20,8 @@ func RegisterWorkspaceRoutes(router chi.Router, service *portal) {
 			ssr.Use(httpxmw.Authz(service.infra.Gatekeeper(), config.ServiceName))
 
 			ssr.Get("/", UseWorkspaceGet(service))
+			ssr.Patch("/", UseWorkspaceUpdate(service))
+			ssr.Delete("/", UseWorkspaceDelete(service))
 		})
 	})
 }
