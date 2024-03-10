@@ -44,14 +44,9 @@ func UseWorkspaceCreate(service *portal) http.HandlerFunc {
 			return
 		}
 
-		httpxwriter.Ok(w, &WorkspaceCreateRes{
-			Id:        out.Id,
-			CreatedAt: out.CreatedAt,
-			UpdatedAt: out.UpdatedAt,
-			OwnerId:   out.OwnerId,
-			Name:      out.Name,
-			Tier:      out.Tier,
-		})
+		res := &WorkspaceCreateRes{Workspace: &Workspace{}}
+		res.Map(out.Workspace)
+		httpxwriter.Ok(w, res)
 	}
 }
 
@@ -60,10 +55,5 @@ type WorkspaceCreateReq struct {
 } // @name WorkspaceCreateReq
 
 type WorkspaceCreateRes struct {
-	Id        string `json:"id" example:"ws_2nR9p4W6UmUieJMLIf7ilbXBIRR"`
-	CreatedAt int64  `json:"created_at" example:"1728925200000"`
-	UpdatedAt int64  `json:"updated_at" example:"1728925200000"`
-	OwnerId   string `json:"owner_id" example:"admin"`
-	Name      string `json:"name" example:"main workspace"`
-	Tier      string `json:"tier" example:"default"`
+	*Workspace
 } // @name WorkspaceCreateRes

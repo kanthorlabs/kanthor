@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/kanthorlabs/common/idx"
+	"github.com/kanthorlabs/common/validator"
 	"gorm.io/gorm"
 )
 
@@ -21,8 +22,8 @@ type ScanningCondition struct {
 }
 
 type ScanningQuery struct {
-	Cursor string
 	Search string
+	Cursor string
 	Size   int
 	From   time.Time
 	To     time.Time
@@ -30,12 +31,21 @@ type ScanningQuery struct {
 
 func (query *ScanningQuery) Clone() *ScanningQuery {
 	return &ScanningQuery{
-		Cursor: query.Cursor,
 		Search: query.Search,
+		Cursor: query.Cursor,
 		Size:   query.Size,
 		From:   query.From,
 		To:     query.To,
 	}
+}
+
+func (query *ScanningQuery) Validate() error {
+	return validator.Validate(
+		validator.StringLenIfNotEmpty("DATASTORE.QUERY.SEARCH", query.Search, SearchMinChar, SearchMaxChar),
+		validator.StringLenIfNotEmpty("DATASTORE.QUERY.CURSOR", query.Cursor, SearchMinChar, SearchMaxChar),
+		validator.NumberInRange("DATASTORE.QUERY.SIZE", query.Size, SizeMin, SizeMax),
+		validator.DatetimeBefore("DATASTORE.QUERY.FROM", query.From, query.To),
+	)
 }
 
 func (query *ScanningQuery) Sqlx(tx *gorm.DB, condition *ScanningCondition) *gorm.DB {

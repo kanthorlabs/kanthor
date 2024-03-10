@@ -40,26 +40,16 @@ func UseWorkspaceUpdate(service *portal) http.HandlerFunc {
 			return
 		}
 
-		httpxwriter.Ok(w, &WorkspaceUpdateRes{
-			Id:        out.Id,
-			CreatedAt: out.CreatedAt,
-			UpdatedAt: out.UpdatedAt,
-			OwnerId:   out.OwnerId,
-			Name:      out.Name,
-			Tier:      out.Tier,
-		})
+		res := &WorkspaceUpdateRes{Workspace: &Workspace{}}
+		res.Map(out.Workspace)
+		httpxwriter.Ok(w, res)
 	}
 }
 
 type WorkspaceUpdateReq struct {
-	Name string `json:"name" example:"anothr workspace name"`
+	Name string `json:"name" example:"anthor workspace name"`
 } // @name WorkspaceUpdateReq
 
 type WorkspaceUpdateRes struct {
-	Id        string `json:"id" example:"ws_2nR9p4W6UmUieJMLIf7ilbXBIRR"`
-	CreatedAt int64  `json:"created_at" example:"1728925200000"`
-	UpdatedAt int64  `json:"updated_at" example:"1728925200000"`
-	OwnerId   string `json:"owner_id" example:"admin"`
-	Name      string `json:"name" example:"anothr workspace name"`
-	Tier      string `json:"tier" example:"default"`
+	*Workspace
 } // @name WorkspaceUpdateRes

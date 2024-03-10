@@ -13,6 +13,7 @@ import (
 type Workspace interface {
 	Create(ctx context.Context, in *WorkspaceCreateIn) (*WorkspaceCreateOut, error)
 	Get(ctx context.Context, in *WorkspaceGetIn) (*WorkspaceGetOut, error)
+	List(ctx context.Context, in *WorkspaceListIn) (*WorkspaceListOut, error)
 	Update(ctx context.Context, in *WorkspaceUpdateIn) (*WorkspaceUpdateOut, error)
 	Delete(ctx context.Context, in *WorkspaceDeleteIn) (*WorkspaceDeleteOut, error)
 }

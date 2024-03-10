@@ -31,6 +31,30 @@ const docTemplatePortal = `{
     "basePath": "{{.BasePath}}",
     "paths": {
         "/workspace": {
+            "get": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "tags": [
+                    "workspace"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/WorkspaceListRes"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            },
             "post": {
                 "security": [
                     {
@@ -314,6 +338,17 @@ const docTemplatePortal = `{
                 }
             }
         },
+        "WorkspaceListRes": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/api.Workspace"
+                    }
+                }
+            }
+        },
         "WorkspaceUpdateReq": {
             "type": "object",
             "required": [
@@ -322,7 +357,7 @@ const docTemplatePortal = `{
             "properties": {
                 "name": {
                     "type": "string",
-                    "example": "anothr workspace name"
+                    "example": "anthor workspace name"
                 }
             }
         },
@@ -347,7 +382,44 @@ const docTemplatePortal = `{
                 },
                 "name": {
                     "type": "string",
-                    "example": "anothr workspace name"
+                    "example": "main workspace"
+                },
+                "owner_id": {
+                    "type": "string",
+                    "example": "admin"
+                },
+                "tier": {
+                    "type": "string",
+                    "example": "default"
+                },
+                "updated_at": {
+                    "type": "integer",
+                    "example": 1728925200000
+                }
+            }
+        },
+        "api.Workspace": {
+            "type": "object",
+            "required": [
+                "created_at",
+                "id",
+                "name",
+                "owner_id",
+                "tier",
+                "updated_at"
+            ],
+            "properties": {
+                "created_at": {
+                    "type": "integer",
+                    "example": 1728925200000
+                },
+                "id": {
+                    "type": "string",
+                    "example": "ws_2nR9p4W6UmUieJMLIf7ilbXBIRR"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "main workspace"
                 },
                 "owner_id": {
                     "type": "string",
