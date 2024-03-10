@@ -2,6 +2,63 @@ basePath: /api
 consumes:
 - application/json
 definitions:
+  CredentialsAccount:
+    properties:
+      created_at:
+        type: integer
+      metadata:
+        $ref: '#/definitions/safe.Metadata'
+      name:
+        type: string
+      role:
+        items:
+          type: string
+        type: array
+      updated_at:
+        type: integer
+      username:
+        type: string
+    required:
+    - created_at
+    - metadata
+    - name
+    - role
+    - updated_at
+    - username
+    type: object
+  CredentialsCreateReq:
+    properties:
+      name:
+        example: default credentials
+        type: string
+    required:
+    - name
+    type: object
+  CredentialsCreateRes:
+    properties:
+      password:
+        example: b7ccecf6054343ca8c3ebbdc36b05e5bcc28f4b5e812484387ad7de6ad6a04e4
+        type: string
+      tenant:
+        example: ws_2nR9p4W6UmUieJMLIf7ilbXBIRR
+        type: string
+      username:
+        example: admin
+        type: string
+    required:
+    - password
+    - tenant
+    - username
+    type: object
+  CredentialsListRes:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/CredentialsAccount'
+        type: array
+    required:
+    - data
+    type: object
   Error:
     properties:
       error:
@@ -9,6 +66,34 @@ definitions:
         type: string
     required:
     - error
+    type: object
+  Workspace:
+    properties:
+      created_at:
+        example: 1728925200000
+        type: integer
+      id:
+        example: ws_2nR9p4W6UmUieJMLIf7ilbXBIRR
+        type: string
+      name:
+        example: main workspace
+        type: string
+      owner_id:
+        example: admin
+        type: string
+      tier:
+        example: default
+        type: string
+      updated_at:
+        example: 1728925200000
+        type: integer
+    required:
+    - created_at
+    - id
+    - name
+    - owner_id
+    - tier
+    - updated_at
     type: object
   WorkspaceCreateReq:
     properties:
@@ -106,7 +191,7 @@ definitions:
     properties:
       data:
         items:
-          $ref: '#/definitions/api.Workspace'
+          $ref: '#/definitions/Workspace'
         type: array
     required:
     - data
@@ -147,33 +232,7 @@ definitions:
     - tier
     - updated_at
     type: object
-  api.Workspace:
-    properties:
-      created_at:
-        example: 1728925200000
-        type: integer
-      id:
-        example: ws_2nR9p4W6UmUieJMLIf7ilbXBIRR
-        type: string
-      name:
-        example: main workspace
-        type: string
-      owner_id:
-        example: admin
-        type: string
-      tier:
-        example: default
-        type: string
-      updated_at:
-        example: 1728925200000
-        type: integer
-    required:
-    - created_at
-    - id
-    - name
-    - owner_id
-    - tier
-    - updated_at
+  safe.Metadata:
     type: object
 externalDocs:
   description: OpenAPI
@@ -191,6 +250,44 @@ info:
   title: Kanthor Portal API
   version: v2024.1014.1700
 paths:
+  /credentials:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/CredentialsListRes'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - Authorization: []
+      - TenantId: []
+      tags:
+      - credentials
+    post:
+      parameters:
+      - description: request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/CredentialsCreateReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/CredentialsCreateRes'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - Authorization: []
+      - TenantId: []
+      tags:
+      - credentials
   /workspace:
     get:
       responses:

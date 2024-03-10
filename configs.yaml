@@ -61,7 +61,7 @@ infrastructure:
         error_ratio: 0.8
   passport:
     strategies:
-      - name: owner
+      - name: kanthor.owner
         engine: ask
         ask:
           accounts:
@@ -72,7 +72,7 @@ infrastructure:
                 avatar_url: https://ui-avatars.com/api/?name=Super+User
               created_at: 1728925200000
               updated_at: 1728925200000
-      - name: sdk
+      - name: kanthor.sdk
         engine: durability
         durability:
           sqlx:
@@ -85,7 +85,7 @@ infrastructure:
   gatekeeper:
     engine: rbac
     definitions:
-      uri: base64://eyJvd25lciI6W3sic2NvcGUiOiIqIiwiYWN0aW9uIjoiKiIsIm9iamVjdCI6IioifV0sInNkayI6W3sic2NvcGUiOiJzZGsiLCJhY3Rpb24iOiIqIiwib2JqZWN0IjoiKiJ9XX0K
+      uri: base64://eyJrYW50aG9yLm93bmVyIjpbeyJzY29wZSI6IioiLCJhY3Rpb24iOiIqIiwib2JqZWN0IjoiKiJ9XSwia2FudGhvci5zZGsiOlt7InNjb3BlIjoic2RrIiwiYWN0aW9uIjoiKiIsIm9iamVjdCI6IioifV19Cg==
     privilege:
       sqlx:
         uri: postgres://postgres:changemenow@localhost:5432/postgres?sslmode=disable
@@ -98,7 +98,7 @@ infrastructure:
 portal:
   gateway:
     addr: ":9180"
-    timeout: 60000
+    timeout: 10000
     cors:
       allowed_origins:
         - http://localhost:3000

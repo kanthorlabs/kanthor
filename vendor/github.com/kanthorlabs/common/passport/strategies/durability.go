@@ -2,7 +2,9 @@ package strategies
 
 import (
 	"context"
+	"fmt"
 	"sync"
+	"time"
 
 	"github.com/kanthorlabs/common/cipher/password"
 	"github.com/kanthorlabs/common/logging"
@@ -11,6 +13,7 @@ import (
 	"github.com/kanthorlabs/common/patterns"
 	"github.com/kanthorlabs/common/persistence"
 	"github.com/kanthorlabs/common/persistence/sqlx"
+	"github.com/kanthorlabs/common/validator"
 	"gorm.io/gorm"
 )
 
@@ -105,14 +108,19 @@ func (instance *durability) Login(ctx context.Context, credentials *entities.Cre
 	}
 
 	var acc entities.Account
-	tx := instance.orm.WithContext(ctx).
+	err := instance.orm.WithContext(ctx).
 		Where("username = ?", credentials.Username).
-		First(&acc)
-	if tx.Error != nil {
+		First(&acc).
+		Error
+	if err != nil {
 		return nil, ErrLogin
 	}
 
-	if err := password.CompareString(credentials.Password, acc.PasswordHash); err != nil {
+	if 0 < acc.DeactivatedAt && acc.DeactivatedAt < time.Now().UnixMilli() {
+		return nil, ErrAccountDeactivated
+	}
+
+	if err := password.Compare(credentials.Password, acc.PasswordHash); err != nil {
 		return nil, ErrLogin
 	}
 
@@ -128,28 +136,58 @@ func (instance *durability) Verify(ctx context.Context, credentials *entities.Cr
 }
 
 func (instance *durability) Register(ctx context.Context, acc *entities.Account) error {
-	tx := instance.orm.WithContext(ctx).Create(acc)
-	if tx.Error != nil {
+	if instance.orm.WithContext(ctx).Create(acc).Error != nil {
 		return ErrRegister
 	}
 	return nil
 }
 
-func (instance *durability) Deactivate(ctx context.Context, username string, ts int64) error {
+func (instance *durability) Deactivate(ctx context.Context, username string, at int64) error {
 	return instance.orm.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
-		acc := entities.Account{Username: username}
+		acc := &entities.Account{Username: username}
 
-		if txn := tx.First(&acc); txn.Error != nil {
+		if tx.First(&acc).Error != nil {
 			return ErrAccountNotFound
 		}
 
-		acc.DeactivatedAt = ts
+		// the expired time should be greater than the current one
+		if at < acc.DeactivatedAt {
+			return ErrDeactivate
+		}
 
-		txn := tx.Model(&entities.Account{Username: username}).Update("deactivated_at", ts)
-		if txn.Error != nil {
+		if tx.Model(acc).Update("deactivated_at", at).Error != nil {
 			return ErrDeactivate
 		}
 
 		return nil
 	})
+}
+
+func (instance *durability) List(ctx context.Context, usernames []string) ([]*entities.Account, error) {
+	err := validator.Validate(
+		validator.SliceRequired("usernames", usernames),
+		validator.Slice(usernames, func(i int, item *string) error {
+			key := fmt.Sprintf("usernames[%d]", i)
+			return validator.StringRequired(key, *item)()
+		}),
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	var docs []entities.Account
+	err = instance.orm.WithContext(ctx).
+		Where("username IN ?", usernames).
+		Find(&docs).
+		Error
+	if err != nil {
+		return nil, ErrList
+	}
+
+	accounts := make([]*entities.Account, len(docs))
+	for i := range docs {
+		accounts[i] = docs[i].Censor()
+	}
+
+	return accounts, nil
 }

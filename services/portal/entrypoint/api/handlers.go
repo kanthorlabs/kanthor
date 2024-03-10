@@ -48,6 +48,7 @@ func (service *portal) httpx() error {
 			// use default time to live - 1 hour
 		))
 		RegisterWorkspaceRoutes(router, service)
+		RegisterCredentialsRoutes(router, service)
 	})
 
 	return service.server.UseHttpx(handler)

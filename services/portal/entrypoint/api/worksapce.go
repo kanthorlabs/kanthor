@@ -56,7 +56,7 @@ type Workspace struct {
 	OwnerId   string `json:"owner_id" example:"admin"`
 	Name      string `json:"name" example:"main workspace"`
 	Tier      string `json:"tier" example:"default"`
-}
+} // @name Workspace
 
 func (ws *Workspace) Map(entity *entities.Workspace) {
 	ws.Id = entity.Id

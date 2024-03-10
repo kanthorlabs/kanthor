@@ -36,9 +36,11 @@ func (uc *workspace) Create(ctx context.Context, in *WorkspaceCreateIn) (*Worksp
 		evaluation := &gkentities.Evaluation{
 			Tenant:   doc.Id,
 			Username: doc.OwnerId,
-			Role:     permissions.RoleOwner,
+			Role:     permissions.Owner,
 		}
 		if err := uc.infra.Gatekeeper().Grant(ctx, evaluation); err != nil {
+			uc.logger.Errorw(ErrWorkspaceCreate.Error(), "error", err.Error(), "workspace", utils.Stringify(doc), "evaluation", utils.Stringify(evaluation))
+
 			return err
 		}
 

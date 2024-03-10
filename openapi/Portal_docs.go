@@ -30,6 +30,73 @@ const docTemplatePortal = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/credentials": {
+            "get": {
+                "security": [
+                    {
+                        "Authorization": []
+                    },
+                    {
+                        "TenantId": []
+                    }
+                ],
+                "tags": [
+                    "credentials"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/CredentialsListRes"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "Authorization": []
+                    },
+                    {
+                        "TenantId": []
+                    }
+                ],
+                "tags": [
+                    "credentials"
+                ],
+                "parameters": [
+                    {
+                        "description": "request body",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/CredentialsCreateReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/CredentialsCreateRes"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
         "/workspace": {
             "get": {
                 "security": [
@@ -203,6 +270,88 @@ const docTemplatePortal = `{
         }
     },
     "definitions": {
+        "CredentialsAccount": {
+            "type": "object",
+            "required": [
+                "created_at",
+                "metadata",
+                "name",
+                "role",
+                "updated_at",
+                "username"
+            ],
+            "properties": {
+                "created_at": {
+                    "type": "integer"
+                },
+                "metadata": {
+                    "$ref": "#/definitions/safe.Metadata"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "updated_at": {
+                    "type": "integer"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "CredentialsCreateReq": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "example": "default credentials"
+                }
+            }
+        },
+        "CredentialsCreateRes": {
+            "type": "object",
+            "required": [
+                "password",
+                "tenant",
+                "username"
+            ],
+            "properties": {
+                "password": {
+                    "type": "string",
+                    "example": "b7ccecf6054343ca8c3ebbdc36b05e5bcc28f4b5e812484387ad7de6ad6a04e4"
+                },
+                "tenant": {
+                    "type": "string",
+                    "example": "ws_2nR9p4W6UmUieJMLIf7ilbXBIRR"
+                },
+                "username": {
+                    "type": "string",
+                    "example": "admin"
+                }
+            }
+        },
+        "CredentialsListRes": {
+            "type": "object",
+            "required": [
+                "data"
+            ],
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/CredentialsAccount"
+                    }
+                }
+            }
+        },
         "Error": {
             "type": "object",
             "required": [
@@ -212,6 +361,43 @@ const docTemplatePortal = `{
                 "error": {
                     "type": "string",
                     "example": "oops, something went wrong"
+                }
+            }
+        },
+        "Workspace": {
+            "type": "object",
+            "required": [
+                "created_at",
+                "id",
+                "name",
+                "owner_id",
+                "tier",
+                "updated_at"
+            ],
+            "properties": {
+                "created_at": {
+                    "type": "integer",
+                    "example": 1728925200000
+                },
+                "id": {
+                    "type": "string",
+                    "example": "ws_2nR9p4W6UmUieJMLIf7ilbXBIRR"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "main workspace"
+                },
+                "owner_id": {
+                    "type": "string",
+                    "example": "admin"
+                },
+                "tier": {
+                    "type": "string",
+                    "example": "default"
+                },
+                "updated_at": {
+                    "type": "integer",
+                    "example": 1728925200000
                 }
             }
         },
@@ -347,7 +533,7 @@ const docTemplatePortal = `{
                 "data": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/api.Workspace"
+                        "$ref": "#/definitions/Workspace"
                     }
                 }
             }
@@ -401,42 +587,8 @@ const docTemplatePortal = `{
                 }
             }
         },
-        "api.Workspace": {
-            "type": "object",
-            "required": [
-                "created_at",
-                "id",
-                "name",
-                "owner_id",
-                "tier",
-                "updated_at"
-            ],
-            "properties": {
-                "created_at": {
-                    "type": "integer",
-                    "example": 1728925200000
-                },
-                "id": {
-                    "type": "string",
-                    "example": "ws_2nR9p4W6UmUieJMLIf7ilbXBIRR"
-                },
-                "name": {
-                    "type": "string",
-                    "example": "main workspace"
-                },
-                "owner_id": {
-                    "type": "string",
-                    "example": "admin"
-                },
-                "tier": {
-                    "type": "string",
-                    "example": "default"
-                },
-                "updated_at": {
-                    "type": "integer",
-                    "example": 1728925200000
-                }
-            }
+        "safe.Metadata": {
+            "type": "object"
         }
     },
     "securityDefinitions": {

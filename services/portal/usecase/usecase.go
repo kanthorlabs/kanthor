@@ -27,6 +27,7 @@ func New(
 
 type Portal interface {
 	Workspace() Workspace
+	Credentials() Credentials
 }
 
 type portal struct {
@@ -35,7 +36,8 @@ type portal struct {
 	watch  clock.Clock
 	infra  infrastructure.Infrastructure
 
-	workspace *workspace
+	workspace   *workspace
+	credentials *credentials
 
 	mu sync.Mutex
 }
@@ -55,4 +57,21 @@ func (uc *portal) Workspace() Workspace {
 	}
 
 	return uc.workspace
+}
+
+func (uc *portal) Credentials() Credentials {
+	uc.mu.Lock()
+	defer uc.mu.Unlock()
+
+	if uc.credentials == nil {
+		uc.credentials = &credentials{
+			conf:   uc.conf,
+			logger: uc.logger,
+			watch:  uc.watch,
+			infra:  uc.infra,
+			orm:    uc.infra.Database().Client().(*gorm.DB),
+		}
+	}
+
+	return uc.credentials
 }

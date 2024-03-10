@@ -1,12 +1,12 @@
 {
-  "owner": [
+  "kanthor.owner": [
     {
       "scope": "*",
       "action": "*",
       "object": "*"
     }
   ],
-  "sdk": [
+  "kanthor.sdk": [
     {
       "scope": "sdk",
       "action": "*",
