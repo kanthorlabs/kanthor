@@ -1,6 +1,14 @@
 {
   "owner": [
     {
+      "scope": "*",
+      "action": "*",
+      "object": "*"
+    }
+  ],
+  "sdk": [
+    {
+      "scope": "sdk",
       "action": "*",
       "object": "*"
     }

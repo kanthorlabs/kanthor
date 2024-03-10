@@ -5,7 +5,7 @@ go 1.21.7
 require (
 	github.com/go-chi/chi/v5 v5.0.12
 	github.com/google/wire v0.6.0
-	github.com/kanthorlabs/common v0.0.0-20240310032314-b88d92b7e709
+	github.com/kanthorlabs/common v0.0.0-20240310042331-812e9f01818c
 	github.com/samber/lo v1.39.0
 	github.com/sourcegraph/conc v0.3.0
 	github.com/spf13/cobra v1.8.0

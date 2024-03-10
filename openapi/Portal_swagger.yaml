@@ -1,6 +1,6 @@
 basePath: /api
 consumes:
-  - application/json
+- application/json
 definitions:
   Error:
     properties:
@@ -8,7 +8,7 @@ definitions:
         example: oops, something went wrong
         type: string
     required:
-      - error
+    - error
     type: object
   WorkspaceCreateReq:
     properties:
@@ -16,7 +16,7 @@ definitions:
         example: main workspace
         type: string
     required:
-      - name
+    - name
     type: object
   WorkspaceCreateRes:
     properties:
@@ -39,12 +39,12 @@ definitions:
         example: 1728925200000
         type: integer
     required:
-      - created_at
-      - id
-      - name
-      - owner_id
-      - tier
-      - updated_at
+    - created_at
+    - id
+    - name
+    - owner_id
+    - tier
+    - updated_at
     type: object
   WorkspaceDeleteRes:
     properties:
@@ -67,12 +67,12 @@ definitions:
         example: 1728925200000
         type: integer
     required:
-      - created_at
-      - id
-      - name
-      - owner_id
-      - tier
-      - updated_at
+    - created_at
+    - id
+    - name
+    - owner_id
+    - tier
+    - updated_at
     type: object
   WorkspaceGetRes:
     properties:
@@ -95,19 +95,21 @@ definitions:
         example: 1728925200000
         type: integer
     required:
-      - created_at
-      - id
-      - name
-      - owner_id
-      - tier
-      - updated_at
+    - created_at
+    - id
+    - name
+    - owner_id
+    - tier
+    - updated_at
     type: object
   WorkspaceListRes:
     properties:
       data:
         items:
-          $ref: "#/definitions/api.Workspace"
+          $ref: '#/definitions/api.Workspace'
         type: array
+    required:
+    - data
     type: object
   WorkspaceUpdateReq:
     properties:
@@ -115,7 +117,7 @@ definitions:
         example: anthor workspace name
         type: string
     required:
-      - name
+    - name
     type: object
   WorkspaceUpdateRes:
     properties:
@@ -138,12 +140,12 @@ definitions:
         example: 1728925200000
         type: integer
     required:
-      - created_at
-      - id
-      - name
-      - owner_id
-      - tier
-      - updated_at
+    - created_at
+    - id
+    - name
+    - owner_id
+    - tier
+    - updated_at
     type: object
   api.Workspace:
     properties:
@@ -166,12 +168,12 @@ definitions:
         example: 1728925200000
         type: integer
     required:
-      - created_at
-      - id
-      - name
-      - owner_id
-      - tier
-      - updated_at
+    - created_at
+    - id
+    - name
+    - owner_id
+    - tier
+    - updated_at
     type: object
 externalDocs:
   description: OpenAPI
@@ -195,108 +197,108 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: "#/definitions/WorkspaceListRes"
+            $ref: '#/definitions/WorkspaceListRes'
         default:
           description: ""
           schema:
-            $ref: "#/definitions/Error"
+            $ref: '#/definitions/Error'
       security:
-        - Authorization: []
+      - Authorization: []
       tags:
-        - workspace
+      - workspace
     post:
       parameters:
-        - description: request body
-          in: body
-          name: request
-          required: true
-          schema:
-            $ref: "#/definitions/WorkspaceCreateReq"
+      - description: request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/WorkspaceCreateReq'
       responses:
         "200":
           description: OK
           schema:
-            $ref: "#/definitions/WorkspaceCreateRes"
+            $ref: '#/definitions/WorkspaceCreateRes'
         default:
           description: ""
           schema:
-            $ref: "#/definitions/Error"
+            $ref: '#/definitions/Error'
       security:
-        - Authorization: []
+      - Authorization: []
       tags:
-        - workspace
+      - workspace
   /workspace/{id}:
     delete:
       parameters:
-        - description: workspace id
-          in: path
-          name: id
-          required: true
-          type: string
+      - description: workspace id
+        in: path
+        name: id
+        required: true
+        type: string
       responses:
         "200":
           description: OK
           schema:
-            $ref: "#/definitions/WorkspaceDeleteRes"
+            $ref: '#/definitions/WorkspaceDeleteRes'
         default:
           description: ""
           schema:
-            $ref: "#/definitions/Error"
+            $ref: '#/definitions/Error'
       security:
-        - Authorization: []
+      - Authorization: []
       tags:
-        - workspace
+      - workspace
     get:
       parameters:
-        - description: workspace id
-          in: path
-          name: id
-          required: true
-          type: string
+      - description: workspace id
+        in: path
+        name: id
+        required: true
+        type: string
       responses:
         "200":
           description: OK
           schema:
-            $ref: "#/definitions/WorkspaceGetRes"
+            $ref: '#/definitions/WorkspaceGetRes'
         default:
           description: ""
           schema:
-            $ref: "#/definitions/Error"
+            $ref: '#/definitions/Error'
       security:
-        - Authorization: []
+      - Authorization: []
       tags:
-        - workspace
+      - workspace
     patch:
       parameters:
-        - description: workspace id
-          in: path
-          name: id
-          required: true
-          type: string
-        - description: request body
-          in: body
-          name: request
-          required: true
-          schema:
-            $ref: "#/definitions/WorkspaceUpdateReq"
+      - description: workspace id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/WorkspaceUpdateReq'
       responses:
         "200":
           description: OK
           schema:
-            $ref: "#/definitions/WorkspaceUpdateRes"
+            $ref: '#/definitions/WorkspaceUpdateRes'
         default:
           description: ""
           schema:
-            $ref: "#/definitions/Error"
+            $ref: '#/definitions/Error'
       security:
-        - Authorization: []
+      - Authorization: []
       tags:
-        - workspace
+      - workspace
 produces:
-  - application/json
+- application/json
 securityDefinitions:
   Authorization:
-    description: "[Bearer JWT_TOKEN] or [Basic base64(key:secret)]"
+    description: '[Bearer JWT_TOKEN] or [Basic base64(key:secret)]'
     in: header
     name: Authorization
     type: apiKey

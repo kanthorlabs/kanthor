@@ -69,7 +69,7 @@ infrastructure:
               username: admin
               password_hash: "$2a$10$qv5Ct.Ee1GY4Fm5fnVS79uQG45q5ruFQoPncUrA29ASY74kIKTLP." #changemenow
               metadata:
-                role: owner
+                avatar_url: https://ui-avatars.com/api/?name=Super+User
               created_at: 1728925200000
               updated_at: 1728925200000
       - name: sdk
@@ -85,7 +85,7 @@ infrastructure:
   gatekeeper:
     engine: rbac
     definitions:
-      uri: base64://eyJvd25lciI6W3siYWN0aW9uIjoiKiIsIm9iamVjdCI6IioifV19Cg==
+      uri: base64://eyJvd25lciI6W3sic2NvcGUiOiIqIiwiYWN0aW9uIjoiKiIsIm9iamVjdCI6IioifV0sInNkayI6W3sic2NvcGUiOiJzZGsiLCJhY3Rpb24iOiIqIiwib2JqZWN0IjoiKiJ9XX0K
     privilege:
       sqlx:
         uri: postgres://postgres:changemenow@localhost:5432/postgres?sslmode=disable

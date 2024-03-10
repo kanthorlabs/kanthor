@@ -340,6 +340,9 @@ const docTemplatePortal = `{
         },
         "WorkspaceListRes": {
             "type": "object",
+            "required": [
+                "data"
+            ],
             "properties": {
                 "data": {
                     "type": "array",

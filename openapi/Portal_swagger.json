@@ -1,430 +1,453 @@
 {
-  "consumes": ["application/json"],
-  "produces": ["application/json"],
-  "swagger": "2.0",
-  "info": {
-    "description": "Portal API",
-    "title": "Kanthor Portal API",
-    "termsOfService": "http://kanthorlabs.com/terms/",
-    "contact": {
-      "name": "Kanthor Support",
-      "url": "http://kanthorlabs.com/support",
-      "email": "support@kanthorlabs.com"
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "swagger": "2.0",
+    "info": {
+        "description": "Portal API",
+        "title": "Kanthor Portal API",
+        "termsOfService": "http://kanthorlabs.com/terms/",
+        "contact": {
+            "name": "Kanthor Support",
+            "url": "http://kanthorlabs.com/support",
+            "email": "support@kanthorlabs.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "v2024.1014.1700"
     },
-    "license": {
-      "name": "Apache 2.0",
-      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    "basePath": "/api",
+    "paths": {
+        "/workspace": {
+            "get": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "tags": [
+                    "workspace"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/WorkspaceListRes"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "tags": [
+                    "workspace"
+                ],
+                "parameters": [
+                    {
+                        "description": "request body",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/WorkspaceCreateReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/WorkspaceCreateRes"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/workspace/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "tags": [
+                    "workspace"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "workspace id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/WorkspaceGetRes"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "tags": [
+                    "workspace"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "workspace id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/WorkspaceDeleteRes"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "tags": [
+                    "workspace"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "workspace id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "request body",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/WorkspaceUpdateReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/WorkspaceUpdateRes"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        }
     },
-    "version": "v2024.1014.1700"
-  },
-  "basePath": "/api",
-  "paths": {
-    "/workspace": {
-      "get": {
-        "security": [
-          {
-            "Authorization": []
-          }
-        ],
-        "tags": ["workspace"],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/WorkspaceListRes"
+    "definitions": {
+        "Error": {
+            "type": "object",
+            "required": [
+                "error"
+            ],
+            "properties": {
+                "error": {
+                    "type": "string",
+                    "example": "oops, something went wrong"
+                }
             }
-          },
-          "default": {
-            "description": "",
-            "schema": {
-              "$ref": "#/definitions/Error"
+        },
+        "WorkspaceCreateReq": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "example": "main workspace"
+                }
             }
-          }
+        },
+        "WorkspaceCreateRes": {
+            "type": "object",
+            "required": [
+                "created_at",
+                "id",
+                "name",
+                "owner_id",
+                "tier",
+                "updated_at"
+            ],
+            "properties": {
+                "created_at": {
+                    "type": "integer",
+                    "example": 1728925200000
+                },
+                "id": {
+                    "type": "string",
+                    "example": "ws_2nR9p4W6UmUieJMLIf7ilbXBIRR"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "main workspace"
+                },
+                "owner_id": {
+                    "type": "string",
+                    "example": "admin"
+                },
+                "tier": {
+                    "type": "string",
+                    "example": "default"
+                },
+                "updated_at": {
+                    "type": "integer",
+                    "example": 1728925200000
+                }
+            }
+        },
+        "WorkspaceDeleteRes": {
+            "type": "object",
+            "required": [
+                "created_at",
+                "id",
+                "name",
+                "owner_id",
+                "tier",
+                "updated_at"
+            ],
+            "properties": {
+                "created_at": {
+                    "type": "integer",
+                    "example": 1728925200000
+                },
+                "id": {
+                    "type": "string",
+                    "example": "ws_2nR9p4W6UmUieJMLIf7ilbXBIRR"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "main workspace"
+                },
+                "owner_id": {
+                    "type": "string",
+                    "example": "admin"
+                },
+                "tier": {
+                    "type": "string",
+                    "example": "default"
+                },
+                "updated_at": {
+                    "type": "integer",
+                    "example": 1728925200000
+                }
+            }
+        },
+        "WorkspaceGetRes": {
+            "type": "object",
+            "required": [
+                "created_at",
+                "id",
+                "name",
+                "owner_id",
+                "tier",
+                "updated_at"
+            ],
+            "properties": {
+                "created_at": {
+                    "type": "integer",
+                    "example": 1728925200000
+                },
+                "id": {
+                    "type": "string",
+                    "example": "ws_2nR9p4W6UmUieJMLIf7ilbXBIRR"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "main workspace"
+                },
+                "owner_id": {
+                    "type": "string",
+                    "example": "admin"
+                },
+                "tier": {
+                    "type": "string",
+                    "example": "default"
+                },
+                "updated_at": {
+                    "type": "integer",
+                    "example": 1728925200000
+                }
+            }
+        },
+        "WorkspaceListRes": {
+            "type": "object",
+            "required": [
+                "data"
+            ],
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/api.Workspace"
+                    }
+                }
+            }
+        },
+        "WorkspaceUpdateReq": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "example": "anthor workspace name"
+                }
+            }
+        },
+        "WorkspaceUpdateRes": {
+            "type": "object",
+            "required": [
+                "created_at",
+                "id",
+                "name",
+                "owner_id",
+                "tier",
+                "updated_at"
+            ],
+            "properties": {
+                "created_at": {
+                    "type": "integer",
+                    "example": 1728925200000
+                },
+                "id": {
+                    "type": "string",
+                    "example": "ws_2nR9p4W6UmUieJMLIf7ilbXBIRR"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "main workspace"
+                },
+                "owner_id": {
+                    "type": "string",
+                    "example": "admin"
+                },
+                "tier": {
+                    "type": "string",
+                    "example": "default"
+                },
+                "updated_at": {
+                    "type": "integer",
+                    "example": 1728925200000
+                }
+            }
+        },
+        "api.Workspace": {
+            "type": "object",
+            "required": [
+                "created_at",
+                "id",
+                "name",
+                "owner_id",
+                "tier",
+                "updated_at"
+            ],
+            "properties": {
+                "created_at": {
+                    "type": "integer",
+                    "example": 1728925200000
+                },
+                "id": {
+                    "type": "string",
+                    "example": "ws_2nR9p4W6UmUieJMLIf7ilbXBIRR"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "main workspace"
+                },
+                "owner_id": {
+                    "type": "string",
+                    "example": "admin"
+                },
+                "tier": {
+                    "type": "string",
+                    "example": "default"
+                },
+                "updated_at": {
+                    "type": "integer",
+                    "example": 1728925200000
+                }
+            }
         }
-      },
-      "post": {
-        "security": [
-          {
-            "Authorization": []
-          }
-        ],
-        "tags": ["workspace"],
-        "parameters": [
-          {
-            "description": "request body",
-            "name": "request",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/WorkspaceCreateReq"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/WorkspaceCreateRes"
-            }
-          },
-          "default": {
-            "description": "",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          }
-        }
-      }
     },
-    "/workspace/{id}": {
-      "get": {
-        "security": [
-          {
-            "Authorization": []
-          }
-        ],
-        "tags": ["workspace"],
-        "parameters": [
-          {
-            "type": "string",
-            "description": "workspace id",
-            "name": "id",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/WorkspaceGetRes"
-            }
-          },
-          "default": {
-            "description": "",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          }
+    "securityDefinitions": {
+        "Authorization": {
+            "description": "[Bearer JWT_TOKEN] or [Basic base64(key:secret)]",
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        },
+        "TenantId": {
+            "description": "The tenant id",
+            "type": "apiKey",
+            "name": "X-Authorization-Tenant",
+            "in": "header"
         }
-      },
-      "delete": {
-        "security": [
-          {
-            "Authorization": []
-          }
-        ],
-        "tags": ["workspace"],
-        "parameters": [
-          {
-            "type": "string",
-            "description": "workspace id",
-            "name": "id",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/WorkspaceDeleteRes"
-            }
-          },
-          "default": {
-            "description": "",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          }
-        }
-      },
-      "patch": {
-        "security": [
-          {
-            "Authorization": []
-          }
-        ],
-        "tags": ["workspace"],
-        "parameters": [
-          {
-            "type": "string",
-            "description": "workspace id",
-            "name": "id",
-            "in": "path",
-            "required": true
-          },
-          {
-            "description": "request body",
-            "name": "request",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/WorkspaceUpdateReq"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/WorkspaceUpdateRes"
-            }
-          },
-          "default": {
-            "description": "",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          }
-        }
-      }
+    },
+    "externalDocs": {
+        "description": "OpenAPI",
+        "url": "https://swagger.io/resources/open-api/"
     }
-  },
-  "definitions": {
-    "Error": {
-      "type": "object",
-      "required": ["error"],
-      "properties": {
-        "error": {
-          "type": "string",
-          "example": "oops, something went wrong"
-        }
-      }
-    },
-    "WorkspaceCreateReq": {
-      "type": "object",
-      "required": ["name"],
-      "properties": {
-        "name": {
-          "type": "string",
-          "example": "main workspace"
-        }
-      }
-    },
-    "WorkspaceCreateRes": {
-      "type": "object",
-      "required": [
-        "created_at",
-        "id",
-        "name",
-        "owner_id",
-        "tier",
-        "updated_at"
-      ],
-      "properties": {
-        "created_at": {
-          "type": "integer",
-          "example": 1728925200000
-        },
-        "id": {
-          "type": "string",
-          "example": "ws_2nR9p4W6UmUieJMLIf7ilbXBIRR"
-        },
-        "name": {
-          "type": "string",
-          "example": "main workspace"
-        },
-        "owner_id": {
-          "type": "string",
-          "example": "admin"
-        },
-        "tier": {
-          "type": "string",
-          "example": "default"
-        },
-        "updated_at": {
-          "type": "integer",
-          "example": 1728925200000
-        }
-      }
-    },
-    "WorkspaceDeleteRes": {
-      "type": "object",
-      "required": [
-        "created_at",
-        "id",
-        "name",
-        "owner_id",
-        "tier",
-        "updated_at"
-      ],
-      "properties": {
-        "created_at": {
-          "type": "integer",
-          "example": 1728925200000
-        },
-        "id": {
-          "type": "string",
-          "example": "ws_2nR9p4W6UmUieJMLIf7ilbXBIRR"
-        },
-        "name": {
-          "type": "string",
-          "example": "main workspace"
-        },
-        "owner_id": {
-          "type": "string",
-          "example": "admin"
-        },
-        "tier": {
-          "type": "string",
-          "example": "default"
-        },
-        "updated_at": {
-          "type": "integer",
-          "example": 1728925200000
-        }
-      }
-    },
-    "WorkspaceGetRes": {
-      "type": "object",
-      "required": [
-        "created_at",
-        "id",
-        "name",
-        "owner_id",
-        "tier",
-        "updated_at"
-      ],
-      "properties": {
-        "created_at": {
-          "type": "integer",
-          "example": 1728925200000
-        },
-        "id": {
-          "type": "string",
-          "example": "ws_2nR9p4W6UmUieJMLIf7ilbXBIRR"
-        },
-        "name": {
-          "type": "string",
-          "example": "main workspace"
-        },
-        "owner_id": {
-          "type": "string",
-          "example": "admin"
-        },
-        "tier": {
-          "type": "string",
-          "example": "default"
-        },
-        "updated_at": {
-          "type": "integer",
-          "example": 1728925200000
-        }
-      }
-    },
-    "WorkspaceListRes": {
-      "type": "object",
-      "properties": {
-        "data": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/api.Workspace"
-          }
-        }
-      }
-    },
-    "WorkspaceUpdateReq": {
-      "type": "object",
-      "required": ["name"],
-      "properties": {
-        "name": {
-          "type": "string",
-          "example": "anthor workspace name"
-        }
-      }
-    },
-    "WorkspaceUpdateRes": {
-      "type": "object",
-      "required": [
-        "created_at",
-        "id",
-        "name",
-        "owner_id",
-        "tier",
-        "updated_at"
-      ],
-      "properties": {
-        "created_at": {
-          "type": "integer",
-          "example": 1728925200000
-        },
-        "id": {
-          "type": "string",
-          "example": "ws_2nR9p4W6UmUieJMLIf7ilbXBIRR"
-        },
-        "name": {
-          "type": "string",
-          "example": "main workspace"
-        },
-        "owner_id": {
-          "type": "string",
-          "example": "admin"
-        },
-        "tier": {
-          "type": "string",
-          "example": "default"
-        },
-        "updated_at": {
-          "type": "integer",
-          "example": 1728925200000
-        }
-      }
-    },
-    "api.Workspace": {
-      "type": "object",
-      "required": [
-        "created_at",
-        "id",
-        "name",
-        "owner_id",
-        "tier",
-        "updated_at"
-      ],
-      "properties": {
-        "created_at": {
-          "type": "integer",
-          "example": 1728925200000
-        },
-        "id": {
-          "type": "string",
-          "example": "ws_2nR9p4W6UmUieJMLIf7ilbXBIRR"
-        },
-        "name": {
-          "type": "string",
-          "example": "main workspace"
-        },
-        "owner_id": {
-          "type": "string",
-          "example": "admin"
-        },
-        "tier": {
-          "type": "string",
-          "example": "default"
-        },
-        "updated_at": {
-          "type": "integer",
-          "example": 1728925200000
-        }
-      }
-    }
-  },
-  "securityDefinitions": {
-    "Authorization": {
-      "description": "[Bearer JWT_TOKEN] or [Basic base64(key:secret)]",
-      "type": "apiKey",
-      "name": "Authorization",
-      "in": "header"
-    },
-    "TenantId": {
-      "description": "The tenant id",
-      "type": "apiKey",
-      "name": "X-Authorization-Tenant",
-      "in": "header"
-    }
-  },
-  "externalDocs": {
-    "description": "OpenAPI",
-    "url": "https://swagger.io/resources/open-api/"
-  }
 }
