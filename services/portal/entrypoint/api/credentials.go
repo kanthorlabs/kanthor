@@ -16,6 +16,7 @@ func RegisterCredentialsRoutes(router chi.Router, service *portal) {
 		sr.Get("/", UseCredentialsList(service))
 		sr.Route("/{username}", func(ssr chi.Router) {
 			ssr.Get("/", UseCredentialsGet(service))
+			ssr.Patch("/", UseCredentialsUpdate(service))
 			ssr.Put("/expiration", UseCredentialsExpire(service))
 		})
 	})

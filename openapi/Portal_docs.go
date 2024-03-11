@@ -133,6 +133,51 @@ const docTemplatePortal = `{
                         }
                     }
                 }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "Authorization": []
+                    },
+                    {
+                        "TenantId": []
+                    }
+                ],
+                "tags": [
+                    "credentials"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "credentials username",
+                        "name": "username",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "request body",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/CredentialsUpdateReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/CredentialsUpdateRes"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
             }
         },
         "/credentials/{username}/expiration": {
@@ -162,7 +207,7 @@ const docTemplatePortal = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/CredentialsCreateReq"
+                            "$ref": "#/definitions/CredentialsExpireReq"
                         }
                     }
                 ],
@@ -396,12 +441,12 @@ const docTemplatePortal = `{
         "CredentialsCreateReq": {
             "type": "object",
             "required": [
-                "expires_in"
+                "name"
             ],
             "properties": {
-                "expires_in": {
-                    "type": "integer",
-                    "example": 1800000
+                "name": {
+                    "type": "string",
+                    "example": "default credentials"
                 }
             }
         },
@@ -424,6 +469,18 @@ const docTemplatePortal = `{
                 "username": {
                     "type": "string",
                     "example": "admin"
+                }
+            }
+        },
+        "CredentialsExpireReq": {
+            "type": "object",
+            "required": [
+                "expires_in"
+            ],
+            "properties": {
+                "expires_in": {
+                    "type": "integer",
+                    "example": 1800000
                 }
             }
         },
@@ -514,6 +571,56 @@ const docTemplatePortal = `{
                     "items": {
                         "$ref": "#/definitions/CredentialsAccount"
                     }
+                }
+            }
+        },
+        "CredentialsUpdateReq": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "example": "default credentials"
+                }
+            }
+        },
+        "CredentialsUpdateRes": {
+            "type": "object",
+            "required": [
+                "created_at",
+                "deactivated_at",
+                "metadata",
+                "name",
+                "role",
+                "updated_at",
+                "username"
+            ],
+            "properties": {
+                "created_at": {
+                    "type": "integer"
+                },
+                "deactivated_at": {
+                    "type": "integer"
+                },
+                "metadata": {
+                    "$ref": "#/definitions/safe.Metadata"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "updated_at": {
+                    "type": "integer"
+                },
+                "username": {
+                    "type": "string"
                 }
             }
         },

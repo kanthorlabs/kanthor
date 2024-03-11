@@ -51,7 +51,7 @@ func UseCredentialsExpire(service *portal) http.HandlerFunc {
 
 type CredentialsExpireReq struct {
 	ExpiresIn int64 `json:"expires_in" example:"1800000"`
-} // @name CredentialsCreateReq
+} // @name CredentialsExpireReq
 
 type CredentialsExpireRes struct {
 	*CredentialsAccount

@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"context"
+	"errors"
 	"slices"
 
 	"github.com/kanthorlabs/common/clock"
@@ -19,6 +20,7 @@ type Credentials interface {
 	Create(ctx context.Context, in *CredentialsCreateIn) (*CredentialsCreateOut, error)
 	List(ctx context.Context, in *CredentialsListIn) (*CredentialsListOut, error)
 	Get(ctx context.Context, in *CredentialsGetIn) (*CredentialsGetOut, error)
+	Update(ctx context.Context, in *CredentialsUpdateIn) (*CredentialsUpdateOut, error)
 	Expire(ctx context.Context, in *CredentialsExpireIn) (*CredentialsExpireOut, error)
 }
 
@@ -28,6 +30,30 @@ type credentials struct {
 	watch  clock.Clock
 	infra  infrastructure.Infrastructure
 	orm    *gorm.DB
+}
+
+func (uc *credentials) get(ctx context.Context, tenant, username string) ([]*CredentialsAccount, error) {
+	strategy, err := uc.infra.Passport().Strategy(permissions.Sdk)
+	if err != nil {
+		return nil, errors.New("PORTAl.CREDENTIALS.PASSPORT.NO_STRATEGY.ERROR")
+	}
+
+	users, err := uc.infra.Gatekeeper().Users(ctx, tenant)
+	if err != nil {
+		return nil, err
+	}
+
+	usernames, maps := cagkmap(users, username)
+	if len(usernames) == 0 {
+		return nil, errors.New("PORTAl.CREDENTIALS.GATEKEEPR.ERROR")
+	}
+
+	accounts, err := strategy.List(ctx, usernames)
+	if err != nil {
+		return nil, errors.New("PORTAl.CREDENTIALS.PASSPORT.ERROR")
+	}
+
+	return cappmap(maps, accounts), nil
 }
 
 type CredentialsAccount struct {
@@ -40,18 +66,25 @@ type CredentialsAccount struct {
 	DeactivatedAt int64
 }
 
-func cagkmap(users []gkentities.User) ([]string, map[string]*CredentialsAccount) {
+func cagkmap(users []gkentities.User, find string) ([]string, map[string]*CredentialsAccount) {
 	usernames := []string{}
 	maps := map[string]*CredentialsAccount{}
 	for i := range users {
-		// the credentials are only for the SDK
-		isSdk := slices.Contains(users[i].Roles, permissions.Sdk)
-		if isSdk {
-			usernames = append(usernames, users[i].Username)
-			maps[users[i].Username] = &CredentialsAccount{
-				Username: users[i].Username,
-				Roles:    users[i].Roles,
-			}
+		// the credentials are only for the SDK, ignore the rest type
+		//lint:ignore S1002 this is a valid comparison
+		othertype := slices.Contains(users[i].Roles, permissions.Sdk) != true
+		if othertype {
+			continue
+		}
+
+		if find != "" && users[i].Username != find {
+			continue
+		}
+
+		usernames = append(usernames, users[i].Username)
+		maps[users[i].Username] = &CredentialsAccount{
+			Username: users[i].Username,
+			Roles:    users[i].Roles,
 		}
 	}
 	return usernames, maps

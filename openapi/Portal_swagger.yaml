@@ -31,11 +31,11 @@ definitions:
     type: object
   CredentialsCreateReq:
     properties:
-      expires_in:
-        example: 1800000
-        type: integer
+      name:
+        example: default credentials
+        type: string
     required:
-    - expires_in
+    - name
     type: object
   CredentialsCreateRes:
     properties:
@@ -52,6 +52,14 @@ definitions:
     - password
     - tenant
     - username
+    type: object
+  CredentialsExpireReq:
+    properties:
+      expires_in:
+        example: 1800000
+        type: integer
+    required:
+    - expires_in
     type: object
   CredentialsExpireRes:
     properties:
@@ -115,6 +123,41 @@ definitions:
         type: array
     required:
     - data
+    type: object
+  CredentialsUpdateReq:
+    properties:
+      name:
+        example: default credentials
+        type: string
+    required:
+    - name
+    type: object
+  CredentialsUpdateRes:
+    properties:
+      created_at:
+        type: integer
+      deactivated_at:
+        type: integer
+      metadata:
+        $ref: '#/definitions/safe.Metadata'
+      name:
+        type: string
+      role:
+        items:
+          type: string
+        type: array
+      updated_at:
+        type: integer
+      username:
+        type: string
+    required:
+    - created_at
+    - deactivated_at
+    - metadata
+    - name
+    - role
+    - updated_at
+    - username
     type: object
   Error:
     properties:
@@ -367,6 +410,33 @@ paths:
       - TenantId: []
       tags:
       - credentials
+    patch:
+      parameters:
+      - description: credentials username
+        in: path
+        name: username
+        required: true
+        type: string
+      - description: request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/CredentialsUpdateReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/CredentialsUpdateRes'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - Authorization: []
+      - TenantId: []
+      tags:
+      - credentials
   /credentials/{username}/expiration:
     put:
       parameters:
@@ -380,7 +450,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/CredentialsCreateReq'
+          $ref: '#/definitions/CredentialsExpireReq'
       responses:
         "200":
           description: OK
