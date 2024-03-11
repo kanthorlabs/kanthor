@@ -582,7 +582,7 @@ const docTemplatePortal = `{
             "properties": {
                 "name": {
                     "type": "string",
-                    "example": "default credentials"
+                    "example": "another name"
                 }
             }
         },

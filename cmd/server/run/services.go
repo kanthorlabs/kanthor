@@ -7,19 +7,23 @@ import (
 	"github.com/kanthorlabs/common/configuration"
 	"github.com/kanthorlabs/common/patterns"
 	"github.com/kanthorlabs/kanthor/services/ioc"
-	portalconfig "github.com/kanthorlabs/kanthor/services/portal/config"
 )
 
 var (
 	ALL      = "all"
 	SERVICES = []string{
-		portalconfig.ServiceName,
+		"portal",
+		"sdk",
 	}
 )
 
 func Service(provider configuration.Provider, name string) (patterns.Runnable, error) {
-	if name == portalconfig.ServiceName {
+	if name == "portal" {
 		return ioc.Portal(provider)
+	}
+
+	if name == "sdk" {
+		return ioc.Sdk(provider)
 	}
 
 	return nil, fmt.Errorf("SERVER.RUN.UNKNOWN_SERVICE.ERROR: [%s]", name)

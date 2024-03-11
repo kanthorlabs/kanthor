@@ -11,8 +11,8 @@ import (
 	ppentities "github.com/kanthorlabs/common/passport/entities"
 	"github.com/kanthorlabs/common/safe"
 	"github.com/kanthorlabs/kanthor/infrastructure"
+	"github.com/kanthorlabs/kanthor/services/permissions"
 	"github.com/kanthorlabs/kanthor/services/portal/config"
-	"github.com/kanthorlabs/kanthor/services/portal/permissions"
 	"gorm.io/gorm"
 )
 

@@ -97,12 +97,26 @@ infrastructure:
 
 portal:
   gateway:
-    addr: ":9180"
+    addr: ":8180"
     timeout: 10000
     cors:
       allowed_origins:
         - http://localhost:3000
-        - http://localhost:9180
+        - http://localhost:8180
+      allowed_methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
+      allowed_headers: ["*"]
+      exposed_headers: ["*"]
+      allow_credentials: true
+      max_age: 86400000
+
+sdk:
+  gateway:
+    addr: ":8280"
+    timeout: 10000
+    cors:
+      allowed_origins:
+        - http://localhost:3000
+        - http://localhost:8280
       allowed_methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
       allowed_headers: ["*"]
       exposed_headers: ["*"]

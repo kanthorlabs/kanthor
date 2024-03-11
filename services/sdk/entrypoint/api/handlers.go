@@ -13,8 +13,8 @@ import (
 
 type Error httpxwriter.E // @name Error
 
-func (service *portal) httpx() error {
-	handler, err := httpx.New(&service.conf.Portal.Gateway, service.logger)
+func (service *sdk) httpx() error {
+	handler, err := httpx.New(&service.conf.Sdk.Gateway, service.logger)
 	if err != nil {
 		return err
 	}
@@ -37,7 +37,7 @@ func (service *portal) httpx() error {
 
 	handler.Get("/openapi/*", swagger.Handler(
 		swagger.PersistAuthorization(true),
-		swagger.InstanceName(openapi.SwaggerInfoPortal.InstanceName()),
+		swagger.InstanceName(openapi.SwaggerInfoSdk.InstanceName()),
 	))
 
 	// protected routes
@@ -45,11 +45,9 @@ func (service *portal) httpx() error {
 		router.Use(httpxmw.Authn(
 			service.infra.Passport(),
 			httpxmw.AuthnWithCache(service.infra.Cache()),
-			httpxmw.AuthnWithFallback(permissions.Owner),
+			httpxmw.AuthnWithFallback(permissions.Sdk),
 			// use default time to live - 1 hour
 		))
-		RegisterWorkspaceRoutes(router, service)
-		RegisterCredentialsRoutes(router, service)
 	})
 
 	return service.server.UseHttpx(handler)

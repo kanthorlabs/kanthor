@@ -127,7 +127,7 @@ definitions:
   CredentialsUpdateReq:
     properties:
       name:
-        example: default credentials
+        example: another name
         type: string
     required:
     - name

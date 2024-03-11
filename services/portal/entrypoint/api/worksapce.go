@@ -9,7 +9,7 @@ import (
 	httpxmw "github.com/kanthorlabs/common/gateway/httpx/middleware"
 	httpxwriter "github.com/kanthorlabs/common/gateway/httpx/writer"
 	"github.com/kanthorlabs/kanthor/internal/database/entities"
-	"github.com/kanthorlabs/kanthor/services/portal/config"
+	"github.com/kanthorlabs/kanthor/services/permissions"
 	"github.com/kanthorlabs/kanthor/services/portal/usecase"
 )
 
@@ -19,7 +19,7 @@ func RegisterWorkspaceRoutes(router chi.Router, service *portal) {
 		sr.Get("/", UseWorkspaceList(service))
 		sr.Route("/{id}", func(ssr chi.Router) {
 			ssr.Use(UseWorkspace(service))
-			ssr.Use(httpxmw.Authz(service.infra.Gatekeeper(), config.ServiceName))
+			ssr.Use(httpxmw.Authz(service.infra.Gatekeeper(), permissions.Owner))
 
 			ssr.Get("/", UseWorkspaceGet(service))
 			ssr.Patch("/", UseWorkspaceUpdate(service))

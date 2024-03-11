@@ -8,7 +8,7 @@ import (
 	"github.com/kanthorlabs/common/utils"
 	"github.com/kanthorlabs/common/validator"
 	"github.com/kanthorlabs/kanthor/internal/database/entities"
-	"github.com/kanthorlabs/kanthor/services/portal/permissions"
+	"github.com/kanthorlabs/kanthor/services/permissions"
 	"gorm.io/gorm"
 )
 

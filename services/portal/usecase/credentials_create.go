@@ -12,9 +12,10 @@ import (
 	"github.com/kanthorlabs/common/safe"
 	"github.com/kanthorlabs/common/utils"
 	"github.com/kanthorlabs/common/validator"
-	"github.com/kanthorlabs/kanthor/services/portal/permissions"
+	"github.com/kanthorlabs/kanthor/services/permissions"
 )
 
+var PasswordLength = 128
 var ErrCredentialsCreate = errors.New("PORTAL.CREDENTIALS.CREATE.ERROR")
 
 func (uc *credentials) Create(ctx context.Context, in *CredentialsCreateIn) (*CredentialsCreateOut, error) {
@@ -31,7 +32,7 @@ func (uc *credentials) Create(ctx context.Context, in *CredentialsCreateIn) (*Cr
 	out := &CredentialsCreateOut{
 		Tenant:   in.Tenant,
 		Username: idx.New("sdkacc"),
-		Password: utils.RandomString(64),
+		Password: utils.RandomString(PasswordLength),
 	}
 	hash, err := password.Hash(out.Password)
 	if err != nil {

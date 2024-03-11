@@ -4,6 +4,8 @@ import (
 	gateway "github.com/kanthorlabs/common/gateway/config"
 )
 
-type Portal struct {
+var ServiceName = "sdk"
+
+type Sdk struct {
 	Gateway gateway.Config `json:"gateway" yaml:"gateway" mapstructure:"gateway"`
 }

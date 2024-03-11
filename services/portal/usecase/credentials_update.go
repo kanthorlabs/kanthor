@@ -7,7 +7,7 @@ import (
 	ppentities "github.com/kanthorlabs/common/passport/entities"
 	"github.com/kanthorlabs/common/utils"
 	"github.com/kanthorlabs/common/validator"
-	"github.com/kanthorlabs/kanthor/services/portal/permissions"
+	"github.com/kanthorlabs/kanthor/services/permissions"
 )
 
 var ErrCredentialsUpdate = errors.New("PORTAL.CREDENTIALS.UPDATE.ERROR")

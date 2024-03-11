@@ -7,7 +7,7 @@ import (
 
 	"github.com/kanthorlabs/common/utils"
 	"github.com/kanthorlabs/common/validator"
-	"github.com/kanthorlabs/kanthor/services/portal/permissions"
+	"github.com/kanthorlabs/kanthor/services/permissions"
 )
 
 var ErrCredentialsExpire = errors.New("PORTAL.CREDENTIALS.EXPIRE.ERROR")

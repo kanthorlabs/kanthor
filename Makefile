@@ -1,4 +1,4 @@
-all: ioc swagger
+all: swagger ioc
 
 ioc:
 	./scripts/gen_ioc.sh
