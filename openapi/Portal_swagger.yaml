@@ -6,6 +6,8 @@ definitions:
     properties:
       created_at:
         type: integer
+      deactivated_at:
+        type: integer
       metadata:
         $ref: '#/definitions/safe.Metadata'
       name:
@@ -20,6 +22,7 @@ definitions:
         type: string
     required:
     - created_at
+    - deactivated_at
     - metadata
     - name
     - role
@@ -28,11 +31,11 @@ definitions:
     type: object
   CredentialsCreateReq:
     properties:
-      name:
-        example: default credentials
-        type: string
+      expires_in:
+        example: 1800000
+        type: integer
     required:
-    - name
+    - expires_in
     type: object
   CredentialsCreateRes:
     properties:
@@ -48,6 +51,60 @@ definitions:
     required:
     - password
     - tenant
+    - username
+    type: object
+  CredentialsExpireRes:
+    properties:
+      created_at:
+        type: integer
+      deactivated_at:
+        type: integer
+      metadata:
+        $ref: '#/definitions/safe.Metadata'
+      name:
+        type: string
+      role:
+        items:
+          type: string
+        type: array
+      updated_at:
+        type: integer
+      username:
+        type: string
+    required:
+    - created_at
+    - deactivated_at
+    - metadata
+    - name
+    - role
+    - updated_at
+    - username
+    type: object
+  CredentialsGetRes:
+    properties:
+      created_at:
+        type: integer
+      deactivated_at:
+        type: integer
+      metadata:
+        $ref: '#/definitions/safe.Metadata'
+      name:
+        type: string
+      role:
+        items:
+          type: string
+        type: array
+      updated_at:
+        type: integer
+      username:
+        type: string
+    required:
+    - created_at
+    - deactivated_at
+    - metadata
+    - name
+    - role
+    - updated_at
     - username
     type: object
   CredentialsListRes:
@@ -279,6 +336,56 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/CredentialsCreateRes'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - Authorization: []
+      - TenantId: []
+      tags:
+      - credentials
+  /credentials/{username}:
+    get:
+      parameters:
+      - description: credentials username
+        in: path
+        name: username
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/CredentialsGetRes'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - Authorization: []
+      - TenantId: []
+      tags:
+      - credentials
+  /credentials/{username}/expiration:
+    put:
+      parameters:
+      - description: credentials username
+        in: path
+        name: username
+        required: true
+        type: string
+      - description: request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/CredentialsCreateReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/CredentialsExpireRes'
         default:
           description: ""
           schema:

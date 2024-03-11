@@ -14,21 +14,21 @@ func RegisterCredentialsRoutes(router chi.Router, service *portal) {
 		sr.Use(httpxmw.Authz(service.infra.Gatekeeper(), config.ServiceName))
 		sr.Post("/", UseCredentialsCreate(service))
 		sr.Get("/", UseCredentialsList(service))
-		// sr.Route("/{id}", func(ssr chi.Router) {
-		// 	ssr.Get("/", UseCredentialsGet(service))
-		// 	ssr.Patch("/", UseCredentialsUpdate(service))
-		// 	ssr.Delete("/", UseCredentialsDelete(service))
-		// })
+		sr.Route("/{username}", func(ssr chi.Router) {
+			ssr.Get("/", UseCredentialsGet(service))
+			ssr.Put("/expiration", UseCredentialsExpire(service))
+		})
 	})
 }
 
 type CredentialsAccount struct {
-	Username  string         `json:"username"`
-	Roles     []string       `json:"role"`
-	Name      string         `json:"name"`
-	Metadata  *safe.Metadata `json:"metadata"`
-	CreatedAt int64          `json:"created_at"`
-	UpdatedAt int64          `json:"updated_at"`
+	Username      string         `json:"username"`
+	Roles         []string       `json:"role"`
+	Name          string         `json:"name"`
+	Metadata      *safe.Metadata `json:"metadata"`
+	CreatedAt     int64          `json:"created_at"`
+	UpdatedAt     int64          `json:"updated_at"`
+	DeactivatedAt int64          `json:"deactivated_at"`
 } // @name CredentialsAccount
 
 func (ws *CredentialsAccount) Map(entity *usecase.CredentialsAccount) {
@@ -38,4 +38,5 @@ func (ws *CredentialsAccount) Map(entity *usecase.CredentialsAccount) {
 	ws.Metadata = entity.Metadata
 	ws.CreatedAt = entity.CreatedAt
 	ws.UpdatedAt = entity.UpdatedAt
+	ws.DeactivatedAt = entity.DeactivatedAt
 }

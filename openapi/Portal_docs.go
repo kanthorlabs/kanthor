@@ -97,6 +97,91 @@ const docTemplatePortal = `{
                 }
             }
         },
+        "/credentials/{username}": {
+            "get": {
+                "security": [
+                    {
+                        "Authorization": []
+                    },
+                    {
+                        "TenantId": []
+                    }
+                ],
+                "tags": [
+                    "credentials"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "credentials username",
+                        "name": "username",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/CredentialsGetRes"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/credentials/{username}/expiration": {
+            "put": {
+                "security": [
+                    {
+                        "Authorization": []
+                    },
+                    {
+                        "TenantId": []
+                    }
+                ],
+                "tags": [
+                    "credentials"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "credentials username",
+                        "name": "username",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "request body",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/CredentialsCreateReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/CredentialsExpireRes"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
         "/workspace": {
             "get": {
                 "security": [
@@ -274,6 +359,7 @@ const docTemplatePortal = `{
             "type": "object",
             "required": [
                 "created_at",
+                "deactivated_at",
                 "metadata",
                 "name",
                 "role",
@@ -282,6 +368,9 @@ const docTemplatePortal = `{
             ],
             "properties": {
                 "created_at": {
+                    "type": "integer"
+                },
+                "deactivated_at": {
                     "type": "integer"
                 },
                 "metadata": {
@@ -307,12 +396,12 @@ const docTemplatePortal = `{
         "CredentialsCreateReq": {
             "type": "object",
             "required": [
-                "name"
+                "expires_in"
             ],
             "properties": {
-                "name": {
-                    "type": "string",
-                    "example": "default credentials"
+                "expires_in": {
+                    "type": "integer",
+                    "example": 1800000
                 }
             }
         },
@@ -335,6 +424,82 @@ const docTemplatePortal = `{
                 "username": {
                     "type": "string",
                     "example": "admin"
+                }
+            }
+        },
+        "CredentialsExpireRes": {
+            "type": "object",
+            "required": [
+                "created_at",
+                "deactivated_at",
+                "metadata",
+                "name",
+                "role",
+                "updated_at",
+                "username"
+            ],
+            "properties": {
+                "created_at": {
+                    "type": "integer"
+                },
+                "deactivated_at": {
+                    "type": "integer"
+                },
+                "metadata": {
+                    "$ref": "#/definitions/safe.Metadata"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "updated_at": {
+                    "type": "integer"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "CredentialsGetRes": {
+            "type": "object",
+            "required": [
+                "created_at",
+                "deactivated_at",
+                "metadata",
+                "name",
+                "role",
+                "updated_at",
+                "username"
+            ],
+            "properties": {
+                "created_at": {
+                    "type": "integer"
+                },
+                "deactivated_at": {
+                    "type": "integer"
+                },
+                "metadata": {
+                    "$ref": "#/definitions/safe.Metadata"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "updated_at": {
+                    "type": "integer"
+                },
+                "username": {
+                    "type": "string"
                 }
             }
         },
