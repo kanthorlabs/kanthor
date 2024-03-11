@@ -27,3 +27,11 @@ func (entity *Application) Validate() error {
 		validator.StringRequired("name", entity.Name),
 	)
 }
+
+func (entity *Application) ColPrimary() string {
+	return "id"
+}
+
+func (entity *Application) ColSearch() []string {
+	return []string{"name"}
+}

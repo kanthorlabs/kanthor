@@ -31,6 +31,62 @@ const docTemplateSdk = `{
     "basePath": "{{.BasePath}}",
     "paths": {
         "/application": {
+            "get": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "tags": [
+                    "application"
+                ],
+                "parameters": [
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "csv",
+                        "description": "list by ids",
+                        "name": "_ids",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "search keyword",
+                        "name": "_q",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "default": 5,
+                        "description": "limit returning records",
+                        "name": "_limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "default": 0,
+                        "description": "current requesting page",
+                        "name": "_page",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ApplicationListRes"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            },
             "post": {
                 "security": [
                     {
@@ -69,6 +125,38 @@ const docTemplateSdk = `{
         }
     },
     "definitions": {
+        "Application": {
+            "type": "object",
+            "required": [
+                "created_at",
+                "id",
+                "name",
+                "updated_at",
+                "ws_id"
+            ],
+            "properties": {
+                "created_at": {
+                    "type": "integer",
+                    "example": 1728925200000
+                },
+                "id": {
+                    "type": "string",
+                    "example": "app_2dXFXcW6HwrJLQuMjc7n02Xmyq8"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "main application"
+                },
+                "updated_at": {
+                    "type": "integer",
+                    "example": 1728925200000
+                },
+                "ws_id": {
+                    "type": "string",
+                    "example": "ws_2dXFW6gHgDR9YBPILkfSmnBaCu8"
+                }
+            }
+        },
         "ApplicationCreateReq": {
             "type": "object",
             "required": [
@@ -110,6 +198,24 @@ const docTemplateSdk = `{
                 "ws_id": {
                     "type": "string",
                     "example": "ws_2dXFW6gHgDR9YBPILkfSmnBaCu8"
+                }
+            }
+        },
+        "ApplicationListRes": {
+            "type": "object",
+            "required": [
+                "count",
+                "data"
+            ],
+            "properties": {
+                "count": {
+                    "type": "integer"
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Application"
+                    }
                 }
             }
         },

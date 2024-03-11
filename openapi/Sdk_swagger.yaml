@@ -2,6 +2,30 @@ basePath: /api
 consumes:
 - application/json
 definitions:
+  Application:
+    properties:
+      created_at:
+        example: 1728925200000
+        type: integer
+      id:
+        example: app_2dXFXcW6HwrJLQuMjc7n02Xmyq8
+        type: string
+      name:
+        example: main application
+        type: string
+      updated_at:
+        example: 1728925200000
+        type: integer
+      ws_id:
+        example: ws_2dXFW6gHgDR9YBPILkfSmnBaCu8
+        type: string
+    required:
+    - created_at
+    - id
+    - name
+    - updated_at
+    - ws_id
+    type: object
   ApplicationCreateReq:
     properties:
       name:
@@ -34,6 +58,18 @@ definitions:
     - updated_at
     - ws_id
     type: object
+  ApplicationListRes:
+    properties:
+      count:
+        type: integer
+      data:
+        items:
+          $ref: '#/definitions/Application'
+        type: array
+    required:
+    - count
+    - data
+    type: object
   Error:
     properties:
       error:
@@ -59,6 +95,42 @@ info:
   version: v2024.1014.1700
 paths:
   /application:
+    get:
+      parameters:
+      - collectionFormat: csv
+        description: list by ids
+        in: query
+        items:
+          type: string
+        name: _ids
+        type: array
+      - description: search keyword
+        in: query
+        name: _q
+        type: string
+      - default: 5
+        description: limit returning records
+        in: query
+        name: _limit
+        type: integer
+      - default: 0
+        description: current requesting page
+        in: query
+        name: _page
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ApplicationListRes'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - Authorization: []
+      tags:
+      - application
     post:
       parameters:
       - description: request body

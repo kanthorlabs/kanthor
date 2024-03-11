@@ -2,17 +2,15 @@ package api
 
 import (
 	"github.com/go-chi/chi/v5"
-	"github.com/kanthorlabs/common/gateway"
 	"github.com/kanthorlabs/kanthor/internal/database/entities"
 )
 
 func RegisterApplicationRoutes(router chi.Router, service *sdk) {
 	router.Route("/application", func(sr chi.Router) {
 		sr.Post("/", UseApplicationCreate(service))
+		sr.Get("/", UseApplicationList(service))
 	})
 }
-
-var CtxWorksspace gateway.ContextKey = "portal.application"
 
 type Application struct {
 	Id        string `json:"id" example:"app_2dXFXcW6HwrJLQuMjc7n02Xmyq8"`

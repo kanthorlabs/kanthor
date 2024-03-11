@@ -151,6 +151,7 @@ github.com/kanthorlabs/common/gateway/config
 github.com/kanthorlabs/common/gateway/httpx
 github.com/kanthorlabs/common/gateway/httpx/middleware
 github.com/kanthorlabs/common/gateway/httpx/writer
+github.com/kanthorlabs/common/gateway/query
 github.com/kanthorlabs/common/idempotency
 github.com/kanthorlabs/common/idempotency/config
 github.com/kanthorlabs/common/idx

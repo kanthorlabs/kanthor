@@ -13,7 +13,7 @@ import (
 type Application interface {
 	Create(ctx context.Context, in *ApplicationCreateIn) (*ApplicationCreateOut, error)
 	// Get(ctx context.Context, in *ApplicationGetIn) (*ApplicationGetOut, error)
-	// List(ctx context.Context, in *ApplicationListIn) (*ApplicationListOut, error)
+	List(ctx context.Context, in *ApplicationListIn) (*ApplicationListOut, error)
 	// Update(ctx context.Context, in *ApplicationUpdateIn) (*ApplicationUpdateOut, error)
 	// Delete(ctx context.Context, in *ApplicationDeleteIn) (*ApplicationDeleteOut, error)
 }
