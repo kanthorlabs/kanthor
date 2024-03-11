@@ -7,6 +7,7 @@ import (
 	"github.com/kanthorlabs/common/logging"
 	"github.com/kanthorlabs/kanthor/infrastructure"
 	"github.com/kanthorlabs/kanthor/services/sdk/config"
+	"gorm.io/gorm"
 )
 
 func New(
@@ -25,6 +26,7 @@ func New(
 }
 
 type Sdk interface {
+	Application() Application
 }
 
 type sdk struct {
@@ -33,5 +35,24 @@ type sdk struct {
 	watch  clock.Clock
 	infra  infrastructure.Infrastructure
 
+	application *application
+
 	mu sync.Mutex
+}
+
+func (uc *sdk) Application() Application {
+	uc.mu.Lock()
+	defer uc.mu.Unlock()
+
+	if uc.application == nil {
+		uc.application = &application{
+			conf:   uc.conf,
+			logger: uc.logger,
+			watch:  uc.watch,
+			infra:  uc.infra,
+			orm:    uc.infra.Database().Client().(*gorm.DB),
+		}
+	}
+
+	return uc.application
 }

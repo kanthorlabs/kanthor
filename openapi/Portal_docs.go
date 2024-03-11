@@ -462,9 +462,12 @@ const docTemplatePortal = `{
                     "type": "string",
                     "example": "b7ccecf6054343ca8c3ebbdc36b05e5bcc28f4b5e812484387ad7de6ad6a04e4"
                 },
+                "schemes": {
+                    "$ref": "#/definitions/writer.M"
+                },
                 "tenant": {
                     "type": "string",
-                    "example": "ws_2nR9p4W6UmUieJMLIf7ilbXBIRR"
+                    "example": "ws_2dXFW6gHgDR9YBPILkfSmnBaCu8"
                 },
                 "username": {
                     "type": "string",
@@ -653,7 +656,7 @@ const docTemplatePortal = `{
                 },
                 "id": {
                     "type": "string",
-                    "example": "ws_2nR9p4W6UmUieJMLIf7ilbXBIRR"
+                    "example": "ws_2dXFW6gHgDR9YBPILkfSmnBaCu8"
                 },
                 "name": {
                     "type": "string",
@@ -702,7 +705,7 @@ const docTemplatePortal = `{
                 },
                 "id": {
                     "type": "string",
-                    "example": "ws_2nR9p4W6UmUieJMLIf7ilbXBIRR"
+                    "example": "ws_2dXFW6gHgDR9YBPILkfSmnBaCu8"
                 },
                 "name": {
                     "type": "string",
@@ -739,7 +742,7 @@ const docTemplatePortal = `{
                 },
                 "id": {
                     "type": "string",
-                    "example": "ws_2nR9p4W6UmUieJMLIf7ilbXBIRR"
+                    "example": "ws_2dXFW6gHgDR9YBPILkfSmnBaCu8"
                 },
                 "name": {
                     "type": "string",
@@ -776,7 +779,7 @@ const docTemplatePortal = `{
                 },
                 "id": {
                     "type": "string",
-                    "example": "ws_2nR9p4W6UmUieJMLIf7ilbXBIRR"
+                    "example": "ws_2dXFW6gHgDR9YBPILkfSmnBaCu8"
                 },
                 "name": {
                     "type": "string",
@@ -839,7 +842,7 @@ const docTemplatePortal = `{
                 },
                 "id": {
                     "type": "string",
-                    "example": "ws_2nR9p4W6UmUieJMLIf7ilbXBIRR"
+                    "example": "ws_2dXFW6gHgDR9YBPILkfSmnBaCu8"
                 },
                 "name": {
                     "type": "string",
@@ -861,6 +864,10 @@ const docTemplatePortal = `{
         },
         "safe.Metadata": {
             "type": "object"
+        },
+        "writer.M": {
+            "type": "object",
+            "additionalProperties": {}
         }
     },
     "securityDefinitions": {

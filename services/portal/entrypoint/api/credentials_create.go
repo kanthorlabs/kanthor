@@ -1,6 +1,7 @@
 package api
 
 import (
+	"encoding/base64"
 	"encoding/json"
 	"net/http"
 
@@ -44,6 +45,9 @@ func UseCredentialsCreate(service *portal) http.HandlerFunc {
 			Tenant:   out.Tenant,
 			Username: out.Username,
 			Password: out.Password,
+			Schemes: httpxwriter.M{
+				"basic": base64.StdEncoding.EncodeToString([]byte(out.Username + ":" + out.Password)),
+			},
 		}
 		httpxwriter.Ok(w, res)
 	}
@@ -54,7 +58,8 @@ type CredentialsCreateReq struct {
 } // @name CredentialsCreateReq
 
 type CredentialsCreateRes struct {
-	Tenant   string `json:"tenant" example:"ws_2nR9p4W6UmUieJMLIf7ilbXBIRR"`
+	Tenant   string `json:"tenant" example:"ws_2dXFW6gHgDR9YBPILkfSmnBaCu8"`
 	Username string `json:"username" example:"admin"`
 	Password string `json:"password" example:"b7ccecf6054343ca8c3ebbdc36b05e5bcc28f4b5e812484387ad7de6ad6a04e4"`
+	Schemes  httpxwriter.M
 } // @name CredentialsCreateRes

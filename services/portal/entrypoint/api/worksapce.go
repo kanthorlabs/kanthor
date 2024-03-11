@@ -1,16 +1,13 @@
 package api
 
 import (
-	"context"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/kanthorlabs/common/gateway"
 	httpxmw "github.com/kanthorlabs/common/gateway/httpx/middleware"
-	httpxwriter "github.com/kanthorlabs/common/gateway/httpx/writer"
 	"github.com/kanthorlabs/kanthor/internal/database/entities"
-	"github.com/kanthorlabs/kanthor/services/permissions"
-	"github.com/kanthorlabs/kanthor/services/portal/usecase"
+	"github.com/kanthorlabs/kanthor/services/portal/config"
 )
 
 func RegisterWorkspaceRoutes(router chi.Router, service *portal) {
@@ -19,7 +16,7 @@ func RegisterWorkspaceRoutes(router chi.Router, service *portal) {
 		sr.Get("/", UseWorkspaceList(service))
 		sr.Route("/{id}", func(ssr chi.Router) {
 			ssr.Use(UseWorkspace(service))
-			ssr.Use(httpxmw.Authz(service.infra.Gatekeeper(), permissions.Owner))
+			ssr.Use(httpxmw.Authz(service.infra.Gatekeeper(), config.ServiceName))
 
 			ssr.Get("/", UseWorkspaceGet(service))
 			ssr.Patch("/", UseWorkspaceUpdate(service))
@@ -33,24 +30,15 @@ var CtxWorksspace gateway.ContextKey = "portal.workspace"
 func UseWorkspace(service *portal) httpxmw.Middleware {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			in := &usecase.WorkspaceGetIn{Id: chi.URLParam(r, "id")}
-			out, err := service.uc.Workspace().Get(r.Context(), in)
-			if err != nil {
-				httpxwriter.ErrNotFound(w, httpxwriter.Error(err))
-				return
-			}
-
 			// set tenant header for authorization check
-			r.Header.Set(httpxmw.HeaderAuthzTenant, out.Id)
-			// set workspace context for further use
-			r = r.WithContext(context.WithValue(r.Context(), CtxWorksspace, out.Workspace))
+			r.Header.Set(httpxmw.HeaderAuthzTenant, chi.URLParam(r, "id"))
 			next.ServeHTTP(w, r)
 		})
 	}
 }
 
 type Workspace struct {
-	Id        string `json:"id" example:"ws_2nR9p4W6UmUieJMLIf7ilbXBIRR"`
+	Id        string `json:"id" example:"ws_2dXFW6gHgDR9YBPILkfSmnBaCu8"`
 	CreatedAt int64  `json:"created_at" example:"1728925200000"`
 	UpdatedAt int64  `json:"updated_at" example:"1728925200000"`
 	OwnerId   string `json:"owner_id" example:"admin"`

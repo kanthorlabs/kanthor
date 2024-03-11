@@ -42,8 +42,10 @@ definitions:
       password:
         example: b7ccecf6054343ca8c3ebbdc36b05e5bcc28f4b5e812484387ad7de6ad6a04e4
         type: string
+      schemes:
+        $ref: '#/definitions/writer.M'
       tenant:
-        example: ws_2nR9p4W6UmUieJMLIf7ilbXBIRR
+        example: ws_2dXFW6gHgDR9YBPILkfSmnBaCu8
         type: string
       username:
         example: admin
@@ -173,7 +175,7 @@ definitions:
         example: 1728925200000
         type: integer
       id:
-        example: ws_2nR9p4W6UmUieJMLIf7ilbXBIRR
+        example: ws_2dXFW6gHgDR9YBPILkfSmnBaCu8
         type: string
       name:
         example: main workspace
@@ -209,7 +211,7 @@ definitions:
         example: 1728925200000
         type: integer
       id:
-        example: ws_2nR9p4W6UmUieJMLIf7ilbXBIRR
+        example: ws_2dXFW6gHgDR9YBPILkfSmnBaCu8
         type: string
       name:
         example: main workspace
@@ -237,7 +239,7 @@ definitions:
         example: 1728925200000
         type: integer
       id:
-        example: ws_2nR9p4W6UmUieJMLIf7ilbXBIRR
+        example: ws_2dXFW6gHgDR9YBPILkfSmnBaCu8
         type: string
       name:
         example: main workspace
@@ -265,7 +267,7 @@ definitions:
         example: 1728925200000
         type: integer
       id:
-        example: ws_2nR9p4W6UmUieJMLIf7ilbXBIRR
+        example: ws_2dXFW6gHgDR9YBPILkfSmnBaCu8
         type: string
       name:
         example: main workspace
@@ -310,7 +312,7 @@ definitions:
         example: 1728925200000
         type: integer
       id:
-        example: ws_2nR9p4W6UmUieJMLIf7ilbXBIRR
+        example: ws_2dXFW6gHgDR9YBPILkfSmnBaCu8
         type: string
       name:
         example: main workspace
@@ -333,6 +335,9 @@ definitions:
     - updated_at
     type: object
   safe.Metadata:
+    type: object
+  writer.M:
+    additionalProperties: {}
     type: object
 externalDocs:
   description: OpenAPI

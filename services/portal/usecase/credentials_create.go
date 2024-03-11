@@ -15,7 +15,8 @@ import (
 	"github.com/kanthorlabs/kanthor/services/permissions"
 )
 
-var PasswordLength = 128
+// bcrypt: password length exceeds 72 bytes
+var PasswordLength = 64
 var ErrCredentialsCreate = errors.New("PORTAL.CREDENTIALS.CREATE.ERROR")
 
 func (uc *credentials) Create(ctx context.Context, in *CredentialsCreateIn) (*CredentialsCreateOut, error) {

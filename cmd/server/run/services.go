@@ -7,22 +7,24 @@ import (
 	"github.com/kanthorlabs/common/configuration"
 	"github.com/kanthorlabs/common/patterns"
 	"github.com/kanthorlabs/kanthor/services/ioc"
+	portalconfig "github.com/kanthorlabs/kanthor/services/portal/config"
+	sdkconfig "github.com/kanthorlabs/kanthor/services/sdk/config"
 )
 
 var (
 	ALL      = "all"
 	SERVICES = []string{
-		"portal",
-		"sdk",
+		portalconfig.ServiceName,
+		sdkconfig.ServiceName,
 	}
 )
 
 func Service(provider configuration.Provider, name string) (patterns.Runnable, error) {
-	if name == "portal" {
+	if name == portalconfig.ServiceName {
 		return ioc.Portal(provider)
 	}
 
-	if name == "sdk" {
+	if name == sdkconfig.ServiceName {
 		return ioc.Sdk(provider)
 	}
 

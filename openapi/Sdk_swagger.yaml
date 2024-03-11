@@ -1,6 +1,47 @@
 basePath: /api
 consumes:
 - application/json
+definitions:
+  ApplicationCreateReq:
+    properties:
+      name:
+        example: simple app
+        type: string
+    required:
+    - name
+    type: object
+  ApplicationCreateRes:
+    properties:
+      created_at:
+        example: 1728925200000
+        type: integer
+      id:
+        example: app_2dXFXcW6HwrJLQuMjc7n02Xmyq8
+        type: string
+      name:
+        example: main application
+        type: string
+      updated_at:
+        example: 1728925200000
+        type: integer
+      ws_id:
+        example: ws_2dXFW6gHgDR9YBPILkfSmnBaCu8
+        type: string
+    required:
+    - created_at
+    - id
+    - name
+    - updated_at
+    - ws_id
+    type: object
+  Error:
+    properties:
+      error:
+        example: oops, something went wrong
+        type: string
+    required:
+    - error
+    type: object
 externalDocs:
   description: OpenAPI
   url: https://swagger.io/resources/open-api/
@@ -16,7 +57,29 @@ info:
   termsOfService: http://kanthorlabs.com/terms/
   title: Kanthor SDK API
   version: v2024.1014.1700
-paths: {}
+paths:
+  /application:
+    post:
+      parameters:
+      - description: request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/ApplicationCreateReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ApplicationCreateRes'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - Authorization: []
+      tags:
+      - application
 produces:
 - application/json
 securityDefinitions:

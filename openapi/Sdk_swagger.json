@@ -22,7 +22,103 @@
         "version": "v2024.1014.1700"
     },
     "basePath": "/api",
-    "paths": {},
+    "paths": {
+        "/application": {
+            "post": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "tags": [
+                    "application"
+                ],
+                "parameters": [
+                    {
+                        "description": "request body",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ApplicationCreateReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ApplicationCreateRes"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "ApplicationCreateReq": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "example": "simple app"
+                }
+            }
+        },
+        "ApplicationCreateRes": {
+            "type": "object",
+            "required": [
+                "created_at",
+                "id",
+                "name",
+                "updated_at",
+                "ws_id"
+            ],
+            "properties": {
+                "created_at": {
+                    "type": "integer",
+                    "example": 1728925200000
+                },
+                "id": {
+                    "type": "string",
+                    "example": "app_2dXFXcW6HwrJLQuMjc7n02Xmyq8"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "main application"
+                },
+                "updated_at": {
+                    "type": "integer",
+                    "example": 1728925200000
+                },
+                "ws_id": {
+                    "type": "string",
+                    "example": "ws_2dXFW6gHgDR9YBPILkfSmnBaCu8"
+                }
+            }
+        },
+        "Error": {
+            "type": "object",
+            "required": [
+                "error"
+            ],
+            "properties": {
+                "error": {
+                    "type": "string",
+                    "example": "oops, something went wrong"
+                }
+            }
+        }
+    },
     "securityDefinitions": {
         "Authorization": {
             "description": "[Bearer JWT_TOKEN] or [Basic base64(key:secret)]",
