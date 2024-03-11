@@ -27,8 +27,8 @@ func (uc *workspace) Update(ctx context.Context, in *WorkspaceUpdateIn) (*Worksp
 			return ErrWorkspaceUpdate
 		}
 
-		// update the workspace
 		doc.Name = in.Name
+		doc.SetAuditFacttor(in.Modifier, uc.watch.Now())
 		if err := tx.Save(doc).Error; err != nil {
 			uc.logger.Errorw(ErrWorkspaceUpdate.Error(), "error", err.Error(), "in", utils.Stringify(in))
 			return ErrWorkspaceUpdate
@@ -46,12 +46,14 @@ func (uc *workspace) Update(ctx context.Context, in *WorkspaceUpdateIn) (*Worksp
 }
 
 type WorkspaceUpdateIn struct {
-	Id   string
-	Name string
+	Modifier string
+	Id       string
+	Name     string
 }
 
 func (in *WorkspaceUpdateIn) Validate() error {
 	return validator.Validate(
+		validator.StringRequired("PORTAl.WORKSPACE.UPDATE.IN.MODIFIER", in.Modifier),
 		validator.StringStartsWith("PORTAl.WORKSPACE.UPDATE.IN.ID", in.Id, entities.IdNsWs),
 		validator.StringRequired("PORTAl.WORKSPACE.UPDATE.IN.NAME", in.Name),
 	)

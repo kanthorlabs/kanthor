@@ -5,6 +5,8 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	httpxwriter "github.com/kanthorlabs/common/gateway/httpx/writer"
+	"github.com/kanthorlabs/common/passport"
+	ppentities "github.com/kanthorlabs/common/passport/entities"
 	"github.com/kanthorlabs/kanthor/services/portal/usecase"
 )
 
@@ -17,8 +19,11 @@ import (
 // @Security	Authorization
 func UseWorkspaceDelete(service *portal) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		account := r.Context().Value(passport.CtxAccount).(*ppentities.Account)
+
 		in := &usecase.WorkspaceDeleteIn{
-			Id: chi.URLParam(r, "id"),
+			Modifier: account.Username,
+			Id:       chi.URLParam(r, "id"),
 		}
 		if err := in.Validate(); err != nil {
 			httpxwriter.ErrBadRequest(w, httpxwriter.Error(err))

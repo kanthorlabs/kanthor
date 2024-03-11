@@ -6,6 +6,8 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	httpxwriter "github.com/kanthorlabs/common/gateway/httpx/writer"
+	"github.com/kanthorlabs/common/passport"
+	ppentities "github.com/kanthorlabs/common/passport/entities"
 	"github.com/kanthorlabs/kanthor/services/portal/usecase"
 )
 
@@ -25,9 +27,11 @@ func UseWorkspaceUpdate(service *portal) http.HandlerFunc {
 			return
 		}
 
+		account := r.Context().Value(passport.CtxAccount).(*ppentities.Account)
 		in := &usecase.WorkspaceUpdateIn{
-			Id:   chi.URLParam(r, "id"),
-			Name: req.Name,
+			Modifier: account.Username,
+			Id:       chi.URLParam(r, "id"),
+			Name:     req.Name,
 		}
 		if err := in.Validate(); err != nil {
 			httpxwriter.ErrBadRequest(w, httpxwriter.Error(err))

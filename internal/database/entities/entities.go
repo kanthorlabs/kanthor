@@ -25,9 +25,11 @@ type Auditable struct {
 	// but, we should keep our entities stateless if we can
 	CreatedAt int64 `gorm:"autoCreateTime:false"`
 	UpdatedAt int64 `gorm:"autoUpdateTime:false"`
+	Modifier  string
 }
 
-func (entity *Auditable) SetAuditTime(now time.Time) {
+func (entity *Auditable) SetAuditFacttor(modifier string, now time.Time) {
+	entity.Modifier = modifier
 	if entity.CreatedAt == 0 {
 		entity.CreatedAt = now.UnixMilli()
 	}

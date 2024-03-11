@@ -25,7 +25,7 @@ func (uc *workspace) Create(ctx context.Context, in *WorkspaceCreateIn) (*Worksp
 		Tier:    in.Tier,
 	}
 	doc.SetId()
-	doc.SetAuditTime(uc.watch.Now())
+	doc.SetAuditFacttor(in.OwnerId, uc.watch.Now())
 
 	err := uc.orm.Transaction(func(tx *gorm.DB) error {
 		if err := tx.Create(doc).Error; err != nil {

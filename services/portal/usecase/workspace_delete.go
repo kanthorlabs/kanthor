@@ -27,8 +27,14 @@ func (uc *workspace) Delete(ctx context.Context, in *WorkspaceDeleteIn) (*Worksp
 			return ErrWorkspaceDelete
 		}
 
+		doc.SetAuditFacttor(in.Modifier, uc.watch.Now())
+		if err := tx.Save(doc).Error; err != nil {
+			uc.logger.Errorw(ErrWorkspaceDelete.Error(), "error", err.Error(), "in", utils.Stringify(in), "workspace", utils.Stringify(doc))
+			return ErrWorkspaceDelete
+		}
+
 		if err := tx.Delete(doc).Error; err != nil {
-			uc.logger.Errorw(ErrWorkspaceDelete.Error(), "error", err.Error(), "in", utils.Stringify(in))
+			uc.logger.Errorw(ErrWorkspaceDelete.Error(), "error", err.Error(), "in", utils.Stringify(in), "workspace", utils.Stringify(doc))
 			return ErrWorkspaceDelete
 		}
 
@@ -44,11 +50,13 @@ func (uc *workspace) Delete(ctx context.Context, in *WorkspaceDeleteIn) (*Worksp
 }
 
 type WorkspaceDeleteIn struct {
-	Id string
+	Modifier string
+	Id       string
 }
 
 func (in *WorkspaceDeleteIn) Validate() error {
 	return validator.Validate(
+		validator.StringRequired("PORTAl.WORKSPACE.DELETE.IN.MODIFIER", in.Modifier),
 		validator.StringStartsWith("PORTAl.WORKSPACE.DELETE.IN.ID", in.Id, entities.IdNsWs),
 	)
 }
