@@ -122,6 +122,116 @@ const docTemplateSdk = `{
                     }
                 }
             }
+        },
+        "/application/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "tags": [
+                    "application"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "application id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ApplicationGetRes"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "tags": [
+                    "application"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "application id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ApplicationDeleteRes"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "tags": [
+                    "application"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "application id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "request body",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/WorkspaceUpdateReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ApplicationUpdateRes"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -201,6 +311,70 @@ const docTemplateSdk = `{
                 }
             }
         },
+        "ApplicationDeleteRes": {
+            "type": "object",
+            "required": [
+                "created_at",
+                "id",
+                "name",
+                "updated_at",
+                "ws_id"
+            ],
+            "properties": {
+                "created_at": {
+                    "type": "integer",
+                    "example": 1728925200000
+                },
+                "id": {
+                    "type": "string",
+                    "example": "app_2dXFXcW6HwrJLQuMjc7n02Xmyq8"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "main application"
+                },
+                "updated_at": {
+                    "type": "integer",
+                    "example": 1728925200000
+                },
+                "ws_id": {
+                    "type": "string",
+                    "example": "ws_2dXFW6gHgDR9YBPILkfSmnBaCu8"
+                }
+            }
+        },
+        "ApplicationGetRes": {
+            "type": "object",
+            "required": [
+                "created_at",
+                "id",
+                "name",
+                "updated_at",
+                "ws_id"
+            ],
+            "properties": {
+                "created_at": {
+                    "type": "integer",
+                    "example": 1728925200000
+                },
+                "id": {
+                    "type": "string",
+                    "example": "app_2dXFXcW6HwrJLQuMjc7n02Xmyq8"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "main application"
+                },
+                "updated_at": {
+                    "type": "integer",
+                    "example": 1728925200000
+                },
+                "ws_id": {
+                    "type": "string",
+                    "example": "ws_2dXFW6gHgDR9YBPILkfSmnBaCu8"
+                }
+            }
+        },
         "ApplicationListRes": {
             "type": "object",
             "required": [
@@ -219,6 +393,38 @@ const docTemplateSdk = `{
                 }
             }
         },
+        "ApplicationUpdateRes": {
+            "type": "object",
+            "required": [
+                "created_at",
+                "id",
+                "name",
+                "updated_at",
+                "ws_id"
+            ],
+            "properties": {
+                "created_at": {
+                    "type": "integer",
+                    "example": 1728925200000
+                },
+                "id": {
+                    "type": "string",
+                    "example": "app_2dXFXcW6HwrJLQuMjc7n02Xmyq8"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "main application"
+                },
+                "updated_at": {
+                    "type": "integer",
+                    "example": 1728925200000
+                },
+                "ws_id": {
+                    "type": "string",
+                    "example": "ws_2dXFW6gHgDR9YBPILkfSmnBaCu8"
+                }
+            }
+        },
         "Error": {
             "type": "object",
             "required": [
@@ -228,6 +434,18 @@ const docTemplateSdk = `{
                 "error": {
                     "type": "string",
                     "example": "oops, something went wrong"
+                }
+            }
+        },
+        "WorkspaceUpdateReq": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "example": "anthor application name"
                 }
             }
         }

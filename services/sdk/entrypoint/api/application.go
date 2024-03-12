@@ -9,6 +9,11 @@ func RegisterApplicationRoutes(router chi.Router, service *sdk) {
 	router.Route("/application", func(sr chi.Router) {
 		sr.Post("/", UseApplicationCreate(service))
 		sr.Get("/", UseApplicationList(service))
+		sr.Route("/{id}", func(ssr chi.Router) {
+			ssr.Get("/", UseApplicationGet(service))
+			ssr.Patch("/", UseApplicationUpdate(service))
+			ssr.Delete("/", UseApplicationDelete(service))
+		})
 	})
 }
 

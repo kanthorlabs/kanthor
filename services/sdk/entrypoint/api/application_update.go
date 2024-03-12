@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/go-chi/chi/v5"
 	"github.com/kanthorlabs/common/gatekeeper"
 	httpxwriter "github.com/kanthorlabs/common/gateway/httpx/writer"
 	"github.com/kanthorlabs/common/passport"
@@ -11,25 +12,27 @@ import (
 	"github.com/kanthorlabs/kanthor/services/sdk/usecase"
 )
 
-// UseApplicationCreate
+// UseApplicationUpdate
 // @Tags			application
-// @Router		/application		[post]
-// @Param			request					body			ApplicationCreateReq	true	"request body"
-// @Success		200							{object}	ApplicationCreateRes
-// @Failure		default					{object}	Error
+// @Router		/application/{id}		[patch]
+// @Param			id									path			string								true	"application id"
+// @Param			request							body			ApplicationUpdateReq	true	"request body"
+// @Success		200									{object}	ApplicationUpdateRes
+// @Failure		default							{object}	Error
 // @Security	Authorization
-func UseApplicationCreate(service *sdk) http.HandlerFunc {
+func UseApplicationUpdate(service *sdk) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var req ApplicationCreateReq
+		var req ApplicationUpdateReq
 		if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-			httpxwriter.ErrBadRequest(w, httpxwriter.ErrorString("SDK.APPLICATION.CREATE.DECODE.ERROR"))
+			httpxwriter.ErrBadRequest(w, httpxwriter.ErrorString("SDK.APPLICATION.UPDATE.DECODE.ERROR"))
 			return
 		}
 
 		account := r.Context().Value(passport.CtxAccount).(*ppentities.Account)
-		in := &usecase.ApplicationCreateIn{
+		in := &usecase.ApplicationUpdateIn{
 			Modifier: account.Username,
 			WsId:     r.Context().Value(gatekeeper.CtxTenantId).(string),
+			Id:       chi.URLParam(r, "id"),
 			Name:     req.Name,
 		}
 		if err := in.Validate(); err != nil {
@@ -37,22 +40,22 @@ func UseApplicationCreate(service *sdk) http.HandlerFunc {
 			return
 		}
 
-		out, err := service.uc.Application().Create(r.Context(), in)
+		out, err := service.uc.Application().Update(r.Context(), in)
 		if err != nil {
 			httpxwriter.ErrBadRequest(w, httpxwriter.Error(err))
 			return
 		}
 
-		res := &ApplicationCreateRes{Application: &Application{}}
+		res := &ApplicationUpdateRes{Application: &Application{}}
 		res.Map(out.Application)
 		httpxwriter.Ok(w, res)
 	}
 }
 
-type ApplicationCreateReq struct {
-	Name string `json:"name" example:"simple app"`
-} // @name ApplicationCreateReq
+type ApplicationUpdateReq struct {
+	Name string `json:"name" example:"anthor application name"`
+} // @name WorkspaceUpdateReq
 
-type ApplicationCreateRes struct {
+type ApplicationUpdateRes struct {
 	*Application
-} // @name ApplicationCreateRes
+} // @name ApplicationUpdateRes

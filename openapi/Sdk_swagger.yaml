@@ -58,6 +58,54 @@ definitions:
     - updated_at
     - ws_id
     type: object
+  ApplicationDeleteRes:
+    properties:
+      created_at:
+        example: 1728925200000
+        type: integer
+      id:
+        example: app_2dXFXcW6HwrJLQuMjc7n02Xmyq8
+        type: string
+      name:
+        example: main application
+        type: string
+      updated_at:
+        example: 1728925200000
+        type: integer
+      ws_id:
+        example: ws_2dXFW6gHgDR9YBPILkfSmnBaCu8
+        type: string
+    required:
+    - created_at
+    - id
+    - name
+    - updated_at
+    - ws_id
+    type: object
+  ApplicationGetRes:
+    properties:
+      created_at:
+        example: 1728925200000
+        type: integer
+      id:
+        example: app_2dXFXcW6HwrJLQuMjc7n02Xmyq8
+        type: string
+      name:
+        example: main application
+        type: string
+      updated_at:
+        example: 1728925200000
+        type: integer
+      ws_id:
+        example: ws_2dXFW6gHgDR9YBPILkfSmnBaCu8
+        type: string
+    required:
+    - created_at
+    - id
+    - name
+    - updated_at
+    - ws_id
+    type: object
   ApplicationListRes:
     properties:
       count:
@@ -70,6 +118,30 @@ definitions:
     - count
     - data
     type: object
+  ApplicationUpdateRes:
+    properties:
+      created_at:
+        example: 1728925200000
+        type: integer
+      id:
+        example: app_2dXFXcW6HwrJLQuMjc7n02Xmyq8
+        type: string
+      name:
+        example: main application
+        type: string
+      updated_at:
+        example: 1728925200000
+        type: integer
+      ws_id:
+        example: ws_2dXFW6gHgDR9YBPILkfSmnBaCu8
+        type: string
+    required:
+    - created_at
+    - id
+    - name
+    - updated_at
+    - ws_id
+    type: object
   Error:
     properties:
       error:
@@ -77,6 +149,14 @@ definitions:
         type: string
     required:
     - error
+    type: object
+  WorkspaceUpdateReq:
+    properties:
+      name:
+        example: anthor application name
+        type: string
+    required:
+    - name
     type: object
 externalDocs:
   description: OpenAPI
@@ -144,6 +224,73 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/ApplicationCreateRes'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - Authorization: []
+      tags:
+      - application
+  /application/{id}:
+    delete:
+      parameters:
+      - description: application id
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ApplicationDeleteRes'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - Authorization: []
+      tags:
+      - application
+    get:
+      parameters:
+      - description: application id
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ApplicationGetRes'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - Authorization: []
+      tags:
+      - application
+    patch:
+      parameters:
+      - description: application id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/WorkspaceUpdateReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ApplicationUpdateRes'
         default:
           description: ""
           schema:
