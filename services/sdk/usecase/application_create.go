@@ -41,7 +41,7 @@ type ApplicationCreateIn struct {
 func (in *ApplicationCreateIn) Validate() error {
 	return validator.Validate(
 		validator.StringRequired("SDK.APPLICATION.CREATE.IN.MODIFIER", in.Modifier),
-		validator.StringStartsWith("SDK.APPLICATION.CREATE.IN.NAME", in.WsId, entities.IdNsWs),
+		validator.StringStartsWith("SDK.APPLICATION.CREATE.IN.WS_ID", in.WsId, entities.IdNsWs),
 		validator.StringRequired("SDK.APPLICATION.CREATE.IN.NAME", in.Name),
 	)
 }

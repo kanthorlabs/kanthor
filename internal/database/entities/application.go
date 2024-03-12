@@ -1,6 +1,8 @@
 package entities
 
 import (
+	"fmt"
+
 	"github.com/kanthorlabs/common/idx"
 	"github.com/kanthorlabs/common/validator"
 )
@@ -28,10 +30,12 @@ func (entity *Application) Validate() error {
 	)
 }
 
-func (entity *Application) ColPrimary() string {
-	return "id"
+func (entity *Application) PrimaryProp() string {
+	return fmt.Sprintf("%s.id", TableApp)
 }
 
-func (entity *Application) ColSearch() []string {
-	return []string{"name"}
+func (entity *Application) SearchProps() []string {
+	return []string{
+		fmt.Sprintf("%s.name", TableApp),
+	}
 }

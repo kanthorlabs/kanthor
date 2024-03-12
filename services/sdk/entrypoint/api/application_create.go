@@ -39,7 +39,7 @@ func UseApplicationCreate(service *sdk) http.HandlerFunc {
 
 		out, err := service.uc.Application().Create(r.Context(), in)
 		if err != nil {
-			httpxwriter.ErrBadRequest(w, httpxwriter.Error(err))
+			httpxwriter.ErrUnknown(w, httpxwriter.Error(err))
 			return
 		}
 

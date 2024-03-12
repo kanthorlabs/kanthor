@@ -39,7 +39,7 @@ func UseCredentialsUpdate(service *portal) http.HandlerFunc {
 
 		out, err := service.uc.Credentials().Update(r.Context(), in)
 		if err != nil {
-			httpxwriter.ErrBadRequest(w, httpxwriter.Error(err))
+			httpxwriter.ErrUnknown(w, httpxwriter.Error(err))
 			return
 		}
 

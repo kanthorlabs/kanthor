@@ -1,6 +1,8 @@
 package entities
 
 import (
+	"fmt"
+
 	"github.com/kanthorlabs/common/idx"
 	"github.com/kanthorlabs/common/validator"
 )
@@ -28,4 +30,14 @@ func (entity *Workspace) Validate() error {
 		validator.StringRequired("name", entity.Name),
 		validator.StringRequired("tier", entity.Tier),
 	)
+}
+
+func (entity *Workspace) PrimaryProp() string {
+	return fmt.Sprintf("%s.id", TableWs)
+}
+
+func (entity *Workspace) SearchProps() []string {
+	return []string{
+		fmt.Sprintf("%s.name", TableWs),
+	}
 }

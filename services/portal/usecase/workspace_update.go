@@ -21,7 +21,7 @@ func (uc *workspace) Update(ctx context.Context, in *WorkspaceUpdateIn) (*Worksp
 	doc := &entities.Workspace{}
 
 	err := uc.orm.Transaction(func(tx *gorm.DB) error {
-		err := tx.Clauses(clause.Locking{Strength: "UPDATE"}).Where("id = ?", in.Id).First(doc).Error
+		err := tx.Clauses(clause.Locking{Strength: clause.LockingStrengthShare}).Where("id = ?", in.Id).First(doc).Error
 		if err != nil {
 			uc.logger.Errorw(ErrWorkspaceUpdate.Error(), "error", err.Error(), "in", utils.Stringify(in))
 			return ErrWorkspaceUpdate

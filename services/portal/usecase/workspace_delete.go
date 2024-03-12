@@ -21,7 +21,7 @@ func (uc *workspace) Delete(ctx context.Context, in *WorkspaceDeleteIn) (*Worksp
 	doc := &entities.Workspace{}
 
 	err := uc.orm.Transaction(func(tx *gorm.DB) error {
-		err := tx.Clauses(clause.Locking{Strength: "UPDATE"}).Where("id = ?", in.Id).First(doc).Error
+		err := tx.Clauses(clause.Locking{Strength: clause.LockingStrengthUpdate}).Where("id = ?", in.Id).First(doc).Error
 		if err != nil {
 			uc.logger.Errorw(ErrWorkspaceDelete.Error(), "error", err.Error(), "in", utils.Stringify(in))
 			return ErrWorkspaceDelete

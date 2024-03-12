@@ -11,7 +11,7 @@ import (
 	"gorm.io/gorm/clause"
 )
 
-var ErrApplicationDelete = errors.New("PORTAL.APPLICATION.DELETE.ERROR")
+var ErrApplicationDelete = errors.New("SDK.APPLICATION.DELETE.ERROR")
 
 func (uc *application) Delete(ctx context.Context, in *ApplicationDeleteIn) (*ApplicationDeleteOut, error) {
 	if err := in.Validate(); err != nil {
@@ -21,7 +21,7 @@ func (uc *application) Delete(ctx context.Context, in *ApplicationDeleteIn) (*Ap
 	doc := &entities.Application{}
 	err := uc.orm.Transaction(func(tx *gorm.DB) error {
 		err := tx.
-			Clauses(clause.Locking{Strength: "UPDATE"}).
+			Clauses(clause.Locking{Strength: clause.LockingStrengthUpdate}).
 			Where("ws_id = ? AND id = ?", in.WsId, in.Id).
 			First(doc).Error
 		if err != nil {

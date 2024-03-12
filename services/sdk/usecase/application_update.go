@@ -22,7 +22,7 @@ func (uc *application) Update(ctx context.Context, in *ApplicationUpdateIn) (*Ap
 
 	err := uc.orm.Transaction(func(tx *gorm.DB) error {
 		err := tx.
-			Clauses(clause.Locking{Strength: "UPDATE"}).
+			Clauses(clause.Locking{Strength: clause.LockingStrengthShare}).
 			Where("ws_id = ? AND id = ?", in.WsId, in.Id).
 			First(doc).Error
 		if err != nil {

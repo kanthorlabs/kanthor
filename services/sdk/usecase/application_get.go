@@ -9,7 +9,7 @@ import (
 	"github.com/kanthorlabs/kanthor/internal/database/entities"
 )
 
-var ErrApplicationGet = errors.New("PORTAL.APPLICATION.GET.ERROR")
+var ErrApplicationGet = errors.New("SDK.APPLICATION.GET.ERROR")
 
 func (uc *application) Get(ctx context.Context, in *ApplicationGetIn) (*ApplicationGetOut, error) {
 	if err := in.Validate(); err != nil {

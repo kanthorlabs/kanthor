@@ -33,7 +33,7 @@ func UseCredentialsExpire(service *portal) http.HandlerFunc {
 			ExpiresIn: req.ExpiresIn,
 		}
 		if err := in.Validate(); err != nil {
-			httpxwriter.ErrBadRequest(w, httpxwriter.Error(err))
+			httpxwriter.ErrUnknown(w, httpxwriter.Error(err))
 			return
 		}
 

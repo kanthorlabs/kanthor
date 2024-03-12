@@ -9,7 +9,7 @@ import (
 	"github.com/kanthorlabs/kanthor/internal/database/entities"
 )
 
-var ErrApplicationList = errors.New("PORTAL.APPLICATION.LIST.ERROR")
+var ErrApplicationList = errors.New("SDK.APPLICATION.LIST.ERROR")
 
 func (uc *application) List(ctx context.Context, in *ApplicationListIn) (*ApplicationListOut, error) {
 	if err := in.Validate(); err != nil {
@@ -22,10 +22,10 @@ func (uc *application) List(ctx context.Context, in *ApplicationListIn) (*Applic
 	model := &entities.Application{}
 	base := uc.orm.Model(model).Where("ws_id = ?", in.WsId)
 
-	if err := in.Query.SqlxCount(base, model.ColPrimary(), model.ColSearch()).Count(&count).Error; err != nil {
+	if err := in.Query.SqlxCount(base, model.PrimaryProp(), model.SearchProps()).Count(&count).Error; err != nil {
 		return nil, ErrApplicationList
 	}
-	if err := in.Query.Sqlx(base, model.ColPrimary(), model.ColSearch()).Find(&docs).Error; err != nil {
+	if err := in.Query.Sqlx(base, model.PrimaryProp(), model.SearchProps()).Find(&docs).Error; err != nil {
 		return nil, ErrApplicationList
 	}
 

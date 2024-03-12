@@ -225,6 +225,244 @@
                     }
                 }
             }
+        },
+        "/endpoint": {
+            "get": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "tags": [
+                    "endpoint"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "application id",
+                        "name": "app_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "csv",
+                        "description": "list by ids",
+                        "name": "_ids",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "search keyword",
+                        "name": "_q",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "default": 5,
+                        "description": "limit returning records",
+                        "name": "_limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "default": 0,
+                        "description": "current requesting page",
+                        "name": "_page",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/EndpointListRes"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "tags": [
+                    "endpoint"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "application id",
+                        "name": "app_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "description": "request body",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/EndpointCreateReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/EndpointCreateRes"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/endpoint/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "tags": [
+                    "endpoint"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "application id",
+                        "name": "app_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "endpoint id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/EndpointGetRes"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "tags": [
+                    "endpoint"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "application id",
+                        "name": "app_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "endpoint id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/EndpointDeleteRes"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "tags": [
+                    "endpoint"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "application id",
+                        "name": "app_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "endpoint id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "request body",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/WorkspaceUpdateReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/EndpointUpdateRes"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -418,6 +656,256 @@
                 }
             }
         },
+        "Endpoint": {
+            "type": "object",
+            "required": [
+                "app_id",
+                "created_at",
+                "id",
+                "method",
+                "name",
+                "updated_at",
+                "uri"
+            ],
+            "properties": {
+                "app_id": {
+                    "type": "string",
+                    "example": "app_2dXFXcW6HwrJLQuMjc7n02Xmyq8"
+                },
+                "created_at": {
+                    "type": "integer",
+                    "example": 1728925200000
+                },
+                "id": {
+                    "type": "string",
+                    "example": "ep_2dZRCcnumVTMI9eHdmep89IpOgY"
+                },
+                "method": {
+                    "type": "string",
+                    "example": "POST"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "echo endpoint"
+                },
+                "updated_at": {
+                    "type": "integer",
+                    "example": 1728925200000
+                },
+                "uri": {
+                    "type": "string",
+                    "example": "https://postman-echo.com/post"
+                }
+            }
+        },
+        "EndpointCreateReq": {
+            "type": "object",
+            "required": [
+                "method",
+                "name",
+                "uri"
+            ],
+            "properties": {
+                "method": {
+                    "type": "string",
+                    "example": "POST"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "echo endpoint"
+                },
+                "uri": {
+                    "type": "string",
+                    "example": "https://postman-echo.com/post"
+                }
+            }
+        },
+        "EndpointCreateRes": {
+            "type": "object",
+            "required": [
+                "app_id",
+                "created_at",
+                "id",
+                "method",
+                "name",
+                "updated_at",
+                "uri"
+            ],
+            "properties": {
+                "app_id": {
+                    "type": "string",
+                    "example": "app_2dXFXcW6HwrJLQuMjc7n02Xmyq8"
+                },
+                "created_at": {
+                    "type": "integer",
+                    "example": 1728925200000
+                },
+                "id": {
+                    "type": "string",
+                    "example": "ep_2dZRCcnumVTMI9eHdmep89IpOgY"
+                },
+                "method": {
+                    "type": "string",
+                    "example": "POST"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "echo endpoint"
+                },
+                "updated_at": {
+                    "type": "integer",
+                    "example": 1728925200000
+                },
+                "uri": {
+                    "type": "string",
+                    "example": "https://postman-echo.com/post"
+                }
+            }
+        },
+        "EndpointDeleteRes": {
+            "type": "object",
+            "required": [
+                "app_id",
+                "created_at",
+                "id",
+                "method",
+                "name",
+                "updated_at",
+                "uri"
+            ],
+            "properties": {
+                "app_id": {
+                    "type": "string",
+                    "example": "app_2dXFXcW6HwrJLQuMjc7n02Xmyq8"
+                },
+                "created_at": {
+                    "type": "integer",
+                    "example": 1728925200000
+                },
+                "id": {
+                    "type": "string",
+                    "example": "ep_2dZRCcnumVTMI9eHdmep89IpOgY"
+                },
+                "method": {
+                    "type": "string",
+                    "example": "POST"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "echo endpoint"
+                },
+                "updated_at": {
+                    "type": "integer",
+                    "example": 1728925200000
+                },
+                "uri": {
+                    "type": "string",
+                    "example": "https://postman-echo.com/post"
+                }
+            }
+        },
+        "EndpointGetRes": {
+            "type": "object",
+            "required": [
+                "app_id",
+                "created_at",
+                "id",
+                "method",
+                "name",
+                "updated_at",
+                "uri"
+            ],
+            "properties": {
+                "app_id": {
+                    "type": "string",
+                    "example": "app_2dXFXcW6HwrJLQuMjc7n02Xmyq8"
+                },
+                "created_at": {
+                    "type": "integer",
+                    "example": 1728925200000
+                },
+                "id": {
+                    "type": "string",
+                    "example": "ep_2dZRCcnumVTMI9eHdmep89IpOgY"
+                },
+                "method": {
+                    "type": "string",
+                    "example": "POST"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "echo endpoint"
+                },
+                "updated_at": {
+                    "type": "integer",
+                    "example": 1728925200000
+                },
+                "uri": {
+                    "type": "string",
+                    "example": "https://postman-echo.com/post"
+                }
+            }
+        },
+        "EndpointListRes": {
+            "type": "object",
+            "required": [
+                "count",
+                "data"
+            ],
+            "properties": {
+                "count": {
+                    "type": "integer"
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Endpoint"
+                    }
+                }
+            }
+        },
+        "EndpointUpdateRes": {
+            "type": "object",
+            "required": [
+                "app_id",
+                "created_at",
+                "id",
+                "method",
+                "name",
+                "updated_at",
+                "uri"
+            ],
+            "properties": {
+                "app_id": {
+                    "type": "string",
+                    "example": "app_2dXFXcW6HwrJLQuMjc7n02Xmyq8"
+                },
+                "created_at": {
+                    "type": "integer",
+                    "example": 1728925200000
+                },
+                "id": {
+                    "type": "string",
+                    "example": "ep_2dZRCcnumVTMI9eHdmep89IpOgY"
+                },
+                "method": {
+                    "type": "string",
+                    "example": "POST"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "echo endpoint"
+                },
+                "updated_at": {
+                    "type": "integer",
+                    "example": 1728925200000
+                },
+                "uri": {
+                    "type": "string",
+                    "example": "https://postman-echo.com/post"
+                }
+            }
+        },
         "Error": {
             "type": "object",
             "required": [
@@ -433,12 +921,22 @@
         "WorkspaceUpdateReq": {
             "type": "object",
             "required": [
-                "name"
+                "method",
+                "name",
+                "uri"
             ],
             "properties": {
+                "method": {
+                    "type": "string",
+                    "example": "PUT"
+                },
                 "name": {
                     "type": "string",
-                    "example": "anthor application name"
+                    "example": "echo endpoint with PUT"
+                },
+                "uri": {
+                    "type": "string",
+                    "example": "https://postman-echo.com/put"
                 }
             }
         }

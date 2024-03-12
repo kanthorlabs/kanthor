@@ -27,6 +27,7 @@ func New(
 
 type Sdk interface {
 	Application() Application
+	Endpoint() Endpoint
 }
 
 type sdk struct {
@@ -36,6 +37,7 @@ type sdk struct {
 	infra  infrastructure.Infrastructure
 
 	application *application
+	endpoint    *endpoint
 
 	mu sync.Mutex
 }
@@ -55,4 +57,21 @@ func (uc *sdk) Application() Application {
 	}
 
 	return uc.application
+}
+
+func (uc *sdk) Endpoint() Endpoint {
+	uc.mu.Lock()
+	defer uc.mu.Unlock()
+
+	if uc.endpoint == nil {
+		uc.endpoint = &endpoint{
+			conf:   uc.conf,
+			logger: uc.logger,
+			watch:  uc.watch,
+			infra:  uc.infra,
+			orm:    uc.infra.Database().Client().(*gorm.DB),
+		}
+	}
+
+	return uc.endpoint
 }

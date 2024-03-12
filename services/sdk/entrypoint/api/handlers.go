@@ -52,6 +52,7 @@ func (service *sdk) httpx() error {
 		router.Use(httpxmw.Authz(service.infra.Gatekeeper(), config.ServiceName))
 
 		RegisterApplicationRoutes(router, service)
+		RegisterEndpointRoutes(router, service)
 	})
 
 	return service.server.UseHttpx(handler)

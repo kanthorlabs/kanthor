@@ -1,6 +1,7 @@
 package entities
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/kanthorlabs/common/idx"
@@ -35,6 +36,18 @@ func (entity *Endpoint) Validate() error {
 		validator.StringOneOf("method", entity.Method, []string{http.MethodPost, http.MethodPut}),
 		validator.StringUri("uri", entity.Uri),
 	)
+}
+
+func (entity *Endpoint) PrimaryProp() string {
+	return fmt.Sprintf("%s.id", TableEp)
+}
+
+func (entity *Endpoint) SearchProps() []string {
+	return []string{
+		fmt.Sprintf("%s.name", TableEp),
+		fmt.Sprintf("%s.method", TableEp),
+		fmt.Sprintf("%s.uri", TableEp),
+	}
 }
 
 type EndpointRule struct {

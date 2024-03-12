@@ -1,10 +1,7 @@
 package api
 
 import (
-	"net/http"
-
 	"github.com/go-chi/chi/v5"
-	"github.com/kanthorlabs/common/gateway"
 	httpxmw "github.com/kanthorlabs/common/gateway/httpx/middleware"
 	"github.com/kanthorlabs/kanthor/internal/database/entities"
 	"github.com/kanthorlabs/kanthor/services/portal/config"
@@ -15,7 +12,7 @@ func RegisterWorkspaceRoutes(router chi.Router, service *portal) {
 		sr.Post("/", UseWorkspaceCreate(service))
 		sr.Get("/", UseWorkspaceList(service))
 		sr.Route("/{id}", func(ssr chi.Router) {
-			ssr.Use(UseWorkspace(service))
+			ssr.Use(UseWorkspace(service, "id"))
 			ssr.Use(httpxmw.Authz(service.infra.Gatekeeper(), config.ServiceName))
 
 			ssr.Get("/", UseWorkspaceGet(service))
@@ -23,18 +20,6 @@ func RegisterWorkspaceRoutes(router chi.Router, service *portal) {
 			ssr.Delete("/", UseWorkspaceDelete(service))
 		})
 	})
-}
-
-var CtxWorksspace gateway.ContextKey = "portal.workspace"
-
-func UseWorkspace(service *portal) httpxmw.Middleware {
-	return func(next http.Handler) http.Handler {
-		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			// set tenant header for authorization check
-			r.Header.Set(httpxmw.HeaderAuthzTenant, chi.URLParam(r, "id"))
-			next.ServeHTTP(w, r)
-		})
-	}
 }
 
 type Workspace struct {

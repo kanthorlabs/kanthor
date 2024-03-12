@@ -142,6 +142,194 @@ definitions:
     - updated_at
     - ws_id
     type: object
+  Endpoint:
+    properties:
+      app_id:
+        example: app_2dXFXcW6HwrJLQuMjc7n02Xmyq8
+        type: string
+      created_at:
+        example: 1728925200000
+        type: integer
+      id:
+        example: ep_2dZRCcnumVTMI9eHdmep89IpOgY
+        type: string
+      method:
+        example: POST
+        type: string
+      name:
+        example: echo endpoint
+        type: string
+      updated_at:
+        example: 1728925200000
+        type: integer
+      uri:
+        example: https://postman-echo.com/post
+        type: string
+    required:
+    - app_id
+    - created_at
+    - id
+    - method
+    - name
+    - updated_at
+    - uri
+    type: object
+  EndpointCreateReq:
+    properties:
+      method:
+        example: POST
+        type: string
+      name:
+        example: echo endpoint
+        type: string
+      uri:
+        example: https://postman-echo.com/post
+        type: string
+    required:
+    - method
+    - name
+    - uri
+    type: object
+  EndpointCreateRes:
+    properties:
+      app_id:
+        example: app_2dXFXcW6HwrJLQuMjc7n02Xmyq8
+        type: string
+      created_at:
+        example: 1728925200000
+        type: integer
+      id:
+        example: ep_2dZRCcnumVTMI9eHdmep89IpOgY
+        type: string
+      method:
+        example: POST
+        type: string
+      name:
+        example: echo endpoint
+        type: string
+      updated_at:
+        example: 1728925200000
+        type: integer
+      uri:
+        example: https://postman-echo.com/post
+        type: string
+    required:
+    - app_id
+    - created_at
+    - id
+    - method
+    - name
+    - updated_at
+    - uri
+    type: object
+  EndpointDeleteRes:
+    properties:
+      app_id:
+        example: app_2dXFXcW6HwrJLQuMjc7n02Xmyq8
+        type: string
+      created_at:
+        example: 1728925200000
+        type: integer
+      id:
+        example: ep_2dZRCcnumVTMI9eHdmep89IpOgY
+        type: string
+      method:
+        example: POST
+        type: string
+      name:
+        example: echo endpoint
+        type: string
+      updated_at:
+        example: 1728925200000
+        type: integer
+      uri:
+        example: https://postman-echo.com/post
+        type: string
+    required:
+    - app_id
+    - created_at
+    - id
+    - method
+    - name
+    - updated_at
+    - uri
+    type: object
+  EndpointGetRes:
+    properties:
+      app_id:
+        example: app_2dXFXcW6HwrJLQuMjc7n02Xmyq8
+        type: string
+      created_at:
+        example: 1728925200000
+        type: integer
+      id:
+        example: ep_2dZRCcnumVTMI9eHdmep89IpOgY
+        type: string
+      method:
+        example: POST
+        type: string
+      name:
+        example: echo endpoint
+        type: string
+      updated_at:
+        example: 1728925200000
+        type: integer
+      uri:
+        example: https://postman-echo.com/post
+        type: string
+    required:
+    - app_id
+    - created_at
+    - id
+    - method
+    - name
+    - updated_at
+    - uri
+    type: object
+  EndpointListRes:
+    properties:
+      count:
+        type: integer
+      data:
+        items:
+          $ref: '#/definitions/Endpoint'
+        type: array
+    required:
+    - count
+    - data
+    type: object
+  EndpointUpdateRes:
+    properties:
+      app_id:
+        example: app_2dXFXcW6HwrJLQuMjc7n02Xmyq8
+        type: string
+      created_at:
+        example: 1728925200000
+        type: integer
+      id:
+        example: ep_2dZRCcnumVTMI9eHdmep89IpOgY
+        type: string
+      method:
+        example: POST
+        type: string
+      name:
+        example: echo endpoint
+        type: string
+      updated_at:
+        example: 1728925200000
+        type: integer
+      uri:
+        example: https://postman-echo.com/post
+        type: string
+    required:
+    - app_id
+    - created_at
+    - id
+    - method
+    - name
+    - updated_at
+    - uri
+    type: object
   Error:
     properties:
       error:
@@ -152,11 +340,19 @@ definitions:
     type: object
   WorkspaceUpdateReq:
     properties:
+      method:
+        example: PUT
+        type: string
       name:
-        example: anthor application name
+        example: echo endpoint with PUT
+        type: string
+      uri:
+        example: https://postman-echo.com/put
         type: string
     required:
+    - method
     - name
+    - uri
     type: object
 externalDocs:
   description: OpenAPI
@@ -299,6 +495,156 @@ paths:
       - Authorization: []
       tags:
       - application
+  /endpoint:
+    get:
+      parameters:
+      - description: application id
+        in: query
+        name: app_id
+        required: true
+        type: string
+      - collectionFormat: csv
+        description: list by ids
+        in: query
+        items:
+          type: string
+        name: _ids
+        type: array
+      - description: search keyword
+        in: query
+        name: _q
+        type: string
+      - default: 5
+        description: limit returning records
+        in: query
+        name: _limit
+        type: integer
+      - default: 0
+        description: current requesting page
+        in: query
+        name: _page
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/EndpointListRes'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - Authorization: []
+      tags:
+      - endpoint
+    post:
+      parameters:
+      - description: application id
+        in: query
+        name: app_id
+        required: true
+        type: string
+      - description: request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/EndpointCreateReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/EndpointCreateRes'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - Authorization: []
+      tags:
+      - endpoint
+  /endpoint/{id}:
+    delete:
+      parameters:
+      - description: application id
+        in: query
+        name: app_id
+        required: true
+        type: string
+      - description: endpoint id
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/EndpointDeleteRes'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - Authorization: []
+      tags:
+      - endpoint
+    get:
+      parameters:
+      - description: application id
+        in: query
+        name: app_id
+        required: true
+        type: string
+      - description: endpoint id
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/EndpointGetRes'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - Authorization: []
+      tags:
+      - endpoint
+    patch:
+      parameters:
+      - description: application id
+        in: query
+        name: app_id
+        required: true
+        type: string
+      - description: endpoint id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/WorkspaceUpdateReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/EndpointUpdateRes'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - Authorization: []
+      tags:
+      - endpoint
 produces:
 - application/json
 securityDefinitions:
