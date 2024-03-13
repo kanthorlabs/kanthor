@@ -333,26 +333,270 @@ definitions:
   Error:
     properties:
       error:
-        example: oops, something went wrong
+        example: KANTHOR.SYSTEM.ERROR
         type: string
     required:
     - error
     type: object
-  WorkspaceUpdateReq:
+  Route:
     properties:
-      method:
-        example: PUT
+      condition_expression:
+        example: 'any::'
+        type: string
+      condition_source:
+        example: category
+        type: string
+      created_at:
+        example: 1728925200000
+        type: integer
+      ep_id:
+        example: ep_2dZRCcnumVTMI9eHdmep89IpOgY
+        type: string
+      exclusionary:
+        example: false
+        type: boolean
+      id:
+        example: rt_2dcBT1R8169aIGvx0PEilqrJIYM
         type: string
       name:
-        example: echo endpoint with PUT
+        example: passthrough
         type: string
-      uri:
-        example: https://postman-echo.com/put
-        type: string
+      priority:
+        example: 1
+        type: integer
+      updated_at:
+        example: 1728925200000
+        type: integer
     required:
-    - method
+    - condition_expression
+    - condition_source
+    - created_at
+    - ep_id
+    - exclusionary
+    - id
     - name
-    - uri
+    - priority
+    - updated_at
+    type: object
+  RouteCreateReq:
+    properties:
+      condition_expression:
+        example: 'any::'
+        type: string
+      condition_source:
+        example: category
+        type: string
+      exclusionary:
+        example: false
+        type: boolean
+      name:
+        example: passthrough
+        type: string
+      priority:
+        example: 1
+        type: integer
+    required:
+    - condition_expression
+    - condition_source
+    - exclusionary
+    - name
+    - priority
+    type: object
+  RouteCreateRes:
+    properties:
+      condition_expression:
+        example: 'any::'
+        type: string
+      condition_source:
+        example: category
+        type: string
+      created_at:
+        example: 1728925200000
+        type: integer
+      ep_id:
+        example: ep_2dZRCcnumVTMI9eHdmep89IpOgY
+        type: string
+      exclusionary:
+        example: false
+        type: boolean
+      id:
+        example: rt_2dcBT1R8169aIGvx0PEilqrJIYM
+        type: string
+      name:
+        example: passthrough
+        type: string
+      priority:
+        example: 1
+        type: integer
+      updated_at:
+        example: 1728925200000
+        type: integer
+    required:
+    - condition_expression
+    - condition_source
+    - created_at
+    - ep_id
+    - exclusionary
+    - id
+    - name
+    - priority
+    - updated_at
+    type: object
+  RouteDeleteRes:
+    properties:
+      condition_expression:
+        example: 'any::'
+        type: string
+      condition_source:
+        example: category
+        type: string
+      created_at:
+        example: 1728925200000
+        type: integer
+      ep_id:
+        example: ep_2dZRCcnumVTMI9eHdmep89IpOgY
+        type: string
+      exclusionary:
+        example: false
+        type: boolean
+      id:
+        example: rt_2dcBT1R8169aIGvx0PEilqrJIYM
+        type: string
+      name:
+        example: passthrough
+        type: string
+      priority:
+        example: 1
+        type: integer
+      updated_at:
+        example: 1728925200000
+        type: integer
+    required:
+    - condition_expression
+    - condition_source
+    - created_at
+    - ep_id
+    - exclusionary
+    - id
+    - name
+    - priority
+    - updated_at
+    type: object
+  RouteGetRes:
+    properties:
+      condition_expression:
+        example: 'any::'
+        type: string
+      condition_source:
+        example: category
+        type: string
+      created_at:
+        example: 1728925200000
+        type: integer
+      ep_id:
+        example: ep_2dZRCcnumVTMI9eHdmep89IpOgY
+        type: string
+      exclusionary:
+        example: false
+        type: boolean
+      id:
+        example: rt_2dcBT1R8169aIGvx0PEilqrJIYM
+        type: string
+      name:
+        example: passthrough
+        type: string
+      priority:
+        example: 1
+        type: integer
+      updated_at:
+        example: 1728925200000
+        type: integer
+    required:
+    - condition_expression
+    - condition_source
+    - created_at
+    - ep_id
+    - exclusionary
+    - id
+    - name
+    - priority
+    - updated_at
+    type: object
+  RouteListRes:
+    properties:
+      count:
+        type: integer
+      data:
+        items:
+          $ref: '#/definitions/Route'
+        type: array
+    required:
+    - count
+    - data
+    type: object
+  RouteUpdateRes:
+    properties:
+      condition_expression:
+        example: 'any::'
+        type: string
+      condition_source:
+        example: category
+        type: string
+      created_at:
+        example: 1728925200000
+        type: integer
+      ep_id:
+        example: ep_2dZRCcnumVTMI9eHdmep89IpOgY
+        type: string
+      exclusionary:
+        example: false
+        type: boolean
+      id:
+        example: rt_2dcBT1R8169aIGvx0PEilqrJIYM
+        type: string
+      name:
+        example: passthrough
+        type: string
+      priority:
+        example: 1
+        type: integer
+      updated_at:
+        example: 1728925200000
+        type: integer
+    required:
+    - condition_expression
+    - condition_source
+    - created_at
+    - ep_id
+    - exclusionary
+    - id
+    - name
+    - priority
+    - updated_at
+    type: object
+  WorkspaceUpdateReq:
+    properties:
+      condition_expression:
+        example: prefix::test.
+        type: string
+      condition_source:
+        example: category
+        type: string
+      exclusionary:
+        example: false
+        type: boolean
+      name:
+        example: only test category route
+        type: string
+      priority:
+        example: 9
+        type: integer
+    required:
+    - condition_expression
+    - condition_source
+    - exclusionary
+    - name
+    - priority
     type: object
 externalDocs:
   description: OpenAPI
@@ -645,6 +889,156 @@ paths:
       - Authorization: []
       tags:
       - endpoint
+  /route:
+    get:
+      parameters:
+      - description: endpoint id
+        in: query
+        name: ep_id
+        required: true
+        type: string
+      - collectionFormat: csv
+        description: list by ids
+        in: query
+        items:
+          type: string
+        name: _ids
+        type: array
+      - description: search keyword
+        in: query
+        name: _q
+        type: string
+      - default: 5
+        description: limit returning records
+        in: query
+        name: _limit
+        type: integer
+      - default: 0
+        description: current requesting page
+        in: query
+        name: _page
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/RouteListRes'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - Authorization: []
+      tags:
+      - route
+    post:
+      parameters:
+      - description: endpoint id
+        in: query
+        name: ep_id
+        required: true
+        type: string
+      - description: request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/RouteCreateReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/RouteCreateRes'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - Authorization: []
+      tags:
+      - route
+  /route/{id}:
+    delete:
+      parameters:
+      - description: endpoint id
+        in: query
+        name: ep_id
+        required: true
+        type: string
+      - description: route id
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/RouteDeleteRes'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - Authorization: []
+      tags:
+      - route
+    get:
+      parameters:
+      - description: endpoint id
+        in: query
+        name: ep_id
+        required: true
+        type: string
+      - description: endpoint id
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/RouteGetRes'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - Authorization: []
+      tags:
+      - route
+    patch:
+      parameters:
+      - description: endpoint id
+        in: query
+        name: ep_id
+        required: true
+        type: string
+      - description: route id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/WorkspaceUpdateReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/RouteUpdateRes'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - Authorization: []
+      tags:
+      - route
 produces:
 - application/json
 securityDefinitions:

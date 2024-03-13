@@ -28,6 +28,7 @@ func New(
 type Sdk interface {
 	Application() Application
 	Endpoint() Endpoint
+	Route() Route
 }
 
 type sdk struct {
@@ -38,6 +39,7 @@ type sdk struct {
 
 	application *application
 	endpoint    *endpoint
+	route       *route
 
 	mu sync.Mutex
 }
@@ -74,4 +76,21 @@ func (uc *sdk) Endpoint() Endpoint {
 	}
 
 	return uc.endpoint
+}
+
+func (uc *sdk) Route() Route {
+	uc.mu.Lock()
+	defer uc.mu.Unlock()
+
+	if uc.route == nil {
+		uc.route = &route{
+			conf:   uc.conf,
+			logger: uc.logger,
+			watch:  uc.watch,
+			infra:  uc.infra,
+			orm:    uc.infra.Database().Client().(*gorm.DB),
+		}
+	}
+
+	return uc.route
 }

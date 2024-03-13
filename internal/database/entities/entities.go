@@ -10,12 +10,12 @@ var (
 	IdNsWs  = "ws"
 	IdNsApp = "app"
 	IdNsEp  = "ep"
-	IdNsEpr = "epr"
+	IdNsRt  = "rt"
 
 	TableWs  = project.Name("workspace")
 	TableApp = project.Name("application")
 	TableEp  = project.Name("endpoint")
-	TableEpr = project.Name("endpoint_rule")
+	TableRt  = project.Name("route")
 )
 
 type Auditable struct {

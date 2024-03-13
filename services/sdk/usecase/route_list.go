@@ -10,39 +10,39 @@ import (
 	"github.com/kanthorlabs/kanthor/internal/database/entities"
 )
 
-var ErrEndpointList = errors.New("SDK.ENDPOINT.LIST.ERROR")
+var ErrRouteList = errors.New("SDK.ROUTE.LIST.ERROR")
 
-func (uc *endpoint) List(ctx context.Context, in *EndpointListIn) (*EndpointListOut, error) {
+func (uc *route) List(ctx context.Context, in *RouteListIn) (*RouteListOut, error) {
 	if err := in.Validate(); err != nil {
 		return nil, err
 	}
 
 	var count int64
-	var docs []*entities.Endpoint
+	var docs []*entities.Route
 
-	model := &entities.Endpoint{}
-	base := uc.orm.Model(model).Where("app_id = ?", in.AppId)
+	model := &entities.Route{}
+	base := uc.orm.Model(model).Where("ep_id = ?", in.EpId)
 
 	if err := in.Query.SqlxCount(base, model.PrimaryProp(), model.SearchProps()).Count(&count).Error; err != nil {
-		uc.logger.Errorw(ErrEndpointList.Error(), "error", err.Error(), "in", utils.Stringify(in))
-		return nil, ErrEndpointList
+		uc.logger.Errorw(ErrRouteList.Error(), "error", err.Error(), "in", utils.Stringify(in))
+		return nil, ErrRouteList
 	}
 	if err := in.Query.Sqlx(base, model.PrimaryProp(), model.SearchProps()).Find(&docs).Error; err != nil {
-		uc.logger.Errorw(ErrEndpointList.Error(), "error", err.Error(), "in", utils.Stringify(in))
-		return nil, ErrEndpointList
+		uc.logger.Errorw(ErrRouteList.Error(), "error", err.Error(), "in", utils.Stringify(in))
+		return nil, ErrRouteList
 	}
 
-	return &EndpointListOut{Count: count, Data: docs}, nil
+	return &RouteListOut{Count: count, Data: docs}, nil
 }
 
-type EndpointListIn struct {
-	AppId string
+type RouteListIn struct {
+	EpId  string
 	Query *database.PagingQuery
 }
 
-func (in *EndpointListIn) Validate() error {
+func (in *RouteListIn) Validate() error {
 	err := validator.Validate(
-		validator.StringStartsWith("SDK.ENDPOINT.LIST.IN.APP_ID", in.AppId, entities.IdNsApp),
+		validator.StringStartsWith("SDK.ROUTE.LIST.IN.EP_ID", in.EpId, entities.IdNsEp),
 	)
 	if err != nil {
 		return err
@@ -56,7 +56,7 @@ func (in *EndpointListIn) Validate() error {
 	return nil
 }
 
-type EndpointListOut struct {
+type RouteListOut struct {
 	Count int64
-	Data  []*entities.Endpoint
+	Data  []*entities.Route
 }

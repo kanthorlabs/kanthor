@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS kanthor_endpoint (
 
 CREATE INDEX IF NOT EXISTS kanthor_ep_app_ref ON kanthor_endpoint(app_id ASC);
 
-CREATE TABLE IF NOT EXISTS kanthor_endpoint_rule (
+CREATE TABLE IF NOT EXISTS kanthor_route (
   id VARCHAR(64) NOT NULL PRIMARY KEY,
   created_at BIGINT NOT NULL DEFAULT 0,
   updated_at BIGINT NOT NULL DEFAULT 0,
@@ -53,6 +53,6 @@ CREATE TABLE IF NOT EXISTS kanthor_endpoint_rule (
   FOREIGN KEY (ep_id) REFERENCES kanthor_endpoint (id) ON DELETE CASCADE
 );
 
-CREATE INDEX IF NOT EXISTS kanthor_epr_ep_ref ON kanthor_endpoint_rule(ep_id ASC);
+CREATE INDEX IF NOT EXISTS kanthor_rt_ep_ref ON kanthor_route(ep_id ASC);
 
 COMMIT;

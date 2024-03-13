@@ -5,6 +5,7 @@ import (
 	"errors"
 
 	"github.com/kanthorlabs/common/persistence/database"
+	"github.com/kanthorlabs/common/utils"
 	"github.com/kanthorlabs/common/validator"
 	"github.com/kanthorlabs/kanthor/internal/database/entities"
 )
@@ -23,9 +24,11 @@ func (uc *application) List(ctx context.Context, in *ApplicationListIn) (*Applic
 	base := uc.orm.Model(model).Where("ws_id = ?", in.WsId)
 
 	if err := in.Query.SqlxCount(base, model.PrimaryProp(), model.SearchProps()).Count(&count).Error; err != nil {
+		uc.logger.Errorw(ErrApplicationList.Error(), "error", err.Error(), "in", utils.Stringify(in))
 		return nil, ErrApplicationList
 	}
 	if err := in.Query.Sqlx(base, model.PrimaryProp(), model.SearchProps()).Find(&docs).Error; err != nil {
+		uc.logger.Errorw(ErrApplicationList.Error(), "error", err.Error(), "in", utils.Stringify(in))
 		return nil, ErrApplicationList
 	}
 

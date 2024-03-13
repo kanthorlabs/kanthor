@@ -470,6 +470,244 @@ const docTemplateSdk = `{
                     }
                 }
             }
+        },
+        "/route": {
+            "get": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "tags": [
+                    "route"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "endpoint id",
+                        "name": "ep_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "csv",
+                        "description": "list by ids",
+                        "name": "_ids",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "search keyword",
+                        "name": "_q",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "default": 5,
+                        "description": "limit returning records",
+                        "name": "_limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "default": 0,
+                        "description": "current requesting page",
+                        "name": "_page",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/RouteListRes"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "tags": [
+                    "route"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "endpoint id",
+                        "name": "ep_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "description": "request body",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/RouteCreateReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/RouteCreateRes"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/route/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "tags": [
+                    "route"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "endpoint id",
+                        "name": "ep_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "endpoint id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/RouteGetRes"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "tags": [
+                    "route"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "endpoint id",
+                        "name": "ep_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "route id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/RouteDeleteRes"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "tags": [
+                    "route"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "endpoint id",
+                        "name": "ep_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "route id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "request body",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/WorkspaceUpdateReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/RouteUpdateRes"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -921,29 +1159,349 @@ const docTemplateSdk = `{
             "properties": {
                 "error": {
                     "type": "string",
-                    "example": "oops, something went wrong"
+                    "example": "KANTHOR.SYSTEM.ERROR"
+                }
+            }
+        },
+        "Route": {
+            "type": "object",
+            "required": [
+                "condition_expression",
+                "condition_source",
+                "created_at",
+                "ep_id",
+                "exclusionary",
+                "id",
+                "name",
+                "priority",
+                "updated_at"
+            ],
+            "properties": {
+                "condition_expression": {
+                    "type": "string",
+                    "example": "any::"
+                },
+                "condition_source": {
+                    "type": "string",
+                    "example": "category"
+                },
+                "created_at": {
+                    "type": "integer",
+                    "example": 1728925200000
+                },
+                "ep_id": {
+                    "type": "string",
+                    "example": "ep_2dZRCcnumVTMI9eHdmep89IpOgY"
+                },
+                "exclusionary": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "id": {
+                    "type": "string",
+                    "example": "rt_2dcBT1R8169aIGvx0PEilqrJIYM"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "passthrough"
+                },
+                "priority": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "updated_at": {
+                    "type": "integer",
+                    "example": 1728925200000
+                }
+            }
+        },
+        "RouteCreateReq": {
+            "type": "object",
+            "required": [
+                "condition_expression",
+                "condition_source",
+                "exclusionary",
+                "name",
+                "priority"
+            ],
+            "properties": {
+                "condition_expression": {
+                    "type": "string",
+                    "example": "any::"
+                },
+                "condition_source": {
+                    "type": "string",
+                    "example": "category"
+                },
+                "exclusionary": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "name": {
+                    "type": "string",
+                    "example": "passthrough"
+                },
+                "priority": {
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        },
+        "RouteCreateRes": {
+            "type": "object",
+            "required": [
+                "condition_expression",
+                "condition_source",
+                "created_at",
+                "ep_id",
+                "exclusionary",
+                "id",
+                "name",
+                "priority",
+                "updated_at"
+            ],
+            "properties": {
+                "condition_expression": {
+                    "type": "string",
+                    "example": "any::"
+                },
+                "condition_source": {
+                    "type": "string",
+                    "example": "category"
+                },
+                "created_at": {
+                    "type": "integer",
+                    "example": 1728925200000
+                },
+                "ep_id": {
+                    "type": "string",
+                    "example": "ep_2dZRCcnumVTMI9eHdmep89IpOgY"
+                },
+                "exclusionary": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "id": {
+                    "type": "string",
+                    "example": "rt_2dcBT1R8169aIGvx0PEilqrJIYM"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "passthrough"
+                },
+                "priority": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "updated_at": {
+                    "type": "integer",
+                    "example": 1728925200000
+                }
+            }
+        },
+        "RouteDeleteRes": {
+            "type": "object",
+            "required": [
+                "condition_expression",
+                "condition_source",
+                "created_at",
+                "ep_id",
+                "exclusionary",
+                "id",
+                "name",
+                "priority",
+                "updated_at"
+            ],
+            "properties": {
+                "condition_expression": {
+                    "type": "string",
+                    "example": "any::"
+                },
+                "condition_source": {
+                    "type": "string",
+                    "example": "category"
+                },
+                "created_at": {
+                    "type": "integer",
+                    "example": 1728925200000
+                },
+                "ep_id": {
+                    "type": "string",
+                    "example": "ep_2dZRCcnumVTMI9eHdmep89IpOgY"
+                },
+                "exclusionary": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "id": {
+                    "type": "string",
+                    "example": "rt_2dcBT1R8169aIGvx0PEilqrJIYM"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "passthrough"
+                },
+                "priority": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "updated_at": {
+                    "type": "integer",
+                    "example": 1728925200000
+                }
+            }
+        },
+        "RouteGetRes": {
+            "type": "object",
+            "required": [
+                "condition_expression",
+                "condition_source",
+                "created_at",
+                "ep_id",
+                "exclusionary",
+                "id",
+                "name",
+                "priority",
+                "updated_at"
+            ],
+            "properties": {
+                "condition_expression": {
+                    "type": "string",
+                    "example": "any::"
+                },
+                "condition_source": {
+                    "type": "string",
+                    "example": "category"
+                },
+                "created_at": {
+                    "type": "integer",
+                    "example": 1728925200000
+                },
+                "ep_id": {
+                    "type": "string",
+                    "example": "ep_2dZRCcnumVTMI9eHdmep89IpOgY"
+                },
+                "exclusionary": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "id": {
+                    "type": "string",
+                    "example": "rt_2dcBT1R8169aIGvx0PEilqrJIYM"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "passthrough"
+                },
+                "priority": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "updated_at": {
+                    "type": "integer",
+                    "example": 1728925200000
+                }
+            }
+        },
+        "RouteListRes": {
+            "type": "object",
+            "required": [
+                "count",
+                "data"
+            ],
+            "properties": {
+                "count": {
+                    "type": "integer"
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Route"
+                    }
+                }
+            }
+        },
+        "RouteUpdateRes": {
+            "type": "object",
+            "required": [
+                "condition_expression",
+                "condition_source",
+                "created_at",
+                "ep_id",
+                "exclusionary",
+                "id",
+                "name",
+                "priority",
+                "updated_at"
+            ],
+            "properties": {
+                "condition_expression": {
+                    "type": "string",
+                    "example": "any::"
+                },
+                "condition_source": {
+                    "type": "string",
+                    "example": "category"
+                },
+                "created_at": {
+                    "type": "integer",
+                    "example": 1728925200000
+                },
+                "ep_id": {
+                    "type": "string",
+                    "example": "ep_2dZRCcnumVTMI9eHdmep89IpOgY"
+                },
+                "exclusionary": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "id": {
+                    "type": "string",
+                    "example": "rt_2dcBT1R8169aIGvx0PEilqrJIYM"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "passthrough"
+                },
+                "priority": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "updated_at": {
+                    "type": "integer",
+                    "example": 1728925200000
                 }
             }
         },
         "WorkspaceUpdateReq": {
             "type": "object",
             "required": [
-                "method",
+                "condition_expression",
+                "condition_source",
+                "exclusionary",
                 "name",
-                "uri"
+                "priority"
             ],
             "properties": {
-                "method": {
+                "condition_expression": {
                     "type": "string",
-                    "example": "PUT"
+                    "example": "prefix::test."
+                },
+                "condition_source": {
+                    "type": "string",
+                    "example": "category"
+                },
+                "exclusionary": {
+                    "type": "boolean",
+                    "example": false
                 },
                 "name": {
                     "type": "string",
-                    "example": "echo endpoint with PUT"
+                    "example": "only test category route"
                 },
-                "uri": {
-                    "type": "string",
-                    "example": "https://postman-echo.com/put"
+                "priority": {
+                    "type": "integer",
+                    "example": 9
                 }
             }
         }

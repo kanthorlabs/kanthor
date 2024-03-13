@@ -5,8 +5,8 @@ CREATE TABLE IF NOT EXISTS kanthor_audit (
   id VARCHAR(256),
   operation VARCHAR(256),
   operator VARCHAR(256),
-  rand VARCHAR(36) DEFAULT gen_random_uuid(),
-  PRIMARY KEY (table_name, id, operation, operator, rand),
+  log_id VARCHAR(36) DEFAULT gen_random_uuid(),
+  PRIMARY KEY (table_name, id, operation, operator, log_id),
   created_at BIGINT	DEFAULT ROUND(EXTRACT(EPOCH FROM NOW()) * 1000),
   previous jsonb,
   current jsonb
@@ -86,8 +86,8 @@ ON public.kanthor_endpoint
 FOR EACH ROW
 EXECUTE FUNCTION kanthor_audit_trigger(); 
 
-CREATE OR REPLACE TRIGGER kanthor_audit_trigger_log_endpoint_rule BEFORE INSERT OR UPDATE OR DELETE 
-ON public.kanthor_endpoint_rule
+CREATE OR REPLACE TRIGGER kanthor_audit_trigger_log_route BEFORE INSERT OR UPDATE OR DELETE 
+ON public.kanthor_route
 FOR EACH ROW
 EXECUTE FUNCTION kanthor_audit_trigger(); 
 

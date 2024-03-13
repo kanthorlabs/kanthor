@@ -635,7 +635,7 @@ const docTemplatePortal = `{
             "properties": {
                 "error": {
                     "type": "string",
-                    "example": "oops, something went wrong"
+                    "example": "KANTHOR.SYSTEM.ERROR"
                 }
             }
         },

@@ -1,8 +1,8 @@
 BEGIN;
 
-DROP INDEX IF EXISTS kanthor_epr_ep_ref;
+DROP INDEX IF EXISTS kanthor_rt_ep_ref;
 
-DROP TABLE IF EXISTS kanthor_endpoint_rule;
+DROP TABLE IF EXISTS kanthor_route;
 
 DROP INDEX IF EXISTS kanthor_ep_app_ref;
 

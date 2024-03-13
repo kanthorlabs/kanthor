@@ -164,7 +164,7 @@ definitions:
   Error:
     properties:
       error:
-        example: oops, something went wrong
+        example: KANTHOR.SYSTEM.ERROR
         type: string
     required:
     - error
