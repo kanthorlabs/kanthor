@@ -14,12 +14,12 @@ func New(
 	conf *config.Config,
 	logger logging.Logger,
 	infra infrastructure.Infrastructure,
-	clock clock.Clock,
+	watch clock.Clock,
 ) (Sdk, error) {
 	uc := &sdk{
 		conf:   conf,
 		logger: logger,
-		watch:  clock,
+		watch:  watch,
 		infra:  infra,
 	}
 	return uc, nil

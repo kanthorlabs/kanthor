@@ -1,4 +1,3 @@
-//go:build appengine || safe || ppc64le || ppc64be || mipsle || mips || s390x
 // +build appengine safe ppc64le ppc64be mipsle mips s390x
 
 package xxhash

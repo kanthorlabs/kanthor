@@ -14,12 +14,12 @@ func New(
 	conf *config.Config,
 	logger logging.Logger,
 	infra infrastructure.Infrastructure,
-	clock clock.Clock,
+	watch clock.Clock,
 ) (Portal, error) {
 	uc := &portal{
 		conf:   conf,
 		logger: logger,
-		watch:  clock,
+		watch:  watch,
 		infra:  infra,
 	}
 	return uc, nil

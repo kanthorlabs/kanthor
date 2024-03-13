@@ -1,0 +1,124 @@
+logger:
+  pretty: true
+  level: info
+  with:
+    env: localhost
+
+infrastructure:
+  database:
+    engine: sqlx
+    sqlx:
+      uri: sqlite3:://
+      connection:
+        max_lifetime: 300000
+        max_idletime: 60000
+        max_idle_count: 1
+        max_open_count: 1
+  datastore:
+    engine: sqlx
+    sqlx:
+      uri: sqlite3:://
+      skip_default_transaction: true
+      connection:
+        max_lifetime: 300000
+        max_idletime: 60000
+        max_idle_count: 1
+        max_open_count: 1
+  stream:
+    name: kanthor
+    uri: nats://localhost:12224
+    nats:
+      replicas: 0
+      limits:
+        bytes: 25769803776 # 24Gi or 70% of 32Gi
+        msg_size: 32768 # 32Kb
+        msg_count: 300000 # 300k per subject
+        msg_age: 3600000
+    publisher:
+      rate_limit: 300
+    subscriber:
+      timeout: 15000
+      max_retry: 1
+      concurrency: 300
+  cache:
+    uri: memory://
+  distributed_lock_manager:
+    uri: memory://
+    time_to_live: 900000 # 15m
+  idempotency:
+    uri: memory://
+    time_to_live: 300000 # 5m
+  circuit_breaker:
+    size: 300
+    close:
+      cleanup_interval: 600000 # 10m
+    half:
+      passthrough_requests: 100
+    open:
+      duration: 1800000 # 30m
+      conditions:
+        error_consecutive: 10
+        error_ratio: 0.8
+  passport:
+    strategies:
+      - name: kanthor.owner
+        engine: ask
+        ask:
+          accounts:
+            - name: "Super User"
+              username: admin
+              password_hash: "$2a$10$qv5Ct.Ee1GY4Fm5fnVS79uQG45q5ruFQoPncUrA29ASY74kIKTLP." #changemenow
+              metadata:
+                avatar_url: https://ui-avatars.com/api/?name=Super+User
+              created_at: 1728925200000
+              updated_at: 1728925200000
+      - name: kanthor.sdk
+        engine: durability
+        durability:
+          sqlx:
+            uri: sqlite3:://
+            connection:
+              max_lifetime: 300000
+              max_idletime: 60000
+              max_idle_count: 1
+              max_open_count: 1
+  gatekeeper:
+    engine: rbac
+    definitions:
+      uri: base64://eyJrYW50aG9yLm93bmVyIjpbeyJzY29wZSI6IioiLCJhY3Rpb24iOiIqIiwib2JqZWN0IjoiKiJ9XSwia2FudGhvci5zZGsiOlt7InNjb3BlIjoic2RrIiwiYWN0aW9uIjoiKiIsIm9iamVjdCI6IioifV19Cg==
+    privilege:
+      sqlx:
+        uri: sqlite3:://
+        connection:
+          max_lifetime: 300000
+          max_idletime: 60000
+          max_idle_count: 1
+          max_open_count: 1
+
+portal:
+  gateway:
+    addr: ":8180"
+    timeout: 10000
+    cors:
+      allowed_origins:
+        - http://localhost:3000
+        - http://localhost:8180
+      allowed_methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
+      allowed_headers: ["*"]
+      exposed_headers: ["*"]
+      allow_credentials: true
+      max_age: 86400000
+
+sdk:
+  gateway:
+    addr: ":8280"
+    timeout: 10000
+    cors:
+      allowed_origins:
+        - http://localhost:3000
+        - http://localhost:8280
+      allowed_methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
+      allowed_headers: ["*"]
+      exposed_headers: ["*"]
+      allow_credentials: true
+      max_age: 86400000
