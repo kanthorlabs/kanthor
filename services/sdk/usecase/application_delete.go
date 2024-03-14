@@ -29,7 +29,7 @@ func (uc *application) Delete(ctx context.Context, in *ApplicationDeleteIn) (*Ap
 			return ErrApplicationDelete
 		}
 
-		doc.SetAuditFacttor(in.Modifier, uc.watch.Now())
+		doc.SetAuditFacttor(uc.watch.Now(), in.Modifier)
 		if err := tx.Save(doc).Error; err != nil {
 			uc.logger.Errorw(
 				ErrApplicationDelete.Error(),

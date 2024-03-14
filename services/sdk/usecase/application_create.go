@@ -21,7 +21,7 @@ func (uc *application) Create(ctx context.Context, in *ApplicationCreateIn) (*Ap
 		Name: in.Name,
 	}
 	doc.SetId()
-	doc.SetAuditFacttor(in.Modifier, uc.watch.Now())
+	doc.SetAuditFacttor(uc.watch.Now(), in.Modifier)
 
 	if err := uc.orm.Create(doc).Error; err != nil {
 		uc.logger.Errorw(ErrApplicationCreate.Error(), "error", err.Error(), "in", utils.Stringify(in), "application", utils.Stringify(doc))

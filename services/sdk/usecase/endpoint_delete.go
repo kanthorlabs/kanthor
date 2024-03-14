@@ -33,7 +33,7 @@ func (uc *endpoint) Delete(ctx context.Context, in *EndpointDeleteIn) (*Endpoint
 			return ErrEndpointDelete
 		}
 
-		doc.SetAuditFacttor(in.Modifier, uc.watch.Now())
+		doc.SetAuditFacttor(uc.watch.Now(), in.Modifier)
 		if err := tx.Save(doc).Error; err != nil {
 			uc.logger.Errorw(
 				ErrEndpointDelete.Error(),

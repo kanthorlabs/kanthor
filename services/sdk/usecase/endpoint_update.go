@@ -37,7 +37,7 @@ func (uc *endpoint) Update(ctx context.Context, in *EndpointUpdateIn) (*Endpoint
 		doc.Name = in.Name
 		doc.Method = in.Method
 		doc.Uri = in.Uri
-		doc.SetAuditFacttor(in.Modifier, uc.watch.Now())
+		doc.SetAuditFacttor(uc.watch.Now(), in.Modifier)
 		if err := tx.Save(doc).Error; err != nil {
 			uc.logger.Errorw(ErrEndpointUpdate.Error(), "error", err.Error(), "in", utils.Stringify(in))
 			return ErrEndpointUpdate

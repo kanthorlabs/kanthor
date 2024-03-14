@@ -18,6 +18,8 @@ var (
 	TableRt  = project.Name("route")
 )
 
+// Auditable is a base entity that contains audit fields, such as created_at, updated_at, and modifier
+// It can tell us who and when the entity was created and updated
 type Auditable struct {
 	Id string
 	// I didn't find a way to disable automatic fields modify yet
@@ -28,10 +30,10 @@ type Auditable struct {
 	Modifier  string
 }
 
-func (entity *Auditable) SetAuditFacttor(modifier string, now time.Time) {
-	entity.Modifier = modifier
+func (entity *Auditable) SetAuditFacttor(now time.Time, modifier string) {
 	if entity.CreatedAt == 0 {
 		entity.CreatedAt = now.UnixMilli()
 	}
 	entity.UpdatedAt = now.UnixMilli()
+	entity.Modifier = modifier
 }

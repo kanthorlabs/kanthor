@@ -27,7 +27,7 @@ func (uc *workspace) Delete(ctx context.Context, in *WorkspaceDeleteIn) (*Worksp
 			return ErrWorkspaceDelete
 		}
 
-		doc.SetAuditFacttor(in.Modifier, uc.watch.Now())
+		doc.SetAuditFacttor(uc.watch.Now(), in.Modifier)
 		if err := tx.Save(doc).Error; err != nil {
 			uc.logger.Errorw(ErrWorkspaceDelete.Error(), "error", err.Error(), "in", utils.Stringify(in), "workspace", utils.Stringify(doc))
 			return ErrWorkspaceDelete

@@ -31,7 +31,7 @@ func (uc *application) Update(ctx context.Context, in *ApplicationUpdateIn) (*Ap
 		}
 
 		doc.Name = in.Name
-		doc.SetAuditFacttor(in.Modifier, uc.watch.Now())
+		doc.SetAuditFacttor(uc.watch.Now(), in.Modifier)
 		if err := tx.Save(doc).Error; err != nil {
 			uc.logger.Errorw(ErrApplicationUpdate.Error(), "error", err.Error(), "in", utils.Stringify(in))
 			return ErrApplicationUpdate

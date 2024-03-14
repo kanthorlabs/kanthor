@@ -26,7 +26,7 @@ func (uc *route) Create(ctx context.Context, in *RouteCreateIn) (*RouteCreateOut
 		ConditionExpression: in.ConditionExpression,
 	}
 	doc.SetId()
-	doc.SetAuditFacttor(in.Modifier, uc.watch.Now())
+	doc.SetAuditFacttor(uc.watch.Now(), in.Modifier)
 
 	if err := uc.orm.Create(doc).Error; err != nil {
 		uc.logger.Errorw(ErrRouteCreate.Error(), "error", err.Error(), "in", utils.Stringify(in), "route", utils.Stringify(doc))

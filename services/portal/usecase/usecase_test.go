@@ -15,7 +15,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func UsecaseTest(t *testing.T) (*portal, func()) {
+func setup(t *testing.T) (*portal, func()) {
 	provider, cleanup := testify.Setup(t)
 
 	conf, err := config.New(provider)
@@ -51,4 +51,14 @@ func UsecaseTest(t *testing.T) (*portal, func()) {
 		cleanup()
 	}
 	return uc, terminate
+}
+
+func assertcount(t *testing.T, uc *portal, table string, id string, expected int64) {
+	var actual int64
+	err := uc.infra.Database().Client().(*gorm.DB).
+		Table(table).
+		Where("id = ?", id).
+		Count(&actual).Error
+	require.NoError(t, err)
+	require.Equal(t, expected, actual)
 }

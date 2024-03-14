@@ -8,11 +8,12 @@ import (
 	"github.com/google/uuid"
 	"github.com/kanthorlabs/common/project"
 	"github.com/kanthorlabs/common/testdata"
+	"github.com/kanthorlabs/kanthor/internal/database/entities"
 	"github.com/stretchr/testify/require"
 )
 
 func TestWorkspaceCreate(t *testing.T) {
-	uc, cleanup := UsecaseTest(t)
+	uc, cleanup := setup(t)
 	defer cleanup()
 
 	t.Run("OK", func(t *testing.T) {
@@ -31,5 +32,7 @@ func TestWorkspaceCreate(t *testing.T) {
 		require.Greater(t, out.CreatedAt, int64(0))
 		require.Greater(t, out.UpdatedAt, int64(0))
 		require.NotEmpty(t, out.Modifier)
+
+		assertcount(t, uc, entities.TableWs, out.Id, 1)
 	})
 }

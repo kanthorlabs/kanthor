@@ -39,7 +39,7 @@ func (uc *route) Update(ctx context.Context, in *RouteUpdateIn) (*RouteUpdateOut
 		doc.Exclusionary = in.Exclusionary
 		doc.ConditionSource = in.ConditionSource
 		doc.ConditionExpression = in.ConditionExpression
-		doc.SetAuditFacttor(in.Modifier, uc.watch.Now())
+		doc.SetAuditFacttor(uc.watch.Now(), in.Modifier)
 		if err := tx.Save(doc).Error; err != nil {
 			uc.logger.Errorw(ErrRouteUpdate.Error(), "error", err.Error(), "in", utils.Stringify(in))
 			return ErrRouteUpdate

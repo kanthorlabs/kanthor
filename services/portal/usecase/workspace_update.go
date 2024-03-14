@@ -28,7 +28,7 @@ func (uc *workspace) Update(ctx context.Context, in *WorkspaceUpdateIn) (*Worksp
 		}
 
 		doc.Name = in.Name
-		doc.SetAuditFacttor(in.Modifier, uc.watch.Now())
+		doc.SetAuditFacttor(uc.watch.Now(), in.Modifier)
 		if err := tx.Save(doc).Error; err != nil {
 			uc.logger.Errorw(ErrWorkspaceUpdate.Error(), "error", err.Error(), "in", utils.Stringify(in))
 			return ErrWorkspaceUpdate

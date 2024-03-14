@@ -25,7 +25,7 @@ func (uc *endpoint) Create(ctx context.Context, in *EndpointCreateIn) (*Endpoint
 		Uri:    in.Uri,
 	}
 	doc.SetId()
-	doc.SetAuditFacttor(in.Modifier, uc.watch.Now())
+	doc.SetAuditFacttor(uc.watch.Now(), in.Modifier)
 	doc.SecretKey = utils.RandomString(SecretLength)
 
 	if err := uc.orm.Create(doc).Error; err != nil {

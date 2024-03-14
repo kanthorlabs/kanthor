@@ -33,7 +33,7 @@ func (uc *route) Delete(ctx context.Context, in *RouteDeleteIn) (*RouteDeleteOut
 			return ErrRouteDelete
 		}
 
-		doc.SetAuditFacttor(in.Modifier, uc.watch.Now())
+		doc.SetAuditFacttor(uc.watch.Now(), in.Modifier)
 		if err := tx.Save(doc).Error; err != nil {
 			uc.logger.Errorw(
 				ErrRouteDelete.Error(),
