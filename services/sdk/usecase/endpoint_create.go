@@ -3,6 +3,7 @@ package usecase
 import (
 	"context"
 	"errors"
+	"fmt"
 	"net/http"
 
 	"github.com/kanthorlabs/common/utils"
@@ -26,7 +27,7 @@ func (uc *endpoint) Create(ctx context.Context, in *EndpointCreateIn) (*Endpoint
 	}
 	doc.SetId()
 	doc.SetAuditFacttor(uc.watch.Now(), in.Modifier)
-	doc.SecretKey = utils.RandomString(SecretLength)
+	doc.SecretKey = fmt.Sprintf("1,%s", utils.RandomString(SecretLength))
 
 	if err := uc.orm.Create(doc).Error; err != nil {
 		uc.logger.Errorw(ErrEndpointCreate.Error(), "error", err.Error(), "in", utils.Stringify(in), "endpoint", utils.Stringify(doc))
