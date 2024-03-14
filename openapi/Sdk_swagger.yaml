@@ -286,6 +286,40 @@ definitions:
     - updated_at
     - uri
     type: object
+  EndpointGetSecretRes:
+    properties:
+      app_id:
+        example: app_2dXFXcW6HwrJLQuMjc7n02Xmyq8
+        type: string
+      created_at:
+        example: 1728925200000
+        type: integer
+      id:
+        example: ep_2dZRCcnumVTMI9eHdmep89IpOgY
+        type: string
+      method:
+        example: POST
+        type: string
+      name:
+        example: echo endpoint
+        type: string
+      secretKey:
+        type: string
+      updated_at:
+        example: 1728925200000
+        type: integer
+      uri:
+        example: https://postman-echo.com/post
+        type: string
+    required:
+    - app_id
+    - created_at
+    - id
+    - method
+    - name
+    - updated_at
+    - uri
+    type: object
   EndpointListRes:
     properties:
       count:
@@ -881,6 +915,32 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/EndpointUpdateRes'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - Authorization: []
+      tags:
+      - endpoint
+  /endpoint/{id}/secret:
+    get:
+      parameters:
+      - description: application id
+        in: query
+        name: app_id
+        required: true
+        type: string
+      - description: endpoint id
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/EndpointGetSecretRes'
         default:
           description: ""
           schema:

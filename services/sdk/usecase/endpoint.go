@@ -17,8 +17,10 @@ type Endpoint interface {
 	Update(ctx context.Context, in *EndpointUpdateIn) (*EndpointUpdateOut, error)
 	Delete(ctx context.Context, in *EndpointDeleteIn) (*EndpointDeleteOut, error)
 
-	// GetOwn is a method to get the endpoint by its id and the workspace id
+	// GetSecretOwn is a method to get the endpoint by its id and the workspace id
 	GetOwn(ctx context.Context, in *EndpointGetOwnIn) (*EndpointGetOwnOut, error)
+	// GetSecret return the endpoint with the decrypted secret key, so user can use it to verify the request to the endpoint
+	GetSecret(ctx context.Context, in *EndpointGetSecretIn) (*EndpointGetSecretOut, error)
 }
 
 type endpoint struct {

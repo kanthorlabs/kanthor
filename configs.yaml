@@ -5,6 +5,9 @@ logger:
     env: localhost
 
 infrastructure:
+  secrets:
+    cipher:
+      - d7688fc5a9ee43a5aeee346148c2b688
   database:
     engine: sqlx
     sqlx:

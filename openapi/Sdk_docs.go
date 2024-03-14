@@ -471,6 +471,48 @@ const docTemplateSdk = `{
                 }
             }
         },
+        "/endpoint/{id}/secret": {
+            "get": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "tags": [
+                    "endpoint"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "application id",
+                        "name": "app_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "endpoint id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/EndpointGetSecretRes"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
         "/route": {
             "get": {
                 "security": [
@@ -1080,6 +1122,51 @@ const docTemplateSdk = `{
                 "name": {
                     "type": "string",
                     "example": "echo endpoint"
+                },
+                "updated_at": {
+                    "type": "integer",
+                    "example": 1728925200000
+                },
+                "uri": {
+                    "type": "string",
+                    "example": "https://postman-echo.com/post"
+                }
+            }
+        },
+        "EndpointGetSecretRes": {
+            "type": "object",
+            "required": [
+                "app_id",
+                "created_at",
+                "id",
+                "method",
+                "name",
+                "updated_at",
+                "uri"
+            ],
+            "properties": {
+                "app_id": {
+                    "type": "string",
+                    "example": "app_2dXFXcW6HwrJLQuMjc7n02Xmyq8"
+                },
+                "created_at": {
+                    "type": "integer",
+                    "example": 1728925200000
+                },
+                "id": {
+                    "type": "string",
+                    "example": "ep_2dZRCcnumVTMI9eHdmep89IpOgY"
+                },
+                "method": {
+                    "type": "string",
+                    "example": "POST"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "echo endpoint"
+                },
+                "secretKey": {
+                    "type": "string"
                 },
                 "updated_at": {
                     "type": "integer",

@@ -13,6 +13,8 @@ import (
 )
 
 type Config struct {
+	Secrets Secrets `json:"secrets" yaml:"secrets" mapstructure:"secrets"`
+
 	Database       database.Config               `json:"database" yaml:"database" mapstructure:"database"`
 	Datastore      datastore.Config              `json:"datastore" yaml:"datastore" mapstructure:"datastore"`
 	Stream         streaming.Config              `json:"stream" yaml:"stream" mapstructure:"stream"`
@@ -20,12 +22,14 @@ type Config struct {
 	DLM            distributedlockmanager.Config `json:"distributed_lock_manager" yaml:"distributed_lock_manager" mapstructure:"distributed_lock_manager"`
 	Idempotency    idempotency.Config            `json:"idempotency" yaml:"idempotency" mapstructure:"idempotency"`
 	CircuitBreaker circuitbreaker.Config         `json:"circuit_breaker" yaml:"circuit_breaker" mapstructure:"circuit_breaker"`
-
-	Passport   passport.Config   `json:"passport" yaml:"passport" mapstructure:"passport"`
-	Gatekeeper gatekeeper.Config `json:"gatekeeper" yaml:"gatekeeper" mapstructure:"gatekeeper"`
+	Passport       passport.Config               `json:"passport" yaml:"passport" mapstructure:"passport"`
+	Gatekeeper     gatekeeper.Config             `json:"gatekeeper" yaml:"gatekeeper" mapstructure:"gatekeeper"`
 }
 
 func (conf *Config) Validate() error {
+	if err := conf.Secrets.Validate(); err != nil {
+		return err
+	}
 	if err := conf.Database.Validate(); err != nil {
 		return err
 	}
