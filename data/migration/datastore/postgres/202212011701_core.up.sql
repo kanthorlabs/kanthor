@@ -7,7 +7,6 @@ CREATE TABLE IF NOT EXISTS kanthor_message (
   created_at BIGINT NOT NULL DEFAULT 0,
   tier VARCHAR(64) NOT NULL,
   tag VARCHAR(256) NOT NULL,
-  headers TEXT NOT NULL,
   body TEXT NOT NULL,
   metadata TEXT NOT NULL
 );

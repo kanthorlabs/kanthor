@@ -7,7 +7,7 @@ import (
 	"github.com/kanthorlabs/common/validator"
 )
 
-var RouteSourceCategory = "category"
+var RouteSourceTag = "tag"
 
 type Route struct {
 	Auditable
@@ -21,7 +21,7 @@ type Route struct {
 	Exclusionary bool
 
 	// examples
-	//  - category
+	//  - tag
 	ConditionSource string
 	// examples:
 	// 	- any::
@@ -44,7 +44,7 @@ func (entity *Route) Validate() error {
 		validator.StringStartsWith("ep_id", entity.EpId, IdNsEp),
 		validator.StringRequired("name", entity.Name),
 		validator.NumberInRange("priority", entity.Priority, 1, 128),
-		validator.StringOneOf("condition_source", entity.ConditionSource, []string{RouteSourceCategory}),
+		validator.StringOneOf("condition_source", entity.ConditionSource, []string{RouteSourceTag}),
 		validator.StringRequired("condition_expression", entity.ConditionExpression),
 	)
 }

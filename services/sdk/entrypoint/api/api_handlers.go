@@ -54,6 +54,7 @@ func (service *sdk) httpx() error {
 		RegisterApplicationRoutes(router, service)
 		RegisterEndpointRoutes(router, service)
 		RegisterRouteRoutes(router, service)
+		RegisterMessageRoutes(router, service)
 	})
 
 	return service.server.UseHttpx(handler)

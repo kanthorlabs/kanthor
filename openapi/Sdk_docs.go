@@ -513,6 +513,50 @@ const docTemplateSdk = `{
                 }
             }
         },
+        "/message": {
+            "post": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "tags": [
+                    "message"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "application id",
+                        "name": "app_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "description": "request body",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/MessageCreateReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/MessageCreateRes"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
         "/route": {
             "get": {
                 "security": [
@@ -1250,6 +1294,46 @@ const docTemplateSdk = `{
                 }
             }
         },
+        "MessageCreateReq": {
+            "type": "object",
+            "required": [
+                "tag",
+                "uri"
+            ],
+            "properties": {
+                "tag": {
+                    "type": "string",
+                    "example": "testing.openapi"
+                },
+                "uri": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    },
+                    "example": {
+                        "from": "openapi",
+                        "say": "hello"
+                    }
+                }
+            }
+        },
+        "MessageCreateRes": {
+            "type": "object",
+            "required": [
+                "created_at",
+                "id"
+            ],
+            "properties": {
+                "created_at": {
+                    "type": "integer",
+                    "example": 1728925200000
+                },
+                "id": {
+                    "type": "string",
+                    "example": "msg_2dgJIHGMePYS4VJRmEGv73RfIvu"
+                }
+            }
+        },
         "Route": {
             "type": "object",
             "required": [
@@ -1314,7 +1398,7 @@ const docTemplateSdk = `{
             "properties": {
                 "condition_expression": {
                     "type": "string",
-                    "example": "any::"
+                    "example": "prefix::testing."
                 },
                 "condition_source": {
                     "type": "string",
@@ -1572,7 +1656,7 @@ const docTemplateSdk = `{
             "properties": {
                 "condition_expression": {
                     "type": "string",
-                    "example": "prefix::test."
+                    "example": "prefix::testing."
                 },
                 "condition_source": {
                     "type": "string",

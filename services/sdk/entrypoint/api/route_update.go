@@ -63,7 +63,7 @@ type RouteUpdateReq struct {
 	Priority            int32  `json:"priority" example:"9"`
 	Exclusionary        bool   `json:"exclusionary" example:"false"`
 	ConditionSource     string `json:"condition_source" example:"category"`
-	ConditionExpression string `json:"condition_expression" example:"prefix::test."`
+	ConditionExpression string `json:"condition_expression" example:"prefix::testing."`
 } // @name WorkspaceUpdateReq
 
 type RouteUpdateRes struct {

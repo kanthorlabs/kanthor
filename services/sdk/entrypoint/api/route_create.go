@@ -60,7 +60,7 @@ type RouteCreateReq struct {
 	Priority            int32  `json:"priority" example:"1"`
 	Exclusionary        bool   `json:"exclusionary" example:"false"`
 	ConditionSource     string `json:"condition_source" example:"category"`
-	ConditionExpression string `json:"condition_expression" example:"any::"`
+	ConditionExpression string `json:"condition_expression" example:"prefix::testing."`
 } // @name RouteCreateReq
 
 type RouteCreateRes struct {

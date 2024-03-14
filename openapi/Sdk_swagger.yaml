@@ -372,6 +372,34 @@ definitions:
     required:
     - error
     type: object
+  MessageCreateReq:
+    properties:
+      tag:
+        example: testing.openapi
+        type: string
+      uri:
+        additionalProperties:
+          type: string
+        example:
+          from: openapi
+          say: hello
+        type: object
+    required:
+    - tag
+    - uri
+    type: object
+  MessageCreateRes:
+    properties:
+      created_at:
+        example: 1728925200000
+        type: integer
+      id:
+        example: msg_2dgJIHGMePYS4VJRmEGv73RfIvu
+        type: string
+    required:
+    - created_at
+    - id
+    type: object
   Route:
     properties:
       condition_expression:
@@ -415,7 +443,7 @@ definitions:
   RouteCreateReq:
     properties:
       condition_expression:
-        example: 'any::'
+        example: prefix::testing.
         type: string
       condition_source:
         example: category
@@ -611,7 +639,7 @@ definitions:
   WorkspaceUpdateReq:
     properties:
       condition_expression:
-        example: prefix::test.
+        example: prefix::testing.
         type: string
       condition_source:
         example: category
@@ -949,6 +977,33 @@ paths:
       - Authorization: []
       tags:
       - endpoint
+  /message:
+    post:
+      parameters:
+      - description: application id
+        in: query
+        name: app_id
+        required: true
+        type: string
+      - description: request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/MessageCreateReq'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/MessageCreateRes'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - Authorization: []
+      tags:
+      - message
   /route:
     get:
       parameters:

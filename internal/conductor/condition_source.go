@@ -11,7 +11,7 @@ type ConditionSource struct {
 }
 
 func (cs *ConditionSource) Validate() error {
-	return validator.StringOneOf("source", cs.Source, []string{entities.RouteSourceCategory})()
+	return validator.StringOneOf("source", cs.Source, []string{entities.RouteSourceTag})()
 }
 
 func (cs *ConditionSource) ExtractMessage() string {
