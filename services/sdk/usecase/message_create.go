@@ -35,9 +35,9 @@ func (uc *message) Create(ctx context.Context, in *MessageCreateIn) (*MessageCre
 	msg := &dsentities.Message{
 		Tier:     tier,
 		AppId:    in.AppId,
-		Tag:      in.Tag,
+		Type:     in.Type,
 		Metadata: &safe.Metadata{},
-		Body:     in.Body,
+		Body:     dsentities.MessageBody{Type: in.Type, Object: in.Body},
 	}
 	msg.SetId()
 	msg.SetTimeseries(uc.watch.Now())
@@ -96,15 +96,15 @@ func (uc *message) getAppTier(ctx context.Context, appId string) (string, error)
 
 type MessageCreateIn struct {
 	AppId string
-	Tag   string
-	Body  string
+	Type  string
+	Body  map[string]any
 }
 
 func (in *MessageCreateIn) Validate() error {
 	return validator.Validate(
 		validator.StringStartsWith("SDK.MESSAGE.CREATE.IN.APP_ID", in.AppId, dbentities.IdNsApp),
-		validator.StringAlphaNumericUnderscoreDot("SDK.MESSAGE.CREATE.IN.TAG", in.Tag),
-		validator.StringRequired("SDK.MESSAGE.CREATE.IN.BODY", in.Body),
+		validator.StringAlphaNumericUnderscoreDot("SDK.MESSAGE.CREATE.IN.TYPE", in.Type),
+		validator.MapRequired("SDK.MESSAGE.CREATE.IN.BODY", in.Body),
 	)
 }
 

@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS kanthor_message (
   PRIMARY KEY (app_id, id),
   created_at BIGINT NOT NULL DEFAULT 0,
   tier VARCHAR(64) NOT NULL,
-  tag VARCHAR(256) NOT NULL,
+  type VARCHAR(256) NOT NULL,
   body TEXT NOT NULL,
   metadata TEXT NOT NULL
 );
@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS kanthor_request (
   app_id VARCHAR(64) NOT NULL,
   created_at BIGINT NOT NULL DEFAULT 0,
   tier VARCHAR(64) NOT NULL,
-  tag VARCHAR(256) NOT NULL,
+  type VARCHAR(256) NOT NULL,
   metadata TEXT NOT NULL,
   method VARCHAR(64) NOT NULL,
   uri VARCHAR(2048) NOT NULL,
@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS kanthor_response (
   created_at BIGINT NOT NULL DEFAULT 0,
   req_id VARCHAR(64) NOT NULL,
   tier VARCHAR(64) NOT NULL,
-  tag VARCHAR(256) NOT NULL,
+  type VARCHAR(256) NOT NULL,
   metadata TEXT NOT NULL,
   status INT NOT NULL,
   uri VARCHAR(2048) NOT NULL,
