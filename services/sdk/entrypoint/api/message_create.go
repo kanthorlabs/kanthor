@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	httpxwriter "github.com/kanthorlabs/common/gateway/httpx/writer"
+	"github.com/kanthorlabs/common/utils"
 	"github.com/kanthorlabs/kanthor/services/sdk/usecase"
 )
 
@@ -27,7 +28,7 @@ func UseMessageCreate(service *sdk) http.HandlerFunc {
 		in := &usecase.MessageCreateIn{
 			AppId: r.URL.Query().Get("app_id"),
 			Type:  req.Type,
-			Body:  req.Body,
+			Body:  utils.Stringify(req.Body),
 		}
 		if err := in.Validate(); err != nil {
 			httpxwriter.ErrBadRequest(w, httpxwriter.Error(err))

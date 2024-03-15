@@ -6,8 +6,6 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	httpxwriter "github.com/kanthorlabs/common/gateway/httpx/writer"
-	"github.com/kanthorlabs/common/passport"
-	ppentities "github.com/kanthorlabs/common/passport/entities"
 	"github.com/kanthorlabs/kanthor/internal/database/entities"
 	"github.com/kanthorlabs/kanthor/services/sdk/usecase"
 )
@@ -29,10 +27,8 @@ func UseRouteUpdate(service *sdk) http.HandlerFunc {
 			return
 		}
 
-		account := r.Context().Value(passport.CtxAccount).(*ppentities.Account)
 		ep := r.Context().Value(CtxEndpoint).(*entities.Endpoint)
 		in := &usecase.RouteUpdateIn{
-			Modifier:            account.Username,
 			EpId:                ep.Id,
 			Id:                  chi.URLParam(r, "id"),
 			Name:                req.Name,

@@ -23,7 +23,7 @@ func (uc *route) Delete(ctx context.Context, in *RouteDeleteIn) (*RouteDeleteOut
 	wherestm := fmt.Sprintf("%s.id = ? AND %s.id = ?", entities.TableEp, entities.TableRt)
 
 	doc := &entities.Route{}
-	err := uc.orm.Transaction(func(tx *gorm.DB) error {
+	err := uc.orm.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
 		err := tx.
 			Clauses(clause.Locking{Strength: clause.LockingStrengthShare}).
 			InnerJoins(joinstm).Where(wherestm, in.EpId, in.Id).
@@ -33,7 +33,7 @@ func (uc *route) Delete(ctx context.Context, in *RouteDeleteIn) (*RouteDeleteOut
 			return ErrRouteDelete
 		}
 
-		doc.SetAuditFacttor(uc.watch.Now(), in.Modifier)
+		doc.SetAuditFacttor(uc.watch.Now())
 		if err := tx.Save(doc).Error; err != nil {
 			uc.logger.Errorw(
 				ErrRouteDelete.Error(),
@@ -66,14 +66,12 @@ func (uc *route) Delete(ctx context.Context, in *RouteDeleteIn) (*RouteDeleteOut
 }
 
 type RouteDeleteIn struct {
-	Modifier string
-	EpId     string
-	Id       string
+	EpId string
+	Id   string
 }
 
 func (in *RouteDeleteIn) Validate() error {
 	return validator.Validate(
-		validator.StringRequired("SDK.ROUTE.DELETE.IN.MODIFIER", in.Modifier),
 		validator.StringStartsWith("SDK.ROUTE.DELETE.IN.EP_ID", in.EpId, entities.IdNsEp),
 		validator.StringStartsWith("SDK.ROUTE.DELETE.IN.ID", in.Id, entities.IdNsRt),
 	)

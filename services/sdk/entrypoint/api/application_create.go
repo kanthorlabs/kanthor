@@ -6,8 +6,6 @@ import (
 
 	"github.com/kanthorlabs/common/gatekeeper"
 	httpxwriter "github.com/kanthorlabs/common/gateway/httpx/writer"
-	"github.com/kanthorlabs/common/passport"
-	ppentities "github.com/kanthorlabs/common/passport/entities"
 	"github.com/kanthorlabs/kanthor/services/sdk/usecase"
 )
 
@@ -26,11 +24,9 @@ func UseApplicationCreate(service *sdk) http.HandlerFunc {
 			return
 		}
 
-		account := r.Context().Value(passport.CtxAccount).(*ppentities.Account)
 		in := &usecase.ApplicationCreateIn{
-			Modifier: account.Username,
-			WsId:     r.Context().Value(gatekeeper.CtxTenantId).(string),
-			Name:     req.Name,
+			WsId: r.Context().Value(gatekeeper.CtxTenantId).(string),
+			Name: req.Name,
 		}
 		if err := in.Validate(); err != nil {
 			httpxwriter.ErrBadRequest(w, httpxwriter.Error(err))

@@ -19,7 +19,7 @@ func (uc *application) Delete(ctx context.Context, in *ApplicationDeleteIn) (*Ap
 	}
 
 	doc := &entities.Application{}
-	err := uc.orm.Transaction(func(tx *gorm.DB) error {
+	err := uc.orm.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
 		err := tx.
 			Clauses(clause.Locking{Strength: clause.LockingStrengthUpdate}).
 			Where("ws_id = ? AND id = ?", in.WsId, in.Id).
@@ -29,7 +29,7 @@ func (uc *application) Delete(ctx context.Context, in *ApplicationDeleteIn) (*Ap
 			return ErrApplicationDelete
 		}
 
-		doc.SetAuditFacttor(uc.watch.Now(), in.Modifier)
+		doc.SetAuditFacttor(uc.watch.Now())
 		if err := tx.Save(doc).Error; err != nil {
 			uc.logger.Errorw(
 				ErrApplicationDelete.Error(),
@@ -62,14 +62,12 @@ func (uc *application) Delete(ctx context.Context, in *ApplicationDeleteIn) (*Ap
 }
 
 type ApplicationDeleteIn struct {
-	Modifier string
-	WsId     string
-	Id       string
+	WsId string
+	Id   string
 }
 
 func (in *ApplicationDeleteIn) Validate() error {
 	return validator.Validate(
-		validator.StringRequired("SDK.APPLICATION.UPDATE.IN.MODIFIER", in.Modifier),
 		validator.StringStartsWith("SDK.APPLICATION.GET.IN.WS_ID", in.WsId, entities.IdNsWs),
 		validator.StringStartsWith("SDK.APPLICATION.GET.IN.ID", in.Id, entities.IdNsApp),
 	)

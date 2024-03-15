@@ -26,7 +26,7 @@ func (uc *endpoint) Create(ctx context.Context, in *EndpointCreateIn) (*Endpoint
 		Uri:    in.Uri,
 	}
 	doc.SetId()
-	doc.SetAuditFacttor(uc.watch.Now(), in.Modifier)
+	doc.SetAuditFacttor(uc.watch.Now())
 
 	secret, err := encryption.Encrypt(utils.RandomString(SecretLength), uc.conf.Infrastructure.Secrets.Cipher[0])
 	if err != nil {
@@ -35,7 +35,7 @@ func (uc *endpoint) Create(ctx context.Context, in *EndpointCreateIn) (*Endpoint
 	}
 	doc.SecretKey = secret
 
-	if err := uc.orm.Create(doc).Error; err != nil {
+	if err := uc.orm.WithContext(ctx).Create(doc).Error; err != nil {
 		uc.logger.Errorw(ErrEndpointCreate.Error(), "error", err.Error(), "in", utils.Stringify(in), "endpoint", utils.Stringify(doc))
 		return nil, ErrEndpointCreate
 	}
@@ -45,16 +45,14 @@ func (uc *endpoint) Create(ctx context.Context, in *EndpointCreateIn) (*Endpoint
 }
 
 type EndpointCreateIn struct {
-	Modifier string
-	AppId    string
-	Name     string
-	Method   string
-	Uri      string
+	AppId  string
+	Name   string
+	Method string
+	Uri    string
 }
 
 func (in *EndpointCreateIn) Validate() error {
 	return validator.Validate(
-		validator.StringRequired("SDK.ENDPOINT.CREATE.IN.MODIFIER", in.Modifier),
 		validator.StringStartsWith("SDK.ENDPOINT.CREATE.IN.APP_ID", in.AppId, entities.IdNsApp),
 		validator.StringRequired("SDK.ENDPOINT.CREATE.IN.NAME", in.Name),
 		validator.StringOneOf("SDK.ENDPOINT.CREATE.IN.METHOD", in.Method, []string{http.MethodPost, http.MethodPut}),

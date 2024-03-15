@@ -22,7 +22,7 @@ func (uc *endpoint) GetOwn(ctx context.Context, in *EndpointGetOwnIn) (*Endpoint
 	selectstm := fmt.Sprintf("%s.*", entities.TableEp)
 
 	doc := &entities.Endpoint{}
-	err := uc.orm.
+	err := uc.orm.WithContext(ctx).
 		InnerJoins(joinstm).
 		Where(wherestm, in.WsId, in.Id).
 		Select(selectstm).

@@ -21,7 +21,7 @@ func (uc *route) List(ctx context.Context, in *RouteListIn) (*RouteListOut, erro
 	var docs []*entities.Route
 
 	model := &entities.Route{}
-	base := uc.orm.Model(model).Where("ep_id = ?", in.EpId)
+	base := uc.orm.WithContext(ctx).Model(model).Where("ep_id = ?", in.EpId)
 
 	if err := in.Query.SqlxCount(base, model.PrimaryProp(), model.SearchProps()).Count(&count).Error; err != nil {
 		uc.logger.Errorw(ErrRouteList.Error(), "error", err.Error(), "in", utils.Stringify(in))

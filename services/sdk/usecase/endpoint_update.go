@@ -24,7 +24,7 @@ func (uc *endpoint) Update(ctx context.Context, in *EndpointUpdateIn) (*Endpoint
 	wherestm := fmt.Sprintf("%s.id = ? AND %s.id = ?", entities.TableApp, entities.TableEp)
 
 	doc := &entities.Endpoint{}
-	err := uc.orm.Transaction(func(tx *gorm.DB) error {
+	err := uc.orm.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
 		err := tx.
 			Clauses(clause.Locking{Strength: clause.LockingStrengthShare}).
 			InnerJoins(joinstm).Where(wherestm, in.AppId, in.Id).
@@ -37,7 +37,7 @@ func (uc *endpoint) Update(ctx context.Context, in *EndpointUpdateIn) (*Endpoint
 		doc.Name = in.Name
 		doc.Method = in.Method
 		doc.Uri = in.Uri
-		doc.SetAuditFacttor(uc.watch.Now(), in.Modifier)
+		doc.SetAuditFacttor(uc.watch.Now())
 		if err := tx.Save(doc).Error; err != nil {
 			uc.logger.Errorw(ErrEndpointUpdate.Error(), "error", err.Error(), "in", utils.Stringify(in))
 			return ErrEndpointUpdate
@@ -55,17 +55,15 @@ func (uc *endpoint) Update(ctx context.Context, in *EndpointUpdateIn) (*Endpoint
 }
 
 type EndpointUpdateIn struct {
-	Modifier string
-	AppId    string
-	Id       string
-	Name     string
-	Method   string
-	Uri      string
+	AppId  string
+	Id     string
+	Name   string
+	Method string
+	Uri    string
 }
 
 func (in *EndpointUpdateIn) Validate() error {
 	return validator.Validate(
-		validator.StringRequired("SDK.ENDPOINT.UPDATE.IN.MODIFIER", in.Modifier),
 		validator.StringStartsWith("SDK.ENDPOINT.CREATE.IN.APP_ID", in.AppId, entities.IdNsApp),
 		validator.StringStartsWith("SDK.ENDPOINT.GET.IN.ID", in.Id, entities.IdNsEp),
 		validator.StringRequired("SDK.ENDPOINT.UPDATE.IN.NAME", in.Name),

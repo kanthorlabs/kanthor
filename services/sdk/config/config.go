@@ -26,3 +26,17 @@ type Config struct {
 	Infrastructure infrastructure.Config `json:"infrastructure" yaml:"infrastructure" mapstructure:"infrastructure"`
 	Sdk            Sdk                   `json:"sdk" yaml:"sdk" mapstructure:"sdk"`
 }
+
+func (c *Config) Validate() error {
+	if err := c.Logger.Validate(); err != nil {
+		return err
+	}
+	if err := c.Infrastructure.Validate(); err != nil {
+		return err
+	}
+	if err := c.Sdk.Validate(); err != nil {
+		return err
+	}
+
+	return nil
+}

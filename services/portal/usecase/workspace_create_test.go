@@ -31,7 +31,6 @@ func TestWorkspaceCreate(t *testing.T) {
 		require.NotEmpty(t, out.Id)
 		require.Greater(t, out.CreatedAt, int64(0))
 		require.Greater(t, out.UpdatedAt, int64(0))
-		require.NotEmpty(t, out.Modifier)
 
 		assertcount(t, uc, entities.TableWs, out.Id, 1)
 	})

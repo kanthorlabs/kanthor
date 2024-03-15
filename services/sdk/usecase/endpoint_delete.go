@@ -23,7 +23,7 @@ func (uc *endpoint) Delete(ctx context.Context, in *EndpointDeleteIn) (*Endpoint
 	wherestm := fmt.Sprintf("%s.id = ? AND %s.id = ?", entities.TableApp, entities.TableEp)
 
 	doc := &entities.Endpoint{}
-	err := uc.orm.Transaction(func(tx *gorm.DB) error {
+	err := uc.orm.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
 		err := tx.
 			Clauses(clause.Locking{Strength: clause.LockingStrengthShare}).
 			InnerJoins(joinstm).Where(wherestm, in.AppId, in.Id).
@@ -33,7 +33,7 @@ func (uc *endpoint) Delete(ctx context.Context, in *EndpointDeleteIn) (*Endpoint
 			return ErrEndpointDelete
 		}
 
-		doc.SetAuditFacttor(uc.watch.Now(), in.Modifier)
+		doc.SetAuditFacttor(uc.watch.Now())
 		if err := tx.Save(doc).Error; err != nil {
 			uc.logger.Errorw(
 				ErrEndpointDelete.Error(),
@@ -66,14 +66,12 @@ func (uc *endpoint) Delete(ctx context.Context, in *EndpointDeleteIn) (*Endpoint
 }
 
 type EndpointDeleteIn struct {
-	Modifier string
-	AppId    string
-	Id       string
+	AppId string
+	Id    string
 }
 
 func (in *EndpointDeleteIn) Validate() error {
 	return validator.Validate(
-		validator.StringRequired("SDK.ENDPOINT.UPDATE.IN.MODIFIER", in.Modifier),
 		validator.StringStartsWith("SDK.ENDPOINT.CREATE.IN.APP_ID", in.AppId, entities.IdNsApp),
 		validator.StringStartsWith("SDK.ENDPOINT.GET.IN.ID", in.Id, entities.IdNsEp),
 	)

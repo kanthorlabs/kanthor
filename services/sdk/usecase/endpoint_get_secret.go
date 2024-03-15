@@ -24,7 +24,7 @@ func (uc *endpoint) GetSecret(ctx context.Context, in *EndpointGetSecretIn) (*En
 
 	doc := &entities.Endpoint{}
 
-	err := uc.orm.
+	err := uc.orm.WithContext(ctx).
 		InnerJoins(joinstm).
 		Where(wherestm, in.AppId, in.Id).
 		Select(selectstm).

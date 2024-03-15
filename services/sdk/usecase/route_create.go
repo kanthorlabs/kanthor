@@ -26,9 +26,9 @@ func (uc *route) Create(ctx context.Context, in *RouteCreateIn) (*RouteCreateOut
 		ConditionExpression: in.ConditionExpression,
 	}
 	doc.SetId()
-	doc.SetAuditFacttor(uc.watch.Now(), in.Modifier)
+	doc.SetAuditFacttor(uc.watch.Now())
 
-	if err := uc.orm.Create(doc).Error; err != nil {
+	if err := uc.orm.WithContext(ctx).Create(doc).Error; err != nil {
 		uc.logger.Errorw(ErrRouteCreate.Error(), "error", err.Error(), "in", utils.Stringify(in), "route", utils.Stringify(doc))
 		return nil, ErrRouteCreate
 	}
@@ -38,7 +38,6 @@ func (uc *route) Create(ctx context.Context, in *RouteCreateIn) (*RouteCreateOut
 }
 
 type RouteCreateIn struct {
-	Modifier            string
 	EpId                string
 	Name                string
 	Priority            int32
@@ -49,7 +48,6 @@ type RouteCreateIn struct {
 
 func (in *RouteCreateIn) Validate() error {
 	return validator.Validate(
-		validator.StringRequired("SDK.ROUTE.CREATE.IN.MODIFIER", in.Modifier),
 		validator.StringStartsWith("SDK.ROUTE.CREATE.IN.EP_ID", in.EpId, entities.IdNsEp),
 		validator.StringRequired("SDK.ROUTE.CREATE.IN.NAME", in.Name),
 		validator.NumberInRange("SDK.ROUTE.CREATE.IN.PRIORITY", in.Priority, 1, 128),

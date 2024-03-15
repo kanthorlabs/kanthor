@@ -4,7 +4,6 @@ CREATE TABLE IF NOT EXISTS kanthor_workspace (
   id VARCHAR(64) NOT NULL PRIMARY KEY,
   created_at BIGINT NOT NULL DEFAULT 0,
   updated_at BIGINT NOT NULL DEFAULT 0,
-  modifier VARCHAR(64) NOT NULL,
   owner_id VARCHAR(64) NOT NULL,
   name VARCHAR(256) NOT NULL,
   tier VARCHAR(256) NOT NULL
@@ -16,7 +15,6 @@ CREATE TABLE IF NOT EXISTS kanthor_application (
   id VARCHAR(64) NOT NULL PRIMARY KEY,
   created_at BIGINT NOT NULL DEFAULT 0,
   updated_at BIGINT NOT NULL DEFAULT 0,
-  modifier VARCHAR(64) NOT NULL,
   ws_id VARCHAR(64) NOT NULL,
   name VARCHAR(256) NOT NULL,
   FOREIGN KEY (ws_id) REFERENCES kanthor_workspace (id) ON DELETE CASCADE
@@ -28,7 +26,6 @@ CREATE TABLE IF NOT EXISTS kanthor_endpoint (
   id VARCHAR(64) NOT NULL PRIMARY KEY,
   created_at BIGINT NOT NULL DEFAULT 0,
   updated_at BIGINT NOT NULL DEFAULT 0,
-  modifier VARCHAR(64) NOT NULL,
   app_id VARCHAR(64) NOT NULL,
   secret_key VARCHAR(64) NOT NULL,
   name VARCHAR(256) NOT NULL,
@@ -43,13 +40,12 @@ CREATE TABLE IF NOT EXISTS kanthor_route (
   id VARCHAR(64) NOT NULL PRIMARY KEY,
   created_at BIGINT NOT NULL DEFAULT 0,
   updated_at BIGINT NOT NULL DEFAULT 0,
-  modifier VARCHAR(64) NOT NULL,
   ep_id VARCHAR(64) NOT NULL,
   name VARCHAR(256) NOT NULL,
   condition_source VARCHAR(256) NOT NULL,
   condition_expression TEXT NOT NULL,
-  priority SMALLINT NOT NULL DEFAULT 0,
   exclusionary BOOLEAN NOT NULL DEFAULT FALSE,
+  priority SMALLINT NOT NULL DEFAULT 0,
   FOREIGN KEY (ep_id) REFERENCES kanthor_endpoint (id) ON DELETE CASCADE
 );
 

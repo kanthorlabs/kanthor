@@ -21,7 +21,7 @@ func (uc *endpoint) List(ctx context.Context, in *EndpointListIn) (*EndpointList
 	var docs []*entities.Endpoint
 
 	model := &entities.Endpoint{}
-	base := uc.orm.Model(model).Where("app_id = ?", in.AppId)
+	base := uc.orm.WithContext(ctx).Model(model).Where("app_id = ?", in.AppId)
 
 	if err := in.Query.SqlxCount(base, model.PrimaryProp(), model.SearchProps()).Count(&count).Error; err != nil {
 		uc.logger.Errorw(ErrEndpointList.Error(), "error", err.Error(), "in", utils.Stringify(in))

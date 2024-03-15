@@ -5,8 +5,6 @@ import (
 	"net/http"
 
 	httpxwriter "github.com/kanthorlabs/common/gateway/httpx/writer"
-	"github.com/kanthorlabs/common/passport"
-	ppentities "github.com/kanthorlabs/common/passport/entities"
 	"github.com/kanthorlabs/kanthor/internal/database/entities"
 	"github.com/kanthorlabs/kanthor/services/sdk/usecase"
 )
@@ -27,10 +25,8 @@ func UseRouteCreate(service *sdk) http.HandlerFunc {
 			return
 		}
 
-		account := r.Context().Value(passport.CtxAccount).(*ppentities.Account)
 		ep := r.Context().Value(CtxEndpoint).(*entities.Endpoint)
 		in := &usecase.RouteCreateIn{
-			Modifier:            account.Username,
 			EpId:                ep.Id,
 			Name:                req.Name,
 			Priority:            req.Priority,

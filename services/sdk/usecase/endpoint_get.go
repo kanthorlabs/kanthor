@@ -23,7 +23,7 @@ func (uc *endpoint) Get(ctx context.Context, in *EndpointGetIn) (*EndpointGetOut
 
 	doc := &entities.Endpoint{}
 
-	err := uc.orm.
+	err := uc.orm.WithContext(ctx).
 		InnerJoins(joinstm).
 		Where(wherestm, in.AppId, in.Id).
 		Select(selectstm).

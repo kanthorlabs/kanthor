@@ -17,7 +17,7 @@ func (uc *workspace) Get(ctx context.Context, in *WorkspaceGetIn) (*WorkspaceGet
 	}
 
 	doc := &entities.Workspace{}
-	err := uc.orm.Where("id = ?", in.Id).First(doc).Error
+	err := uc.orm.WithContext(ctx).Where("id = ?", in.Id).First(doc).Error
 	if err != nil {
 		uc.logger.Errorw(ErrWorkspaceGet.Error(), "error", err.Error(), "in", utils.Stringify(in))
 		return nil, ErrWorkspaceGet

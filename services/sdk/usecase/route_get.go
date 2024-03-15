@@ -23,7 +23,7 @@ func (uc *route) Get(ctx context.Context, in *RouteGetIn) (*RouteGetOut, error) 
 
 	doc := &entities.Route{}
 
-	err := uc.orm.
+	err := uc.orm.WithContext(ctx).
 		InnerJoins(joinstm).
 		Where(wherestm, in.EpId, in.Id).
 		Select(selectstm).

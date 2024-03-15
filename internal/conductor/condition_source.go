@@ -2,7 +2,8 @@ package conductor
 
 import (
 	"github.com/kanthorlabs/common/validator"
-	"github.com/kanthorlabs/kanthor/internal/database/entities"
+	dbentities "github.com/kanthorlabs/kanthor/internal/database/entities"
+	dsentities "github.com/kanthorlabs/kanthor/internal/datastore/entities"
 )
 
 // ConditionSource is a struct that represents a condition source
@@ -11,9 +12,13 @@ type ConditionSource struct {
 }
 
 func (cs *ConditionSource) Validate() error {
-	return validator.StringOneOf("source", cs.Source, []string{entities.RouteSourceTag})()
+	return validator.StringOneOf("source", cs.Source, []string{dbentities.RouteSourceType})()
 }
 
-func (cs *ConditionSource) ExtractMessage() string {
+func (cs *ConditionSource) ExtractMessage(msg *dsentities.Message) string {
+	if cs.Source == dbentities.RouteSourceType {
+		return msg.Type
+	}
+
 	return ""
 }

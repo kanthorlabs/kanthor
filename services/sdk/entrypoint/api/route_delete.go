@@ -5,8 +5,6 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	httpxwriter "github.com/kanthorlabs/common/gateway/httpx/writer"
-	"github.com/kanthorlabs/common/passport"
-	ppentities "github.com/kanthorlabs/common/passport/entities"
 	"github.com/kanthorlabs/kanthor/internal/database/entities"
 	"github.com/kanthorlabs/kanthor/services/sdk/usecase"
 )
@@ -21,12 +19,10 @@ import (
 // @Security	Authorization
 func UseRouteDelete(service *sdk) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		account := r.Context().Value(passport.CtxAccount).(*ppentities.Account)
 		ep := r.Context().Value(CtxEndpoint).(*entities.Endpoint)
 		in := &usecase.RouteDeleteIn{
-			Modifier: account.Username,
-			EpId:     ep.Id,
-			Id:       chi.URLParam(r, "id"),
+			EpId: ep.Id,
+			Id:   chi.URLParam(r, "id"),
 		}
 		if err := in.Validate(); err != nil {
 			httpxwriter.ErrBadRequest(w, httpxwriter.Error(err))

@@ -13,7 +13,7 @@ type Message struct {
 	Tier     string
 	AppId    string
 	Type     string
-	Body     MessageBody
+	Body     string
 	Metadata *safe.Metadata
 }
 
@@ -29,9 +29,4 @@ func (entity *Message) SetTimeseries(now time.Time) {
 	if entity.CreatedAt == 0 {
 		entity.CreatedAt = now.UnixMilli()
 	}
-}
-
-type MessageBody struct {
-	Type   string
-	Object map[string]any
 }

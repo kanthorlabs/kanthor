@@ -17,7 +17,7 @@ func (uc *application) Get(ctx context.Context, in *ApplicationGetIn) (*Applicat
 	}
 
 	doc := &entities.Application{}
-	err := uc.orm.Where("ws_id = ? AND id = ?", in.WsId, in.Id).First(doc).Error
+	err := uc.orm.WithContext(ctx).Where("ws_id = ? AND id = ?", in.WsId, in.Id).First(doc).Error
 	if err != nil {
 		uc.logger.Errorw(ErrApplicationGet.Error(), "error", err.Error(), "in", utils.Stringify(in))
 		return nil, ErrApplicationGet

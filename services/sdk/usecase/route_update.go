@@ -24,7 +24,7 @@ func (uc *route) Update(ctx context.Context, in *RouteUpdateIn) (*RouteUpdateOut
 	wherestm := fmt.Sprintf("%s.id = ? AND %s.id = ?", entities.TableEp, entities.TableRt)
 
 	doc := &entities.Route{}
-	err := uc.orm.Transaction(func(tx *gorm.DB) error {
+	err := uc.orm.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
 		err := tx.
 			Clauses(clause.Locking{Strength: clause.LockingStrengthShare}).
 			InnerJoins(joinstm).Where(wherestm, in.EpId, in.Id).
@@ -39,7 +39,7 @@ func (uc *route) Update(ctx context.Context, in *RouteUpdateIn) (*RouteUpdateOut
 		doc.Exclusionary = in.Exclusionary
 		doc.ConditionSource = in.ConditionSource
 		doc.ConditionExpression = in.ConditionExpression
-		doc.SetAuditFacttor(uc.watch.Now(), in.Modifier)
+		doc.SetAuditFacttor(uc.watch.Now())
 		if err := tx.Save(doc).Error; err != nil {
 			uc.logger.Errorw(ErrRouteUpdate.Error(), "error", err.Error(), "in", utils.Stringify(in))
 			return ErrRouteUpdate
@@ -57,7 +57,6 @@ func (uc *route) Update(ctx context.Context, in *RouteUpdateIn) (*RouteUpdateOut
 }
 
 type RouteUpdateIn struct {
-	Modifier            string
 	EpId                string
 	Id                  string
 	Name                string
@@ -69,7 +68,6 @@ type RouteUpdateIn struct {
 
 func (in *RouteUpdateIn) Validate() error {
 	return validator.Validate(
-		validator.StringRequired("SDK.ROUTE.UPDATE.IN.MODIFIER", in.Modifier),
 		validator.StringStartsWith("SDK.ROUTE.UPDATE.IN.EP_ID", in.EpId, entities.IdNsEp),
 		validator.StringStartsWith("SDK.ROUTE.UPDATE.IN.ID", in.Id, entities.IdNsRt),
 		validator.StringRequired("SDK.ROUTE.UPDATE.IN.NAME", in.Name),

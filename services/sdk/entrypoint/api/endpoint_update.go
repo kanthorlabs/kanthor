@@ -6,8 +6,6 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	httpxwriter "github.com/kanthorlabs/common/gateway/httpx/writer"
-	"github.com/kanthorlabs/common/passport"
-	ppentities "github.com/kanthorlabs/common/passport/entities"
 	"github.com/kanthorlabs/kanthor/internal/database/entities"
 	"github.com/kanthorlabs/kanthor/services/sdk/usecase"
 )
@@ -29,15 +27,13 @@ func UseEndpointUpdate(service *sdk) http.HandlerFunc {
 			return
 		}
 
-		account := r.Context().Value(passport.CtxAccount).(*ppentities.Account)
 		app := r.Context().Value(CtxApplication).(*entities.Application)
 		in := &usecase.EndpointUpdateIn{
-			Modifier: account.Username,
-			AppId:    app.Id,
-			Id:       chi.URLParam(r, "id"),
-			Name:     req.Name,
-			Method:   req.Method,
-			Uri:      req.Uri,
+			AppId:  app.Id,
+			Id:     chi.URLParam(r, "id"),
+			Name:   req.Name,
+			Method: req.Method,
+			Uri:    req.Uri,
 		}
 		if err := in.Validate(); err != nil {
 			httpxwriter.ErrBadRequest(w, httpxwriter.Error(err))

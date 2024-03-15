@@ -26,3 +26,17 @@ type Config struct {
 	Infrastructure infrastructure.Config `json:"infrastructure" yaml:"infrastructure" mapstructure:"infrastructure"`
 	Portal         Portal                `json:"portal" yaml:"portal" mapstructure:"portal"`
 }
+
+func (c *Config) Validate() error {
+	if err := c.Logger.Validate(); err != nil {
+		return err
+	}
+	if err := c.Infrastructure.Validate(); err != nil {
+		return err
+	}
+	if err := c.Portal.Validate(); err != nil {
+		return err
+	}
+
+	return nil
+}

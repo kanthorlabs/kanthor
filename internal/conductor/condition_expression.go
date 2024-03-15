@@ -35,6 +35,8 @@ func (ce *ConditionExression) Validate() error {
 	return nil
 }
 
+// Match is a method that matches the condition expression with the given data
+// Except ConditionExpressionOperatorAny, other operators require the data to be non-empty
 func (ce *ConditionExression) Match(data string) (bool, error) {
 	// always validate the expression before matching
 	if err := ce.Validate(); err != nil {
@@ -46,11 +48,11 @@ func (ce *ConditionExression) Match(data string) (bool, error) {
 	}
 
 	if ce.operator == ConditionExpressionOperatorEqual {
-		return data == ce.value, nil
+		return data != "" && data == ce.value, nil
 	}
 
 	if ce.operator == ConditionExpressionOperatorPrefix {
-		return strings.HasPrefix(data, ce.value), nil
+		return data != "" && strings.HasPrefix(data, ce.value), nil
 	}
 
 	return false, errors.New("CONDUCTOR.CONDITION_EXPRESSION.OPERATOR_UNKNOWN")

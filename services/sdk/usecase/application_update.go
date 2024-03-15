@@ -20,7 +20,7 @@ func (uc *application) Update(ctx context.Context, in *ApplicationUpdateIn) (*Ap
 
 	doc := &entities.Application{}
 
-	err := uc.orm.Transaction(func(tx *gorm.DB) error {
+	err := uc.orm.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
 		err := tx.
 			Clauses(clause.Locking{Strength: clause.LockingStrengthShare}).
 			Where("ws_id = ? AND id = ?", in.WsId, in.Id).
@@ -31,7 +31,7 @@ func (uc *application) Update(ctx context.Context, in *ApplicationUpdateIn) (*Ap
 		}
 
 		doc.Name = in.Name
-		doc.SetAuditFacttor(uc.watch.Now(), in.Modifier)
+		doc.SetAuditFacttor(uc.watch.Now())
 		if err := tx.Save(doc).Error; err != nil {
 			uc.logger.Errorw(ErrApplicationUpdate.Error(), "error", err.Error(), "in", utils.Stringify(in))
 			return ErrApplicationUpdate
@@ -49,15 +49,13 @@ func (uc *application) Update(ctx context.Context, in *ApplicationUpdateIn) (*Ap
 }
 
 type ApplicationUpdateIn struct {
-	Modifier string
-	WsId     string
-	Id       string
-	Name     string
+	WsId string
+	Id   string
+	Name string
 }
 
 func (in *ApplicationUpdateIn) Validate() error {
 	return validator.Validate(
-		validator.StringRequired("SDK.APPLICATION.UPDATE.IN.MODIFIER", in.Modifier),
 		validator.StringStartsWith("SDK.APPLICATION.GET.IN.WS_ID", in.WsId, entities.IdNsWs),
 		validator.StringStartsWith("SDK.APPLICATION.GET.IN.ID", in.Id, entities.IdNsApp),
 		validator.StringRequired("SDK.APPLICATION.UPDATE.IN.NAME", in.Name),

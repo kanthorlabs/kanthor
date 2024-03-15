@@ -21,9 +21,9 @@ func (uc *application) Create(ctx context.Context, in *ApplicationCreateIn) (*Ap
 		Name: in.Name,
 	}
 	doc.SetId()
-	doc.SetAuditFacttor(uc.watch.Now(), in.Modifier)
+	doc.SetAuditFacttor(uc.watch.Now())
 
-	if err := uc.orm.Create(doc).Error; err != nil {
+	if err := uc.orm.WithContext(ctx).Create(doc).Error; err != nil {
 		uc.logger.Errorw(ErrApplicationCreate.Error(), "error", err.Error(), "in", utils.Stringify(in), "application", utils.Stringify(doc))
 		return nil, ErrApplicationCreate
 	}
@@ -33,14 +33,12 @@ func (uc *application) Create(ctx context.Context, in *ApplicationCreateIn) (*Ap
 }
 
 type ApplicationCreateIn struct {
-	Modifier string
-	WsId     string
-	Name     string
+	WsId string
+	Name string
 }
 
 func (in *ApplicationCreateIn) Validate() error {
 	return validator.Validate(
-		validator.StringRequired("SDK.APPLICATION.CREATE.IN.MODIFIER", in.Modifier),
 		validator.StringStartsWith("SDK.APPLICATION.CREATE.IN.WS_ID", in.WsId, entities.IdNsWs),
 		validator.StringRequired("SDK.APPLICATION.CREATE.IN.NAME", in.Name),
 	)

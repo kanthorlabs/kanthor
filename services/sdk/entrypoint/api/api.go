@@ -11,7 +11,6 @@ import (
 	"github.com/kanthorlabs/kanthor/infrastructure"
 	"github.com/kanthorlabs/kanthor/services/sdk/config"
 	"github.com/kanthorlabs/kanthor/services/sdk/usecase"
-	"github.com/sourcegraph/conc/pool"
 )
 
 func New(
@@ -20,6 +19,10 @@ func New(
 	infra infrastructure.Infrastructure,
 	uc usecase.Sdk,
 ) (patterns.Runnable, error) {
+	if err := conf.Validate(); err != nil {
+		return nil, err
+	}
+
 	entrypoint := &sdk{
 		conf:   conf,
 		logger: logger.With("entrypoint", "api"),
@@ -48,11 +51,7 @@ func (service *sdk) Start(ctx context.Context) error {
 		return ErrAlreadyStarted
 	}
 
-	p := pool.New().WithContext(ctx)
-	p.Go(func(subctx context.Context) error {
-		return service.infra.Connect(subctx)
-	})
-	if err := p.Wait(); err != nil {
+	if err := service.infra.Connect(ctx); err != nil {
 		return err
 	}
 
@@ -84,11 +83,7 @@ func (service *sdk) Stop(ctx context.Context) error {
 		returning = errors.Join(returning, err)
 	}
 
-	p := pool.New().WithContext(ctx)
-	p.Go(func(subctx context.Context) error {
-		return service.infra.Disconnect(subctx)
-	})
-	if err := p.Wait(); err != nil {
+	if err := service.infra.Disconnect(ctx); err != nil {
 		returning = errors.Join(returning, err)
 	}
 
