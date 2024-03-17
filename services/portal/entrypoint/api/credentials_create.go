@@ -58,8 +58,8 @@ type CredentialsCreateReq struct {
 } // @name CredentialsCreateReq
 
 type CredentialsCreateRes struct {
-	Tenant   string `json:"tenant" example:"ws_2dXFW6gHgDR9YBPILkfSmnBaCu8"`
-	Username string `json:"username" example:"admin"`
-	Password string `json:"password" example:"b7ccecf6054343ca8c3ebbdc36b05e5bcc28f4b5e812484387ad7de6ad6a04e4"`
-	Schemes  httpxwriter.M
+	Tenant   string        `json:"tenant" example:"ws_2dXFW6gHgDR9YBPILkfSmnBaCu8"`
+	Username string        `json:"username" example:"admin"`
+	Password string        `json:"password" example:"b7ccecf6054343ca8c3ebbdc36b05e5bcc28f4b5e812484387ad7de6ad6a04e4"`
+	Schemes  httpxwriter.M `json:"schemes" example:"basic:YWRtaW46YjdjY2VmNjA1NDM0M2NhOGMzZWJiZGMzNmIwNWU1YmNjMjhmNGI1ZTgxMjQ4NDM4N2FkN2RlNmFkNmEwNGU0" swaggertype:"object,string"`
 } // @name CredentialsCreateRes

@@ -137,7 +137,7 @@ github.com/jinzhu/now
 # github.com/josharian/intern v1.0.0
 ## explicit; go 1.5
 github.com/josharian/intern
-# github.com/kanthorlabs/common v0.0.0-20240315041737-1f63c400d5fe
+# github.com/kanthorlabs/common v0.0.0-20240317031139-7e67108694ad
 ## explicit; go 1.21.7
 github.com/kanthorlabs/common/cache
 github.com/kanthorlabs/common/cache/config
@@ -161,6 +161,8 @@ github.com/kanthorlabs/common/gateway/httpx/middleware
 github.com/kanthorlabs/common/gateway/httpx/writer
 github.com/kanthorlabs/common/gateway/query
 github.com/kanthorlabs/common/healthcheck
+github.com/kanthorlabs/common/healthcheck/background
+github.com/kanthorlabs/common/healthcheck/config
 github.com/kanthorlabs/common/idempotency
 github.com/kanthorlabs/common/idempotency/config
 github.com/kanthorlabs/common/idx

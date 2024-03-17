@@ -3,6 +3,7 @@ package usecase
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	"github.com/kanthorlabs/common/cipher/encryption"
 	"github.com/kanthorlabs/common/safe"
@@ -16,7 +17,7 @@ import (
 	"github.com/sourcegraph/conc"
 )
 
-var ErrSchedulerArrange = errors.New("SDK.SCHDULER.ARRANGE.ERROR")
+var ErrSchedulerArrange = errors.New("DELIVERY.SCHEDULER.ARRANGE.ERROR")
 
 func (uc *scheduler) Arrange(ctx context.Context, in *SchedulerArrangeIn) (*SchedulerArrangeOut, error) {
 	ok := &safe.Slice[string]{}
@@ -27,33 +28,44 @@ func (uc *scheduler) Arrange(ctx context.Context, in *SchedulerArrangeIn) (*Sche
 	// arrange requests to events
 	events := &safe.Map[*stmentities.Event]{}
 	var wg conc.WaitGroup
-	for refId := range in.Messages {
+	for id := range in.Messages {
+		refId := id
 		msg := in.Messages[refId]
+
 		wg.Go(func() {
 			reqs, err := uc.arrange(ctx, msg)
 			if err != nil {
 				uc.logger.Errorw(ErrSchedulerArrange.Error(), "error", err, "message", utils.Stringify(msg))
-				ko.Set(refId, err)
+				// if we got any error when arranging the message, reject the whole message because those error is unrecoverable
 				return
 			}
 
+			var scheduleerr error
+			schedulable := map[string]*stmentities.Event{}
 			for _, req := range reqs {
-				// if any message request got error, reject the whole message
-				// we don't accept partial success
-				if _, exist := ko.Get(refId); exist {
-					continue
-				}
-
 				event, err := transformation.EventFromRequest(req, constants.SubjectRequestSchedule)
 				if err != nil {
-					ko.Set(refId, err)
+					scheduleerr = errors.Join(scheduleerr, err)
 					uc.logger.Errorw(ErrSchedulerArrange.Error(), "error", err, "request", utils.Stringify(req))
 					continue
 				}
+
+				schedulable[req.EpId] = event
+			}
+
+			// if we got any error when transforming the request to event, reject the whole message because those error is unrecoverable
+			if scheduleerr != nil {
+				for epId, event := range schedulable {
+					uc.logger.Errorw(ErrSchedulerArrange.Error(), "error", fmt.Sprintf("REJECTED by %v", scheduleerr), "event", event.String(), "ep_id", epId, "ref_id", refId)
+				}
+				return
+			}
+
+			for epId := range schedulable {
 				// one message can produce multiple events, so if you set event key by refId, it will be overwritten
-				// then we create a direction of message -> refId -> epId -> event
-				refs.Set(req.EpId, refId)
-				events.Set(req.EpId, event)
+				// that why we need to create a direction of message -> refId -> epId -> event
+				refs.Set(epId, refId)
+				events.Set(epId, schedulable[epId])
 			}
 		})
 	}
@@ -97,21 +109,24 @@ func (uc *scheduler) buildDestinationOfApp(ctx context.Context, appId string) (m
 	}
 
 	destinations := map[string]*conductor.Destination{}
-	epIds := make([]string, len(endpoints))
+	epIds := []string{}
 	for i := range endpoints {
-		epIds[i] = endpoints[i].Id
-
 		signkey, err := encryption.DecryptAny(uc.conf.Infrastructure.Secrets.Cipher, endpoints[i].SecretKey)
 		if err != nil {
 			uc.logger.Errorw(ErrSchedulerArrange.Error(), "error", err, "endpoint", utils.Stringify(endpoints[i]))
 			continue
 		}
 
+		epIds = append(epIds, endpoints[i].Id)
 		destinations[endpoints[i].Id] = &conductor.Destination{
 			Endpoint: endpoints[i],
 			SignKey:  signkey,
 			Routes:   []*dbentities.Route{},
 		}
+	}
+
+	if len(endpoints) > 0 && len(epIds) == 0 {
+		return nil, ErrSchedulerArrange
 	}
 
 	routes, err := uc.getRoutesOfEndpoint(ctx, epIds)
@@ -134,6 +149,11 @@ func (uc *scheduler) getEndpointOfApp(ctx context.Context, appId string) ([]*dbe
 	if err != nil {
 		return nil, err
 	}
+
+	if len(endpoints) == 0 {
+		uc.logger.Warnw("SDK.SCHEDULER.ARRANGE.NO_ENDPOINT.ERROR", "app_id", appId)
+	}
+
 	return endpoints, nil
 }
 
@@ -152,6 +172,13 @@ func (uc *scheduler) getRoutesOfEndpoint(ctx context.Context, epIds []string) (m
 	for i := range routes {
 		maps[routes[i].EpId] = append(maps[routes[i].EpId], routes[i])
 	}
+
+	for _, id := range epIds {
+		if _, exist := maps[id]; !exist {
+			uc.logger.Warnw("SDK.SCHEDULER.ARRANGE.NO_ROUTE.ERROR", "ep_id", id)
+		}
+	}
+
 	return maps, nil
 }
 

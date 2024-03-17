@@ -5,8 +5,10 @@ import (
 
 	"github.com/kanthorlabs/common/project"
 	stmentities "github.com/kanthorlabs/common/streaming/entities"
+	"github.com/kanthorlabs/common/validator"
 
 	"github.com/kanthorlabs/kanthor/internal/constants"
+	dbentities "github.com/kanthorlabs/kanthor/internal/database/entities"
 	dsentities "github.com/kanthorlabs/kanthor/internal/datastore/entities"
 )
 
@@ -26,4 +28,24 @@ func EventFromMessage(msg *dsentities.Message, subject string) (*stmentities.Eve
 	}
 
 	return event, nil
+}
+
+func EventToMessage(event *stmentities.Event) (*dsentities.Message, error) {
+	msg := &dsentities.Message{}
+	if err := json.Unmarshal(event.Data, msg); err != nil {
+		return nil, err
+	}
+
+	err := validator.Validate(
+		validator.StringStartsWith("id", msg.Id, dsentities.IdNsMsg),
+		validator.StringRequired("tier", msg.Tier),
+		validator.StringStartsWith("appId", msg.AppId, dbentities.IdNsApp),
+		validator.StringAlphaNumericUnderscoreDot("type", msg.Type),
+		validator.StringRequired("body", msg.Body),
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	return msg, nil
 }

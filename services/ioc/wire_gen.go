@@ -12,17 +12,20 @@ import (
 	"github.com/kanthorlabs/common/logging"
 	"github.com/kanthorlabs/common/patterns"
 	"github.com/kanthorlabs/kanthor/infrastructure"
-	"github.com/kanthorlabs/kanthor/services/portal/config"
-	"github.com/kanthorlabs/kanthor/services/portal/entrypoint"
-	"github.com/kanthorlabs/kanthor/services/portal/usecase"
-	config2 "github.com/kanthorlabs/kanthor/services/sdk/config"
-	entrypoint2 "github.com/kanthorlabs/kanthor/services/sdk/entrypoint"
-	usecase2 "github.com/kanthorlabs/kanthor/services/sdk/usecase"
+	"github.com/kanthorlabs/kanthor/services/delivery/config"
+	"github.com/kanthorlabs/kanthor/services/delivery/entrypoint"
+	"github.com/kanthorlabs/kanthor/services/delivery/usecase"
+	config2 "github.com/kanthorlabs/kanthor/services/portal/config"
+	entrypoint2 "github.com/kanthorlabs/kanthor/services/portal/entrypoint"
+	usecase2 "github.com/kanthorlabs/kanthor/services/portal/usecase"
+	config3 "github.com/kanthorlabs/kanthor/services/sdk/config"
+	entrypoint3 "github.com/kanthorlabs/kanthor/services/sdk/entrypoint"
+	usecase3 "github.com/kanthorlabs/kanthor/services/sdk/usecase"
 )
 
-// Injectors from portal.go:
+// Injectors from delivery.go:
 
-func Portal(provider configuration.Provider) (patterns.Runnable, error) {
+func Scheduler(provider configuration.Provider) (patterns.Runnable, error) {
 	configConfig, err := config.New(provider)
 	if err != nil {
 		return nil, err
@@ -37,20 +40,20 @@ func Portal(provider configuration.Provider) (patterns.Runnable, error) {
 		return nil, err
 	}
 	clockClock := clock.New()
-	portal, err := usecase.New(configConfig, logger, infrastructureInfrastructure, clockClock)
+	delivery, err := usecase.New(configConfig, logger, infrastructureInfrastructure, clockClock)
 	if err != nil {
 		return nil, err
 	}
-	runnable, err := entrypoint.NewApi(configConfig, logger, infrastructureInfrastructure, portal)
+	runnable, err := entrypoint.NewScheduler(configConfig, logger, infrastructureInfrastructure, delivery)
 	if err != nil {
 		return nil, err
 	}
 	return runnable, nil
 }
 
-// Injectors from sdk.go:
+// Injectors from portal.go:
 
-func Sdk(provider configuration.Provider) (patterns.Runnable, error) {
+func Portal(provider configuration.Provider) (patterns.Runnable, error) {
 	configConfig, err := config2.New(provider)
 	if err != nil {
 		return nil, err
@@ -65,11 +68,39 @@ func Sdk(provider configuration.Provider) (patterns.Runnable, error) {
 		return nil, err
 	}
 	clockClock := clock.New()
-	sdk, err := usecase2.New(configConfig, logger, infrastructureInfrastructure, clockClock)
+	portal, err := usecase2.New(configConfig, logger, infrastructureInfrastructure, clockClock)
 	if err != nil {
 		return nil, err
 	}
-	runnable, err := entrypoint2.NewApi(configConfig, logger, infrastructureInfrastructure, sdk)
+	runnable, err := entrypoint2.NewApi(configConfig, logger, infrastructureInfrastructure, portal)
+	if err != nil {
+		return nil, err
+	}
+	return runnable, nil
+}
+
+// Injectors from sdk.go:
+
+func Sdk(provider configuration.Provider) (patterns.Runnable, error) {
+	configConfig, err := config3.New(provider)
+	if err != nil {
+		return nil, err
+	}
+	logger, err := logging.New(provider)
+	if err != nil {
+		return nil, err
+	}
+	config4 := &configConfig.Infrastructure
+	infrastructureInfrastructure, err := infrastructure.New(config4, logger)
+	if err != nil {
+		return nil, err
+	}
+	clockClock := clock.New()
+	sdk, err := usecase3.New(configConfig, logger, infrastructureInfrastructure, clockClock)
+	if err != nil {
+		return nil, err
+	}
+	runnable, err := entrypoint3.NewApi(configConfig, logger, infrastructureInfrastructure, sdk)
 	if err != nil {
 		return nil, err
 	}

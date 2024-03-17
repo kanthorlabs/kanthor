@@ -2,6 +2,8 @@ package config
 
 import "github.com/kanthorlabs/common/validator"
 
+var ServiceNameScheduler = "scheduler"
+
 type Scheduler struct {
 	Request SchedulerRequest `json:"request" yaml:"request" mapstructure:"request"`
 }

@@ -454,6 +454,7 @@ const docTemplatePortal = `{
             "type": "object",
             "required": [
                 "password",
+                "schemes",
                 "tenant",
                 "username"
             ],
@@ -463,7 +464,13 @@ const docTemplatePortal = `{
                     "example": "b7ccecf6054343ca8c3ebbdc36b05e5bcc28f4b5e812484387ad7de6ad6a04e4"
                 },
                 "schemes": {
-                    "$ref": "#/definitions/writer.M"
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    },
+                    "example": {
+                        "basic": "YWRtaW46YjdjY2VmNjA1NDM0M2NhOGMzZWJiZGMzNmIwNWU1YmNjMjhmNGI1ZTgxMjQ4NDM4N2FkN2RlNmFkNmEwNGU0"
+                    }
                 },
                 "tenant": {
                     "type": "string",
@@ -864,10 +871,6 @@ const docTemplatePortal = `{
         },
         "safe.Metadata": {
             "type": "object"
-        },
-        "writer.M": {
-            "type": "object",
-            "additionalProperties": {}
         }
     },
     "securityDefinitions": {

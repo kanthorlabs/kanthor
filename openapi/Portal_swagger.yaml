@@ -43,7 +43,11 @@ definitions:
         example: b7ccecf6054343ca8c3ebbdc36b05e5bcc28f4b5e812484387ad7de6ad6a04e4
         type: string
       schemes:
-        $ref: '#/definitions/writer.M'
+        additionalProperties:
+          type: string
+        example:
+          basic: YWRtaW46YjdjY2VmNjA1NDM0M2NhOGMzZWJiZGMzNmIwNWU1YmNjMjhmNGI1ZTgxMjQ4NDM4N2FkN2RlNmFkNmEwNGU0
+        type: object
       tenant:
         example: ws_2dXFW6gHgDR9YBPILkfSmnBaCu8
         type: string
@@ -52,6 +56,7 @@ definitions:
         type: string
     required:
     - password
+    - schemes
     - tenant
     - username
     type: object
@@ -335,9 +340,6 @@ definitions:
     - updated_at
     type: object
   safe.Metadata:
-    type: object
-  writer.M:
-    additionalProperties: {}
     type: object
 externalDocs:
   description: OpenAPI

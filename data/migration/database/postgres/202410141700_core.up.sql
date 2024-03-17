@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS kanthor_endpoint (
   created_at BIGINT NOT NULL DEFAULT 0,
   updated_at BIGINT NOT NULL DEFAULT 0,
   app_id VARCHAR(64) NOT NULL,
-  secret_key VARCHAR(64) NOT NULL,
+  secret_key TEXT NOT NULL,
   name VARCHAR(256) NOT NULL,
   uri TEXT NOT NULL,
   method VARCHAR(64) NOT NULL,

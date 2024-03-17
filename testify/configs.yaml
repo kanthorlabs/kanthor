@@ -125,3 +125,7 @@ sdk:
       exposed_headers: ["*"]
       allow_credentials: true
       max_age: 86400000
+
+scheduler:
+  request:
+    timeout: 60000

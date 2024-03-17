@@ -40,8 +40,8 @@ infrastructure:
     publisher:
       rate_limit: 300
     subscriber:
-      timeout: 15000
-      max_retry: 1
+      timeout: 5000
+      max_retry: 2
       concurrency: 300
   cache:
     uri: redis://localhost:6379/0
@@ -125,3 +125,7 @@ sdk:
       exposed_headers: ["*"]
       allow_credentials: true
       max_age: 86400000
+
+scheduler:
+  request:
+    timeout: 60000

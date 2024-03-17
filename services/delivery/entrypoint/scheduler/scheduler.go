@@ -6,6 +6,8 @@ import (
 	"sync"
 
 	"github.com/kanthorlabs/common/healthcheck"
+	"github.com/kanthorlabs/common/healthcheck/background"
+	healthcheckconfig "github.com/kanthorlabs/common/healthcheck/config"
 	"github.com/kanthorlabs/common/logging"
 	"github.com/kanthorlabs/common/patterns"
 	"github.com/kanthorlabs/common/project"
@@ -16,14 +18,39 @@ import (
 	"github.com/kanthorlabs/kanthor/services/delivery/usecase"
 )
 
-type scheduler struct {
-	conf   *config.Config
-	logger logging.Logger
-	infra  infrastructure.Infrastructure
-	uc     usecase.Scheduler
+func New(
+	conf *config.Config,
+	logger logging.Logger,
+	infra infrastructure.Infrastructure,
+	uc usecase.Delivery,
+) (patterns.Runnable, error) {
+	if err := conf.Validate(); err != nil {
+		return nil, err
+	}
 
-	subscriber  streaming.Subscriber
+	healthcheck, err := background.NewServer(healthcheckconfig.Default("delivery.scheduler", 5000))
+	if err != nil {
+		return nil, err
+	}
+
+	entrypoint := &scheduler{
+		conf:        conf,
+		logger:      logger.With("entrypoint", "scheduler"),
+		infra:       infra,
+		uc:          uc,
+		healthcheck: healthcheck,
+	}
+	return entrypoint, nil
+}
+
+type scheduler struct {
+	conf        *config.Config
+	logger      logging.Logger
+	infra       infrastructure.Infrastructure
+	uc          usecase.Delivery
 	healthcheck healthcheck.Server
+
+	subscriber streaming.Subscriber
 
 	mu     sync.Mutex
 	status int

@@ -6,7 +6,7 @@ import (
 	"github.com/kanthorlabs/common/clock"
 	"github.com/kanthorlabs/common/logging"
 	"github.com/kanthorlabs/kanthor/infrastructure"
-	"github.com/kanthorlabs/kanthor/services/sdk/config"
+	"github.com/kanthorlabs/kanthor/services/delivery/config"
 	"gorm.io/gorm"
 )
 

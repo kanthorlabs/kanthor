@@ -6,6 +6,7 @@ import (
 
 	"github.com/kanthorlabs/common/configuration"
 	"github.com/kanthorlabs/common/patterns"
+	deliveryconfig "github.com/kanthorlabs/kanthor/services/delivery/config"
 	"github.com/kanthorlabs/kanthor/services/ioc"
 	portalconfig "github.com/kanthorlabs/kanthor/services/portal/config"
 	sdkconfig "github.com/kanthorlabs/kanthor/services/sdk/config"
@@ -16,6 +17,7 @@ var (
 	SERVICES = []string{
 		portalconfig.ServiceName,
 		sdkconfig.ServiceName,
+		deliveryconfig.ServiceNameScheduler,
 	}
 )
 
@@ -26,6 +28,10 @@ func Service(provider configuration.Provider, name string) (patterns.Runnable, e
 
 	if name == sdkconfig.ServiceName {
 		return ioc.Sdk(provider)
+	}
+
+	if name == deliveryconfig.ServiceNameScheduler {
+		return ioc.Scheduler(provider)
 	}
 
 	return nil, fmt.Errorf("SERVER.RUN.UNKNOWN_SERVICE.ERROR: [%s]", name)

@@ -11,7 +11,7 @@ import (
 	"github.com/kanthorlabs/kanthor/internal/database/entities"
 )
 
-var SecretLength = 64
+var SecretLength = 32
 var ErrEndpointCreate = errors.New("SDK.ENDPOINT.CREATE.ERROR")
 
 func (uc *endpoint) Create(ctx context.Context, in *EndpointCreateIn) (*EndpointCreateOut, error) {
@@ -28,7 +28,7 @@ func (uc *endpoint) Create(ctx context.Context, in *EndpointCreateIn) (*Endpoint
 	doc.SetId()
 	doc.SetAuditFacttor(uc.watch.Now())
 
-	secret, err := encryption.Encrypt(utils.RandomString(SecretLength), uc.conf.Infrastructure.Secrets.Cipher[0])
+	secret, err := encryption.Encrypt(uc.conf.Infrastructure.Secrets.Cipher[0], utils.RandomString(SecretLength))
 	if err != nil {
 		uc.logger.Errorw(ErrEndpointCreate.Error(), "error", err.Error(), "in", utils.Stringify(in), "endpoint", utils.Stringify(doc))
 		return nil, ErrEndpointCreate

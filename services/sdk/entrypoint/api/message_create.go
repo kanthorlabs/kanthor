@@ -48,7 +48,7 @@ func UseMessageCreate(service *sdk) http.HandlerFunc {
 
 type MessageCreateReq struct {
 	Type string         `json:"tag" example:"testing.openapi"`
-	Body map[string]any `json:"uri"  swaggertype:"object,string" example:"say:hello,from:openapi"`
+	Body map[string]any `json:"uri" example:"say:hello,from:openapi" swaggertype:"object,string"`
 } // @name MessageCreateReq
 
 type MessageCreateRes struct {
