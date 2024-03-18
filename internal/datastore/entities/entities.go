@@ -10,7 +10,7 @@ var (
 	IdNsRes = "res"
 
 	TableMsg = project.Name("message")
-	TableReq = project.Name("requesst")
+	TableReq = project.Name("request")
 	TableRes = project.Name("response")
 )
 

@@ -10,6 +10,7 @@ import (
 	"github.com/kanthorlabs/kanthor/services/ioc"
 	portalconfig "github.com/kanthorlabs/kanthor/services/portal/config"
 	sdkconfig "github.com/kanthorlabs/kanthor/services/sdk/config"
+	storageconfig "github.com/kanthorlabs/kanthor/services/storage/config"
 )
 
 var (
@@ -18,6 +19,7 @@ var (
 		portalconfig.ServiceName,
 		sdkconfig.ServiceName,
 		deliveryconfig.ServiceNameScheduler,
+		storageconfig.ServiceName,
 	}
 )
 
@@ -32,6 +34,10 @@ func Service(provider configuration.Provider, name string) (patterns.Runnable, e
 
 	if name == deliveryconfig.ServiceNameScheduler {
 		return ioc.Scheduler(provider)
+	}
+
+	if name == storageconfig.ServiceName {
+		return ioc.Storage(provider)
 	}
 
 	return nil, fmt.Errorf("SERVER.RUN.UNKNOWN_SERVICE.ERROR: [%s]", name)

@@ -20,12 +20,12 @@ type Endpoint struct {
 	Uri    string
 }
 
-func (entity *Endpoint) SetId() {
-	entity.Id = idx.New(IdNsEp)
-}
-
 func (entity *Endpoint) TableName() string {
 	return TableEp
+}
+
+func (entity *Endpoint) SetId() {
+	entity.Id = idx.New(IdNsEp)
 }
 
 func (entity *Endpoint) Validate() error {

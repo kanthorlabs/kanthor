@@ -132,6 +132,10 @@ github.com/kanthorlabs/common v0.0.0-20240315041737-1f63c400d5fe h1:nqsfSVh1mXOD
 github.com/kanthorlabs/common v0.0.0-20240315041737-1f63c400d5fe/go.mod h1:eYgVwQSl9pxioCgQTXkbfSNe1SAAf4iZXOG0FOjUf9U=
 github.com/kanthorlabs/common v0.0.0-20240317031139-7e67108694ad h1:rQnHLUCpxSyRZOyzws6UAkT8HGhBN+7o/psLSTj2+Xk=
 github.com/kanthorlabs/common v0.0.0-20240317031139-7e67108694ad/go.mod h1:eYgVwQSl9pxioCgQTXkbfSNe1SAAf4iZXOG0FOjUf9U=
+github.com/kanthorlabs/common v0.0.0-20240317040942-ab789c3826a3 h1:rGXVgqtz7NyhYK438w+9YkuBkNEo99sm6gJzYU7qbmE=
+github.com/kanthorlabs/common v0.0.0-20240317040942-ab789c3826a3/go.mod h1:eYgVwQSl9pxioCgQTXkbfSNe1SAAf4iZXOG0FOjUf9U=
+github.com/kanthorlabs/common v0.0.0-20240318030303-f2f298b8ca15 h1:NV4+7u5AVC3MH4Q4T/fGfjS7w+5muAzq+eZ1uzjfdFk=
+github.com/kanthorlabs/common v0.0.0-20240318030303-f2f298b8ca15/go.mod h1:eYgVwQSl9pxioCgQTXkbfSNe1SAAf4iZXOG0FOjUf9U=
 github.com/klauspost/compress v1.17.6 h1:60eq2E/jlfwQXtvZEeBUYADs+BwKBWURIY+Gj2eRGjI=
 github.com/klauspost/compress v1.17.6/go.mod h1:/dCuZOvVtNoHsyb+cuJD3itjs3NbnF6KH9zAO4BDxPM=
 github.com/kr/pretty v0.3.1 h1:flRD4NNwYAUpkphVc1HcthR4KEIFJ65n8Mw5qdRn3LE=

@@ -43,7 +43,7 @@ func (uc *scheduler) Arrange(ctx context.Context, in *SchedulerArrangeIn) (*Sche
 			var scheduleerr error
 			schedulable := map[string]*stmentities.Event{}
 			for _, req := range reqs {
-				event, err := transformation.EventFromRequest(req, constants.SubjectRequestSchedule)
+				event, err := transformation.EventFromRequest(req, constants.RequestScheduleSubject)
 				if err != nil {
 					scheduleerr = errors.Join(scheduleerr, err)
 					uc.logger.Errorw(ErrSchedulerArrange.Error(), "error", err, "request", utils.Stringify(req))
@@ -71,7 +71,7 @@ func (uc *scheduler) Arrange(ctx context.Context, in *SchedulerArrangeIn) (*Sche
 	}
 	wg.Wait()
 
-	publisher, err := uc.infra.Streaming().Publisher(constants.PublisherRequest)
+	publisher, err := uc.infra.Streaming().Publisher(constants.RequestPublisher)
 	if err != nil {
 		uc.logger.Errorw(ErrSchedulerArrange.Error(), "error", err.Error())
 		return nil, ErrSchedulerArrange

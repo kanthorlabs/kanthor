@@ -6,7 +6,7 @@ require (
 	github.com/go-chi/chi/v5 v5.0.12
 	github.com/google/uuid v1.6.0
 	github.com/google/wire v0.6.0
-	github.com/kanthorlabs/common v0.0.0-20240317031139-7e67108694ad
+	github.com/kanthorlabs/common v0.0.0-20240318030303-f2f298b8ca15
 	github.com/nats-io/nats-server/v2 v2.10.11
 	github.com/samber/lo v1.39.0
 	github.com/sourcegraph/conc v0.3.0

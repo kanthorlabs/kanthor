@@ -21,6 +21,9 @@ import (
 	config3 "github.com/kanthorlabs/kanthor/services/sdk/config"
 	entrypoint3 "github.com/kanthorlabs/kanthor/services/sdk/entrypoint"
 	usecase3 "github.com/kanthorlabs/kanthor/services/sdk/usecase"
+	config4 "github.com/kanthorlabs/kanthor/services/storage/config"
+	entrypoint4 "github.com/kanthorlabs/kanthor/services/storage/entrypoint"
+	usecase4 "github.com/kanthorlabs/kanthor/services/storage/usecase"
 )
 
 // Injectors from delivery.go:
@@ -101,6 +104,34 @@ func Sdk(provider configuration.Provider) (patterns.Runnable, error) {
 		return nil, err
 	}
 	runnable, err := entrypoint3.NewApi(configConfig, logger, infrastructureInfrastructure, sdk)
+	if err != nil {
+		return nil, err
+	}
+	return runnable, nil
+}
+
+// Injectors from storage.go:
+
+func Storage(provider configuration.Provider) (patterns.Runnable, error) {
+	configConfig, err := config4.New(provider)
+	if err != nil {
+		return nil, err
+	}
+	logger, err := logging.New(provider)
+	if err != nil {
+		return nil, err
+	}
+	config5 := &configConfig.Infrastructure
+	infrastructureInfrastructure, err := infrastructure.New(config5, logger)
+	if err != nil {
+		return nil, err
+	}
+	clockClock := clock.New()
+	storage, err := usecase4.New(configConfig, logger, infrastructureInfrastructure, clockClock)
+	if err != nil {
+		return nil, err
+	}
+	runnable, err := entrypoint4.NewConsumer(configConfig, logger, infrastructureInfrastructure, storage)
 	if err != nil {
 		return nil, err
 	}

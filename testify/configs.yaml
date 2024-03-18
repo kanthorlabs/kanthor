@@ -40,7 +40,7 @@ infrastructure:
     publisher:
       rate_limit: 300
     subscriber:
-      timeout: 15000
+      timeout: 5000
       max_retry: 1
       concurrency: 300
   cache:
@@ -101,7 +101,7 @@ infrastructure:
 portal:
   gateway:
     addr: ":8180"
-    timeout: 10000
+    timeout: 3000
     cors:
       allowed_origins:
         - http://localhost:3000
@@ -115,7 +115,7 @@ portal:
 sdk:
   gateway:
     addr: ":8280"
-    timeout: 10000
+    timeout: 3000
     cors:
       allowed_origins:
         - http://localhost:3000
@@ -128,4 +128,15 @@ sdk:
 
 scheduler:
   request:
-    timeout: 60000
+    timeout: 30000
+
+storage:
+  message:
+    timeout: 5000
+    batch_size: 100
+  request:
+    timeout: 5000
+    batch_size: 100
+  response:
+    timeout: 5000
+    batch_size: 100

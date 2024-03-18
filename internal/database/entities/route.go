@@ -30,12 +30,12 @@ type Route struct {
 	ConditionExpression string
 }
 
-func (entity *Route) SetId() {
-	entity.Id = idx.New(IdNsRt)
-}
-
 func (entity *Route) TableName() string {
 	return TableRt
+}
+
+func (entity *Route) SetId() {
+	entity.Id = idx.New(IdNsRt)
 }
 
 func (entity *Route) Validate() error {

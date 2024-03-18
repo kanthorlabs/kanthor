@@ -1,7 +1,6 @@
 package entities
 
 import (
-	"net/http"
 	"time"
 
 	"github.com/kanthorlabs/common/idx"
@@ -9,49 +8,51 @@ import (
 	"github.com/kanthorlabs/common/validator"
 )
 
-type Request struct {
+type Response struct {
 	Timeseries
 
 	// message properties
-	MsgId    string
-	Tier     string
-	AppId    string
-	Type     string
-	Body     string
+	MsgId string
+	Tier  string
+	AppId string
+	Type  string
+
+	// request properties
+	ReqId    string
+	EpId     string
+	Headers  *safe.Metadata
 	Metadata *safe.Metadata
 
-	// endpoint properties
-	EpId string
-	// HTTP: POST/PUT
-	Method  string
-	Uri     string
-	Headers *safe.Metadata
+	Status int
+	Uri    string
+	Body   string
+	Error  string
 }
 
-func (entity *Request) TableName() string {
-	return TableReq
+func (entity *Response) TableName() string {
+	return TableRes
 }
 
-func (entity *Request) SetId() {
-	entity.Id = idx.New(IdNsReq)
+func (entity *Response) SetId() {
+	entity.Id = idx.New(IdNsRes)
 }
 
-func (entity *Request) SetTimeseries(now time.Time) {
+func (entity *Response) SetTimeseries(now time.Time) {
 	if entity.CreatedAt == 0 {
 		entity.CreatedAt = now.UnixMilli()
 	}
 }
 
-func (entity *Request) Validate() error {
+func (entity *Response) Validate() error {
 	return validator.Validate(
-		validator.StringStartsWith("id", entity.Id, IdNsReq),
+		validator.StringStartsWith("id", entity.Id, IdNsRes),
 		validator.StringStartsWith("msg_id", entity.MsgId, IdNsMsg),
 		validator.StringRequired("tier", entity.Tier),
 		validator.StringRequired("app_id", entity.AppId),
 		validator.StringAlphaNumericUnderscoreDot("type", entity.Type),
-		validator.StringRequired("body", entity.Body),
+		validator.StringStartsWith("req_id", entity.ReqId, IdNsReq),
 		validator.StringRequired("ep_id", entity.EpId),
-		validator.StringOneOf("method", entity.Method, []string{http.MethodPost, http.MethodPut}),
 		validator.StringUri("uri", entity.Uri),
+		validator.StringRequired("body", entity.Body),
 	)
 }

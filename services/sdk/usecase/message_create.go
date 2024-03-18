@@ -43,13 +43,13 @@ func (uc *message) Create(ctx context.Context, in *MessageCreateIn) (*MessageCre
 	msg.SetTimeseries(uc.watch.Now())
 	msg.Metadata.Set(constants.MetadataProjectVersion, project.GetVersion())
 
-	event, err := transformation.EventFromMessage(msg, constants.SubjectMessageCreate)
+	event, err := transformation.EventFromMessage(msg, constants.MessageCreateSubject)
 	if err != nil {
 		uc.logger.Errorw(ErrMessageCreate.Error(), "error", err.Error(), "msg", utils.Stringify(msg))
 		return nil, ErrMessageCreate
 	}
 
-	publisher, err := uc.infra.Streaming().Publisher(constants.PublisherMessage)
+	publisher, err := uc.infra.Streaming().Publisher(constants.MessagePublisher)
 	if err != nil {
 		uc.logger.Errorw(ErrMessageCreate.Error(), "error", err.Error(), "msg", utils.Stringify(msg))
 		return nil, ErrMessageCreate

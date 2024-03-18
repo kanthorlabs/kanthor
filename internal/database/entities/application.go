@@ -14,12 +14,12 @@ type Application struct {
 	Name string
 }
 
-func (entity *Application) SetId() {
-	entity.Id = idx.New(IdNsApp)
-}
-
 func (entity *Application) TableName() string {
 	return TableApp
+}
+
+func (entity *Application) SetId() {
+	entity.Id = idx.New(IdNsApp)
 }
 
 func (entity *Application) Validate() error {

@@ -5,20 +5,19 @@ import (
 
 	"github.com/kanthorlabs/common/project"
 	stmentities "github.com/kanthorlabs/common/streaming/entities"
-
 	"github.com/kanthorlabs/kanthor/internal/constants"
 	dsentities "github.com/kanthorlabs/kanthor/internal/datastore/entities"
 )
 
-func EventFromMessage(msg *dsentities.Message, subject string) (*stmentities.Event, error) {
-	data, err := json.Marshal(msg)
+func EventFromResponse(res *dsentities.Response, subject string) (*stmentities.Event, error) {
+	data, err := json.Marshal(res)
 	if err != nil {
 		return nil, err
 	}
 
 	event := &stmentities.Event{
 		Subject: project.Subject(subject),
-		Id:      msg.Id,
+		Id:      res.Id,
 		Data:    data,
 		Metadata: map[string]string{
 			constants.MetadataProjectVersion: project.GetVersion(),
@@ -28,15 +27,15 @@ func EventFromMessage(msg *dsentities.Message, subject string) (*stmentities.Eve
 	return event, nil
 }
 
-func EventToMessage(event *stmentities.Event) (*dsentities.Message, error) {
-	msg := &dsentities.Message{}
-	if err := json.Unmarshal(event.Data, msg); err != nil {
+func EventToResponse(event *stmentities.Event) (*dsentities.Response, error) {
+	res := &dsentities.Response{}
+	if err := json.Unmarshal(event.Data, res); err != nil {
 		return nil, err
 	}
 
-	if err := msg.Validate(); err != nil {
+	if err := res.Validate(); err != nil {
 		return nil, err
 	}
 
-	return msg, nil
+	return res, nil
 }

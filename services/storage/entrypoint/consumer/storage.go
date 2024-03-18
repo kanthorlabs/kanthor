@@ -1,4 +1,4 @@
-package scheduler
+package consumer
 
 import (
 	"context"
@@ -14,28 +14,28 @@ import (
 	"github.com/kanthorlabs/common/streaming"
 	"github.com/kanthorlabs/kanthor/infrastructure"
 	"github.com/kanthorlabs/kanthor/internal/constants"
-	"github.com/kanthorlabs/kanthor/services/delivery/config"
-	"github.com/kanthorlabs/kanthor/services/delivery/usecase"
+	"github.com/kanthorlabs/kanthor/services/storage/config"
+	"github.com/kanthorlabs/kanthor/services/storage/usecase"
 )
 
 func New(
 	conf *config.Config,
 	logger logging.Logger,
 	infra infrastructure.Infrastructure,
-	uc usecase.Delivery,
+	uc usecase.Storage,
 ) (patterns.Runnable, error) {
 	if err := conf.Validate(); err != nil {
 		return nil, err
 	}
 
-	healthcheck, err := background.NewServer(healthcheckconfig.Default("delivery.scheduler", 5000))
+	healthcheck, err := background.NewServer(healthcheckconfig.Default("storage.scheduler", 5000))
 	if err != nil {
 		return nil, err
 	}
 
 	entrypoint := &scheduler{
 		conf:        conf,
-		logger:      logger.With("entrypoint", "scheduler"),
+		logger:      logger.With("entrypoint", "consumer"),
 		infra:       infra,
 		uc:          uc,
 		healthcheck: healthcheck,
@@ -47,7 +47,7 @@ type scheduler struct {
 	conf        *config.Config
 	logger      logging.Logger
 	infra       infrastructure.Infrastructure
-	uc          usecase.Delivery
+	uc          usecase.Storage
 	healthcheck healthcheck.Server
 
 	subscriber streaming.Subscriber
@@ -68,7 +68,7 @@ func (service *scheduler) Start(ctx context.Context) error {
 		return err
 	}
 
-	subscriber, err := service.infra.Streaming().Subscriber(constants.MessageSubscriber("delivery_scheduler"))
+	subscriber, err := service.infra.Streaming().Subscriber(constants.Subscriber("storage"))
 	if err != nil {
 		return err
 	}
@@ -106,7 +106,7 @@ func (service *scheduler) Stop(ctx context.Context) error {
 }
 
 func (service *scheduler) Run(ctx context.Context) error {
-	topic := project.Subject(constants.MessageTopic)
+	topic := project.Subject(service.conf.Storage.Topic)
 
 	if err := service.subscriber.Sub(ctx, topic, handler(service)); err != nil {
 		return err

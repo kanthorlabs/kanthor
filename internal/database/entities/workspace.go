@@ -15,12 +15,12 @@ type Workspace struct {
 	Tier    string
 }
 
-func (entity *Workspace) SetId() {
-	entity.Id = idx.New(IdNsWs)
-}
-
 func (entity *Workspace) TableName() string {
 	return TableWs
+}
+
+func (entity *Workspace) SetId() {
+	entity.Id = idx.New(IdNsWs)
 }
 
 func (entity *Workspace) Validate() error {
