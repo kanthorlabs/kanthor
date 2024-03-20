@@ -1,0 +1,117 @@
+version: "3.8"
+
+services:
+  startup:
+    image: kanthorlabs/kanthor:localdev
+    build: .
+    depends_on:
+      streaming:
+        condition: service_started
+      sqlx:
+        condition: service_healthy
+      cache:
+        condition: service_healthy
+    container_name: kanthor-services-startup
+    restart: on-failure
+    networks:
+      - kanthor
+    volumes:
+      - ./docker/.kanthor:/root/.kanthor
+      - ./data:/app/data
+    command:
+      - sleep
+      - "86400"
+    healthcheck:
+      test: ["CMD", "kanthor", "-h"]
+      interval: 1s
+      timeout: 4s
+      retries: 16
+
+  portal:
+    image: kanthorlabs/kanthor:localdev
+    depends_on:
+      startup:
+        condition: service_healthy
+    container_name: kanthor-services-portal
+    restart: unless-stopped
+    networks:
+      - kanthor
+    ports:
+      - "8180:8180"
+    volumes:
+      - ./docker/.kanthor:/root/.kanthor
+    command:
+      - kanthor
+      - run
+      - portal
+
+  sdk:
+    image: kanthorlabs/kanthor:localdev
+    depends_on:
+      startup:
+        condition: service_healthy
+    container_name: kanthor-services-sdk
+    restart: unless-stopped
+    networks:
+      - kanthor
+    ports:
+      - "8280:8280"
+    volumes:
+      - ./docker/.kanthor:/root/.kanthor
+    command:
+      - kanthor
+      - run
+      - sdk
+
+  scheduler:
+    image: kanthorlabs/kanthor:localdev
+    depends_on:
+      startup:
+        condition: service_healthy
+    container_name: kanthor-services-scheduler
+    restart: unless-stopped
+    networks:
+      - kanthor 
+    volumes:
+      - ./docker/.kanthor:/root/.kanthor
+    command:
+      - kanthor
+      - run
+      - scheduler
+
+  dispatcher:
+    image: kanthorlabs/kanthor:localdev
+    depends_on:
+      startup:
+        condition: service_healthy
+    container_name: kanthor-services-dispatcher
+    restart: unless-stopped
+    networks:
+      - kanthor 
+    volumes:
+      - ./docker/.kanthor:/root/.kanthor
+    command:
+      - kanthor
+      - run
+      - dispatcher
+
+  storage:
+    image: kanthorlabs/kanthor:localdev
+    depends_on:
+      startup:
+        condition: service_healthy
+    container_name: kanthor-services-storage
+    restart: unless-stopped
+    networks:
+      - kanthor 
+    volumes:
+      - ./docker/.kanthor:/root/.kanthor
+    command:
+      - kanthor
+      - run
+      - storage
+
+networks:
+  kanthor:
+    name: kanthor
+    external: true
