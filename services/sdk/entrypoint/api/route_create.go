@@ -55,7 +55,7 @@ type RouteCreateReq struct {
 	Name                string `json:"name" example:"passthrough"`
 	Priority            int32  `json:"priority" example:"1"`
 	Exclusionary        bool   `json:"exclusionary" example:"false"`
-	ConditionSource     string `json:"condition_source" example:"category"`
+	ConditionSource     string `json:"condition_source" example:"type"`
 	ConditionExpression string `json:"condition_expression" example:"prefix::testing."`
 } // @name RouteCreateReq
 

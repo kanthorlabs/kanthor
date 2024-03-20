@@ -26,7 +26,7 @@ type Route struct {
 	EpId                string `json:"ep_id" example:"ep_2dZRCcnumVTMI9eHdmep89IpOgY"`
 	Priority            int32  `json:"priority" example:"1"`
 	Exclusionary        bool   `json:"exclusionary" example:"false"`
-	ConditionSource     string `json:"condition_source" example:"category"`
+	ConditionSource     string `json:"condition_source" example:"type"`
 	ConditionExpression string `json:"condition_expression" example:"any::"`
 } // @name Route
 

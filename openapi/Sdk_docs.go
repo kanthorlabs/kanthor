@@ -1297,23 +1297,23 @@ const docTemplateSdk = `{
         "MessageCreateReq": {
             "type": "object",
             "required": [
-                "tag",
-                "uri"
+                "object",
+                "type"
             ],
             "properties": {
-                "tag": {
-                    "type": "string",
-                    "example": "testing.openapi"
-                },
-                "uri": {
+                "object": {
                     "type": "object",
                     "additionalProperties": {
                         "type": "string"
                     },
                     "example": {
-                        "from": "openapi",
+                        "from_client": "openapi",
                         "say": "hello"
                     }
+                },
+                "type": {
+                    "type": "string",
+                    "example": "testing.openapi"
                 }
             }
         },
@@ -1354,7 +1354,7 @@ const docTemplateSdk = `{
                 },
                 "condition_source": {
                     "type": "string",
-                    "example": "category"
+                    "example": "type"
                 },
                 "created_at": {
                     "type": "integer",
@@ -1402,7 +1402,7 @@ const docTemplateSdk = `{
                 },
                 "condition_source": {
                     "type": "string",
-                    "example": "category"
+                    "example": "type"
                 },
                 "exclusionary": {
                     "type": "boolean",
@@ -1438,7 +1438,7 @@ const docTemplateSdk = `{
                 },
                 "condition_source": {
                     "type": "string",
-                    "example": "category"
+                    "example": "type"
                 },
                 "created_at": {
                     "type": "integer",
@@ -1490,7 +1490,7 @@ const docTemplateSdk = `{
                 },
                 "condition_source": {
                     "type": "string",
-                    "example": "category"
+                    "example": "type"
                 },
                 "created_at": {
                     "type": "integer",
@@ -1542,7 +1542,7 @@ const docTemplateSdk = `{
                 },
                 "condition_source": {
                     "type": "string",
-                    "example": "category"
+                    "example": "type"
                 },
                 "created_at": {
                     "type": "integer",
@@ -1612,7 +1612,7 @@ const docTemplateSdk = `{
                 },
                 "condition_source": {
                     "type": "string",
-                    "example": "category"
+                    "example": "type"
                 },
                 "created_at": {
                     "type": "integer",
@@ -1660,7 +1660,7 @@ const docTemplateSdk = `{
                 },
                 "condition_source": {
                     "type": "string",
-                    "example": "category"
+                    "example": "type"
                 },
                 "exclusionary": {
                     "type": "boolean",
@@ -1668,7 +1668,7 @@ const docTemplateSdk = `{
                 },
                 "name": {
                     "type": "string",
-                    "example": "only test category route"
+                    "example": "only test type route"
                 },
                 "priority": {
                     "type": "integer",

@@ -28,7 +28,7 @@ func UseMessageCreate(service *sdk) http.HandlerFunc {
 		in := &usecase.MessageCreateIn{
 			AppId: r.URL.Query().Get("app_id"),
 			Type:  req.Type,
-			Body:  utils.Stringify(req.Body),
+			Body:  utils.Stringify(req),
 		}
 		if err := in.Validate(); err != nil {
 			httpxwriter.ErrBadRequest(w, httpxwriter.Error(err))
@@ -47,8 +47,8 @@ func UseMessageCreate(service *sdk) http.HandlerFunc {
 }
 
 type MessageCreateReq struct {
-	Type string         `json:"tag" example:"testing.openapi"`
-	Body map[string]any `json:"uri" example:"say:hello,from:openapi" swaggertype:"object,string"`
+	Type   string         `json:"type" example:"testing.openapi"`
+	Object map[string]any `json:"object" example:"say:hello,from_client:openapi" swaggertype:"object,string"`
 } // @name MessageCreateReq
 
 type MessageCreateRes struct {

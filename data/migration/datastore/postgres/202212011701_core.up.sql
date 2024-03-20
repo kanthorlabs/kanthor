@@ -7,8 +7,8 @@ CREATE TABLE IF NOT EXISTS kanthor_message (
   created_at BIGINT NOT NULL DEFAULT 0,
   tier VARCHAR(64) NOT NULL,
   type VARCHAR(256) NOT NULL,
-  body TEXT NOT NULL,
-  metadata TEXT NOT NULL
+  metadata TEXT NOT NULL,
+  body TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS kanthor_request (

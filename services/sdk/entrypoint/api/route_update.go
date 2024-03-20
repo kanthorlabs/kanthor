@@ -55,10 +55,10 @@ func UseRouteUpdate(service *sdk) http.HandlerFunc {
 }
 
 type RouteUpdateReq struct {
-	Name                string `json:"name" example:"only test category route"`
+	Name                string `json:"name" example:"only test type route"`
 	Priority            int32  `json:"priority" example:"9"`
 	Exclusionary        bool   `json:"exclusionary" example:"false"`
-	ConditionSource     string `json:"condition_source" example:"category"`
+	ConditionSource     string `json:"condition_source" example:"type"`
 	ConditionExpression string `json:"condition_expression" example:"prefix::testing."`
 } // @name WorkspaceUpdateReq
 

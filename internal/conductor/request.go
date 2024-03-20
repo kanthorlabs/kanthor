@@ -9,6 +9,7 @@ import (
 	"github.com/kanthorlabs/common/safe"
 	dbentities "github.com/kanthorlabs/kanthor/internal/database/entities"
 	dsentities "github.com/kanthorlabs/kanthor/internal/datastore/entities"
+	"github.com/valyala/fastjson"
 )
 
 var MetaRouteId = "kanthor.rt.id"
@@ -33,6 +34,12 @@ func Request(
 		Method:  ep.Method,
 		Uri:     ep.Uri,
 		Headers: &safe.Metadata{},
+	}
+
+	if err := fastjson.Validate(req.Body); err == nil {
+		req.Headers.Set("Content-Type", "application/json")
+	} else {
+		req.Headers.Set("Content-Type", "text/plain")
 	}
 
 	req.SetId()

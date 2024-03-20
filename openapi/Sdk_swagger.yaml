@@ -374,19 +374,19 @@ definitions:
     type: object
   MessageCreateReq:
     properties:
-      tag:
-        example: testing.openapi
-        type: string
-      uri:
+      object:
         additionalProperties:
           type: string
         example:
-          from: openapi
+          from_client: openapi
           say: hello
         type: object
+      type:
+        example: testing.openapi
+        type: string
     required:
-    - tag
-    - uri
+    - object
+    - type
     type: object
   MessageCreateRes:
     properties:
@@ -406,7 +406,7 @@ definitions:
         example: 'any::'
         type: string
       condition_source:
-        example: category
+        example: type
         type: string
       created_at:
         example: 1728925200000
@@ -446,7 +446,7 @@ definitions:
         example: prefix::testing.
         type: string
       condition_source:
-        example: category
+        example: type
         type: string
       exclusionary:
         example: false
@@ -470,7 +470,7 @@ definitions:
         example: 'any::'
         type: string
       condition_source:
-        example: category
+        example: type
         type: string
       created_at:
         example: 1728925200000
@@ -510,7 +510,7 @@ definitions:
         example: 'any::'
         type: string
       condition_source:
-        example: category
+        example: type
         type: string
       created_at:
         example: 1728925200000
@@ -550,7 +550,7 @@ definitions:
         example: 'any::'
         type: string
       condition_source:
-        example: category
+        example: type
         type: string
       created_at:
         example: 1728925200000
@@ -602,7 +602,7 @@ definitions:
         example: 'any::'
         type: string
       condition_source:
-        example: category
+        example: type
         type: string
       created_at:
         example: 1728925200000
@@ -642,13 +642,13 @@ definitions:
         example: prefix::testing.
         type: string
       condition_source:
-        example: category
+        example: type
         type: string
       exclusionary:
         example: false
         type: boolean
       name:
-        example: only test category route
+        example: only test type route
         type: string
       priority:
         example: 9

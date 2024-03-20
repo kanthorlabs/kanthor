@@ -6,7 +6,7 @@ import (
 
 type Config struct {
 	Timeout int64             `json:"timeout" yaml:"timeout" mapstructure:"timeout"`
-	Headers map[string]string `json:"headers" yaml:"headers" mapstructure:"headers"`
+	Headers map[string]string `json:"header" yaml:"header" mapstructure:"header"`
 	Retry   Retry             `json:"retry" yaml:"retry" mapstructure:"retry"`
 }
 

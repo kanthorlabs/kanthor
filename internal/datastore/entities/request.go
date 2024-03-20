@@ -13,19 +13,20 @@ type Request struct {
 	Timeseries
 
 	// message properties
-	MsgId    string
-	Tier     string
-	AppId    string
-	Type     string
-	Body     string
-	Metadata *safe.Metadata
+	MsgId string
+	Tier  string
+	AppId string
+	Type  string
+	Body  string
 
 	// endpoint properties
 	EpId string
 	// HTTP: POST/PUT
-	Method  string
-	Uri     string
-	Headers *safe.Metadata
+	Method string
+	Uri    string
+
+	Headers  *safe.Metadata
+	Metadata *safe.Metadata
 }
 
 func (entity *Request) TableName() string {
