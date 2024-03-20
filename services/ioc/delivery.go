@@ -27,3 +27,16 @@ func Scheduler(provider configuration.Provider) (patterns.Runnable, error) {
 	)
 	return nil, nil
 }
+
+func Dispatcher(provider configuration.Provider) (patterns.Runnable, error) {
+	wire.Build(
+		config.New,
+		logging.New,
+		clock.New,
+		wire.FieldsOf(new(*config.Config), "Infrastructure"),
+		infrastructure.New,
+		usecase.New,
+		entrypoint.NewDispatcher,
+	)
+	return nil, nil
+}

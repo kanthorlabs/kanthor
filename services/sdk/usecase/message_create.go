@@ -57,7 +57,7 @@ func (uc *message) Create(ctx context.Context, in *MessageCreateIn) (*MessageCre
 
 	errs := publisher.Pub(ctx, map[string]*stmentities.Event{event.Id: event})
 	if len(errs) > 0 {
-		uc.logger.Errorw(ErrMessageCreate.Error(), "error", errs[event.Id], "event", utils.Stringify(event))
+		uc.logger.Errorw(ErrMessageCreate.Error(), "error", errs[event.Id], "event", event.String())
 		return nil, ErrMessageCreate
 	}
 

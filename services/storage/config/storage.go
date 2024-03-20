@@ -16,7 +16,7 @@ type Storage struct {
 
 func (conf *Storage) Validate() error {
 	err := validator.Validate(
-		validator.StringStartsWithOneOf("STORAGE.CONFIG.MESSAGE.TOPIC", conf.Topic, []string{
+		validator.StringStartsWithOneOf("STORAGE.CONFIG.TOPIC", conf.Topic, []string{
 			constants.TopicCore,
 			constants.MessageTopic,
 			constants.RequestTopic,

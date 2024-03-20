@@ -3,7 +3,10 @@ package safe
 import (
 	"database/sql/driver"
 	"encoding/json"
+	"fmt"
+	"net/http"
 	"reflect"
+	"strings"
 	"sync"
 
 	"github.com/mitchellh/mapstructure"
@@ -102,6 +105,30 @@ func (meta *Metadata) MarshalYAML() (interface{}, error) {
 
 func (meta *Metadata) UnmarshalYAML(value *yaml.Node) error {
 	return value.Decode(&meta.kv)
+}
+
+func (meta *Metadata) FromHttpHeader(headers http.Header) {
+	for k, v := range headers {
+		meta.Set(strings.ToLower(k), v[0])
+	}
+}
+
+func (meta *Metadata) ToHttpHeader() http.Header {
+	headers := http.Header{}
+	for k, v := range meta.kv {
+		switch value := v.(type) {
+		case string:
+			headers.Set(k, value)
+		case int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64:
+			headers.Set(k, fmt.Sprintf("%d", value))
+		case float32, float64:
+			headers.Set(k, fmt.Sprintf("%f", value))
+		case bool:
+			headers.Set(k, fmt.Sprintf("%t", value))
+			// ignore other cases
+		}
+	}
+	return headers
 }
 
 func MetadataMapstructureHook() mapstructure.DecodeHookFuncType {

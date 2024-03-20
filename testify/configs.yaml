@@ -140,3 +140,11 @@ storage:
   response:
     timeout: 5000
     batch_size: 100
+
+dispatcher:
+  topic: core.request
+  sender:
+    timeout: 5000
+    retry:
+      count: 1
+      wait_time: 1000 

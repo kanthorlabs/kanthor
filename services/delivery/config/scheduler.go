@@ -22,6 +22,6 @@ type SchedulerRequest struct {
 
 func (conf *SchedulerRequest) Validate() error {
 	return validator.Validate(
-		validator.NumberGreaterThanOrEqual("SCHEDULER.CONFIG.REQUEST.SCHEDULE.TIMEOUT", conf.Timeout, 1000),
+		validator.NumberGreaterThanOrEqual("SCHEDULER.CONFIG.REQUEST.TIMEOUT", conf.Timeout, 1000),
 	)
 }

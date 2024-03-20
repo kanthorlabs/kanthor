@@ -41,8 +41,7 @@ CREATE TABLE IF NOT EXISTS kanthor_response (
   status INT NOT NULL,
   uri VARCHAR(2048) NOT NULL,
   headers TEXT NOT NULL,
-  body TEXT NOT NULL,
-  error TEXT NOT NULL
+  body TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS kanthor_attempt (

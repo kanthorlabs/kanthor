@@ -26,7 +26,6 @@ type Response struct {
 	Status int
 	Uri    string
 	Body   string
-	Error  string
 }
 
 func (entity *Response) TableName() string {

@@ -54,6 +54,32 @@ func Scheduler(provider configuration.Provider) (patterns.Runnable, error) {
 	return runnable, nil
 }
 
+func Dispatcher(provider configuration.Provider) (patterns.Runnable, error) {
+	configConfig, err := config.New(provider)
+	if err != nil {
+		return nil, err
+	}
+	logger, err := logging.New(provider)
+	if err != nil {
+		return nil, err
+	}
+	config2 := &configConfig.Infrastructure
+	infrastructureInfrastructure, err := infrastructure.New(config2, logger)
+	if err != nil {
+		return nil, err
+	}
+	clockClock := clock.New()
+	delivery, err := usecase.New(configConfig, logger, infrastructureInfrastructure, clockClock)
+	if err != nil {
+		return nil, err
+	}
+	runnable, err := entrypoint.NewDispatcher(configConfig, logger, infrastructureInfrastructure, delivery)
+	if err != nil {
+		return nil, err
+	}
+	return runnable, nil
+}
+
 // Injectors from portal.go:
 
 func Portal(provider configuration.Provider) (patterns.Runnable, error) {

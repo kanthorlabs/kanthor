@@ -9,6 +9,7 @@ import (
 	"github.com/kanthorlabs/common/safe"
 	stmentities "github.com/kanthorlabs/common/streaming/entities"
 	"github.com/kanthorlabs/common/utils"
+	"github.com/kanthorlabs/common/validator"
 	"github.com/kanthorlabs/kanthor/internal/conductor"
 	"github.com/kanthorlabs/kanthor/internal/constants"
 	dbentities "github.com/kanthorlabs/kanthor/internal/database/entities"
@@ -81,7 +82,7 @@ func (uc *scheduler) Arrange(ctx context.Context, in *SchedulerArrangeIn) (*Sche
 	if len(errs) > 0 {
 		for epId, err := range errs {
 			event, _ := events.Get(epId)
-			uc.logger.Errorw(ErrSchedulerArrange.Error(), "error", utils.Stringify(err), "event", utils.Stringify(event))
+			uc.logger.Errorw(ErrSchedulerArrange.Error(), "error", utils.Stringify(err), "event", event.String())
 
 			// follow back of the direction message -> refId -> epId -> event
 			// we report back to the streaming that we need to retry the message because one of request event got error
@@ -184,6 +185,10 @@ func (uc *scheduler) getRoutesOfEndpoint(ctx context.Context, epIds []string) (m
 
 type SchedulerArrangeIn struct {
 	Messages map[string]*dsentities.Message
+}
+
+func (in *SchedulerArrangeIn) Validate() error {
+	return validator.Validate(validator.MapRequired("messages", in.Messages))
 }
 
 type SchedulerArrangeOut struct {

@@ -6,7 +6,7 @@ require (
 	github.com/go-chi/chi/v5 v5.0.12
 	github.com/google/uuid v1.6.0
 	github.com/google/wire v0.6.0
-	github.com/kanthorlabs/common v0.0.0-20240318030303-f2f298b8ca15
+	github.com/kanthorlabs/common v0.0.0-20240318071612-ccb9bbfb2a71
 	github.com/nats-io/nats-server/v2 v2.10.11
 	github.com/samber/lo v1.39.0
 	github.com/sourcegraph/conc v0.3.0
@@ -35,6 +35,7 @@ require (
 	github.com/go-openapi/spec v0.20.15 // indirect
 	github.com/go-openapi/swag v0.22.10 // indirect
 	github.com/go-redsync/redsync/v4 v4.12.1 // indirect
+	github.com/go-resty/resty/v2 v2.11.0 // indirect
 	github.com/gobwas/glob v0.2.3 // indirect
 	github.com/gorilla/mux v1.8.1 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
@@ -93,6 +94,7 @@ require (
 	go.uber.org/zap v1.26.0 // indirect
 	golang.org/x/crypto v0.21.0 // indirect
 	golang.org/x/exp v0.0.0-20230905200255-921286631fa9 // indirect
+	golang.org/x/net v0.22.0 // indirect
 	golang.org/x/sync v0.6.0 // indirect
 	golang.org/x/sys v0.18.0 // indirect
 	golang.org/x/text v0.14.0 // indirect

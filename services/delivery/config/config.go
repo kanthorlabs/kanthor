@@ -25,6 +25,7 @@ type Config struct {
 	Logger         logging.Config        `json:"logger" yaml:"logger" mapstructure:"logger"`
 	Infrastructure infrastructure.Config `json:"infrastructure" yaml:"infrastructure" mapstructure:"infrastructure"`
 	Scheduler      Scheduler             `json:"scheduler" yaml:"scheduler" mapstructure:"scheduler"`
+	Dispatcher     Dispatcher            `json:"dispatcher" yaml:"dispatcher" mapstructure:"dispatcher"`
 }
 
 func (c *Config) Validate() error {
@@ -35,6 +36,9 @@ func (c *Config) Validate() error {
 		return err
 	}
 	if err := c.Scheduler.Validate(); err != nil {
+		return err
+	}
+	if err := c.Dispatcher.Validate(); err != nil {
 		return err
 	}
 

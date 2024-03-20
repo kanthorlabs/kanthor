@@ -19,6 +19,7 @@ var (
 		portalconfig.ServiceName,
 		sdkconfig.ServiceName,
 		deliveryconfig.ServiceNameScheduler,
+		deliveryconfig.ServiceNameDispatcher,
 		storageconfig.ServiceName,
 	}
 )
@@ -34,6 +35,10 @@ func Service(provider configuration.Provider, name string) (patterns.Runnable, e
 
 	if name == deliveryconfig.ServiceNameScheduler {
 		return ioc.Scheduler(provider)
+	}
+
+	if name == deliveryconfig.ServiceNameDispatcher {
+		return ioc.Dispatcher(provider)
 	}
 
 	if name == storageconfig.ServiceName {
