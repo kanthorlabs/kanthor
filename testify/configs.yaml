@@ -106,6 +106,7 @@ portal:
       allowed_origins:
         - http://localhost:3000
         - http://localhost:8180
+        - https://console.kanthorlabs.com
       allowed_methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
       allowed_headers: ["*"]
       exposed_headers: ["*"]
@@ -120,6 +121,7 @@ sdk:
       allowed_origins:
         - http://localhost:3000
         - http://localhost:8280
+        - https://console.kanthorlabs.com
       allowed_methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
       allowed_headers: ["*"]
       exposed_headers: ["*"]
@@ -129,6 +131,14 @@ sdk:
 scheduler:
   request:
     timeout: 30000
+
+dispatcher:
+  topic: core.request
+  sender:
+    timeout: 5000
+    retry:
+      count: 1
+      wait_time: 1000 
 
 storage:
   message:
@@ -140,11 +150,3 @@ storage:
   response:
     timeout: 5000
     batch_size: 100
-
-dispatcher:
-  topic: core.request
-  sender:
-    timeout: 5000
-    retry:
-      count: 1
-      wait_time: 1000 
