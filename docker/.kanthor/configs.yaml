@@ -2,7 +2,7 @@ logger:
   pretty: true
   level: info
   with:
-    env: localhost
+    environment: localhost
 
 infrastructure:
   secrets:
