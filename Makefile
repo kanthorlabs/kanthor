@@ -6,17 +6,21 @@ ioc:
 swagger:
 	./scripts/gen_swagger.sh
 
-db-up:
-	migrate -source file://data/migration/database/postgres -database "postgres://postgres:changemenow@localhost:5432/postgres?sslmode=disable&x-migrations-table=kanthor_db_migration" up 1
+up-db:
+	go run cmd/data/main.go migrate up -s file://data/migration/database/postgres -d "postgres://postgres:changemenow@localhost:5432/postgres?sslmode=disable&x-migrations-table=kanthor_db_migration"
 
-db-down:
-	migrate -source file://data/migration/database/postgres -database "postgres://postgres:changemenow@localhost:5432/postgres?sslmode=disable&x-migrations-table=kanthor_db_migration" down 1
+up-ds:
+	go run cmd/data/main.go migrate up -s file://data/migration/datastore/postgres -d "postgres://postgres:changemenow@localhost:5432/postgres?sslmode=disable&x-migrations-table=kanthor_ds_migration"
 
-ds-up:
-	migrate -source file://data/migration/datastore/postgres -database "postgres://postgres:changemenow@localhost:5432/postgres?sslmode=disable&x-migrations-table=kanthor_ds_migration" up 1
+up: up-db up-ds
 
-ds-down:
-	migrate -source file://data/migration/datastore/postgres -database "postgres://postgres:changemenow@localhost:5432/postgres?sslmode=disable&x-migrations-table=kanthor_ds_migration" down 1
+down-db:
+	go run cmd/data/main.go migrate down -s file://data/migration/database/postgres -d "postgres://postgres:changemenow@localhost:5432/postgres?sslmode=disable&x-migrations-table=kanthor_db_migration"
+
+down-ds:
+	go run cmd/data/main.go migrate down -s file://data/migration/datastore/postgres -d "postgres://postgres:changemenow@localhost:5432/postgres?sslmode=disable&x-migrations-table=kanthor_ds_migration"
+
+down: down-db down-ds
 
 gk-encode:
 	cat data/gatekeeper/definitions.json | jq -c . | base64 -w 0
