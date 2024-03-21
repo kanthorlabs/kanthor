@@ -6,6 +6,7 @@ import (
 
 	"github.com/kanthorlabs/common/configuration"
 	"github.com/kanthorlabs/common/patterns"
+	"github.com/kanthorlabs/kanthor/cmd/base"
 	deliveryconfig "github.com/kanthorlabs/kanthor/services/delivery/config"
 	"github.com/kanthorlabs/kanthor/services/ioc"
 	portalconfig "github.com/kanthorlabs/kanthor/services/portal/config"
@@ -13,16 +14,7 @@ import (
 	storageconfig "github.com/kanthorlabs/kanthor/services/storage/config"
 )
 
-var (
-	ALL      = "all"
-	SERVICES = []string{
-		portalconfig.ServiceName,
-		sdkconfig.ServiceName,
-		deliveryconfig.ServiceNameScheduler,
-		deliveryconfig.ServiceNameDispatcher,
-		storageconfig.ServiceName,
-	}
-)
+var ALL = "all"
 
 func Service(provider configuration.Provider, name string) (patterns.Runnable, error) {
 	if name == portalconfig.ServiceName {
@@ -51,7 +43,7 @@ func Service(provider configuration.Provider, name string) (patterns.Runnable, e
 func Services(provider configuration.Provider, names []string) (map[string]patterns.Runnable, error) {
 	instances := map[string]patterns.Runnable{}
 
-	for _, name := range SERVICES {
+	for _, name := range base.ServiceNames() {
 		if slices.Contains(names, ALL) || slices.Contains(names, name) {
 			instance, err := Service(provider, name)
 			if err != nil {

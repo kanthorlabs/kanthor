@@ -6,14 +6,12 @@ import (
 	_ "embed"
 
 	"github.com/kanthorlabs/kanthor/cmd/base"
-	"github.com/kanthorlabs/kanthor/cmd/server/run"
-	"github.com/kanthorlabs/kanthor/cmd/server/show"
+	"github.com/kanthorlabs/kanthor/cmd/healthz/check"
 )
 
 func main() {
-	provider, command := base.New()
-	command.AddCommand(run.New(provider))
-	command.AddCommand(show.New(provider))
+	_, command := base.New()
+	command.AddCommand(check.New())
 
 	defer func() {
 		if r := recover(); r != nil {

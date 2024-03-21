@@ -5,7 +5,7 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "server run all",
+      "name": "server run <service>",
       "type": "go",
       "request": "launch",
       "mode": "auto",
@@ -15,8 +15,17 @@
         "PROJECT_ENV": "development",
         "KANTHOR_HOME": "${workspaceRoot}"
       },
-      "args": ["run", "all"],
+      "args": ["run", "${input:service_name}"],
       "preLaunchTask": "make"
+    }
+  ],
+  "inputs": [
+    {
+      "id": "service_name",
+      "type": "pickString",
+      "description": "What service do you want to start?",
+      "options": ["portal", "sdk", "scheduler", "dispatcher", "storage", "all"],
+      "default": "all"
     }
   ]
 }

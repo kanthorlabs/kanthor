@@ -6,7 +6,8 @@ require (
 	github.com/go-chi/chi/v5 v5.0.12
 	github.com/google/uuid v1.6.0
 	github.com/google/wire v0.6.0
-	github.com/kanthorlabs/common v0.0.0-20240318071612-ccb9bbfb2a71
+	github.com/jedib0t/go-pretty/v6 v6.5.5
+	github.com/kanthorlabs/common v0.0.0-20240321040153-0e8f32056006
 	github.com/nats-io/nats-server/v2 v2.10.11
 	github.com/samber/lo v1.39.0
 	github.com/sourcegraph/conc v0.3.0
@@ -55,6 +56,7 @@ require (
 	github.com/klauspost/compress v1.17.6 // indirect
 	github.com/magiconair/properties v1.8.7 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
+	github.com/mattn/go-runewidth v0.0.15 // indirect
 	github.com/mattn/go-sqlite3 v1.14.22 // indirect
 	github.com/matttproud/golang_protobuf_extensions/v2 v2.0.0 // indirect
 	github.com/minio/highwayhash v1.0.2 // indirect
@@ -72,6 +74,7 @@ require (
 	github.com/prometheus/procfs v0.12.0 // indirect
 	github.com/rcrowley/go-metrics v0.0.0-20200313005456-10cdbea86bc0 // indirect
 	github.com/redis/go-redis/v9 v9.5.1 // indirect
+	github.com/rivo/uniseg v0.2.0 // indirect
 	github.com/sagikazarmark/locafero v0.4.0 // indirect
 	github.com/sagikazarmark/slog-shim v0.1.0 // indirect
 	github.com/segmentio/ksuid v1.0.4 // indirect

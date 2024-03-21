@@ -28,14 +28,14 @@ func New(
 		return nil, err
 	}
 
-	healthcheck, err := background.NewServer(healthcheckconfig.Default("delivery.dispatcher", 5000))
+	healthcheck, err := background.NewServer(healthcheckconfig.Default(config.ServiceNameDispatcher, 5000))
 	if err != nil {
 		return nil, err
 	}
 
 	entrypoint := &dispatcher{
 		conf:        conf,
-		logger:      logger.With("entrypoint", "dispatcher"),
+		logger:      logger.With("entrypoint", config.ServiceNameDispatcher),
 		infra:       infra,
 		uc:          uc,
 		healthcheck: healthcheck,
@@ -68,7 +68,7 @@ func (service *dispatcher) Start(ctx context.Context) error {
 		return err
 	}
 
-	subscriber, err := service.infra.Streaming().Subscriber(constants.RequestSubscriber("delivery_dispatcher"))
+	subscriber, err := service.infra.Streaming().Subscriber(constants.RequestSubscriber(config.ServiceNameDispatcher))
 	if err != nil {
 		return err
 	}

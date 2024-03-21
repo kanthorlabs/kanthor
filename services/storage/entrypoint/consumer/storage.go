@@ -28,7 +28,7 @@ func New(
 		return nil, err
 	}
 
-	healthcheck, err := background.NewServer(healthcheckconfig.Default("storage.scheduler", 5000))
+	healthcheck, err := background.NewServer(healthcheckconfig.Default(config.ServiceName, 5000))
 	if err != nil {
 		return nil, err
 	}
@@ -68,7 +68,7 @@ func (service *scheduler) Start(ctx context.Context) error {
 		return err
 	}
 
-	subscriber, err := service.infra.Streaming().Subscriber(constants.Subscriber("storage"))
+	subscriber, err := service.infra.Streaming().Subscriber(constants.Subscriber(config.ServiceName))
 	if err != nil {
 		return err
 	}
