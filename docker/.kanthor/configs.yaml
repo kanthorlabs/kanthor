@@ -33,9 +33,9 @@ infrastructure:
     nats:
       replicas: 0
       limits:
-        bytes: 25769803776 # 24Gi or 70% of 32Gi
-        msg_size: 32768 # 32Kb
-        msg_count: 300000 # 300k per subject
+        bytes: 1146880000 # 1.6384
+        msg_size: 16384 # 16Kb
+        msg_count: 100000 # 100k per subject
         msg_age: 3600000
     publisher:
       rate_limit: 300
