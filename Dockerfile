@@ -13,6 +13,7 @@ RUN go install github.com/swaggo/swag/cmd/swag@latest
 COPY . .
 RUN make swagger ioc
 RUN go build -mod vendor -o ./.kanthor/kanthor -buildvcs=false cmd/server/main.go
+RUN go build -mod vendor -o ./.kanthor/kanthorhealthz -buildvcs=false cmd/healthz/main.go
 
 FROM alpine:3
 WORKDIR /app
@@ -20,6 +21,7 @@ WORKDIR /app
 COPY --from=build /app/data ./data
 COPY --from=build /app/configs.yaml ./configs.yaml
 COPY --from=build /app/.kanthor/kanthor /usr/bin/kanthor
+COPY --from=build /app/.kanthor/kanthorhealthz /usr/bin/kanthorhealthz
 
 # portal
 EXPOSE 8180
