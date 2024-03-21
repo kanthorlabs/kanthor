@@ -28,7 +28,7 @@ func New(
 		return nil, err
 	}
 
-	healthcheck, err := background.NewServer(healthcheckconfig.Default(config.ServiceNameDispatcher, 5000))
+	healthcheck, err := background.NewServer(healthcheckconfig.Default(config.ServiceNameDispatcher, 15000))
 	if err != nil {
 		return nil, err
 	}

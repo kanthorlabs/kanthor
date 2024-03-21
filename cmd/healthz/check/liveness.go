@@ -15,7 +15,7 @@ func NewLiveness() *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			serviceName := args[0]
 
-			client, err := background.NewClient(config.Default(serviceName, 5000))
+			client, err := background.NewClient(config.Default(serviceName, 30000))
 			if err != nil {
 				return err
 			}

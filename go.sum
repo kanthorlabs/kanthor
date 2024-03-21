@@ -136,6 +136,8 @@ github.com/kanthorlabs/common v0.0.0-20240318071612-ccb9bbfb2a71 h1:quxL7jMZ6Xfl
 github.com/kanthorlabs/common v0.0.0-20240318071612-ccb9bbfb2a71/go.mod h1:eYgVwQSl9pxioCgQTXkbfSNe1SAAf4iZXOG0FOjUf9U=
 github.com/kanthorlabs/common v0.0.0-20240321040153-0e8f32056006 h1:lEiL8e/SfZ/hflKGOBpwTWGHA+Exe+qkjjEycWs6f4s=
 github.com/kanthorlabs/common v0.0.0-20240321040153-0e8f32056006/go.mod h1:eYgVwQSl9pxioCgQTXkbfSNe1SAAf4iZXOG0FOjUf9U=
+github.com/kanthorlabs/common v0.0.0-20240321085352-91b6c0c54fae h1:3aihFEFj9+sBOWbURY2oGqsonDz1nW7w6pldSoegey0=
+github.com/kanthorlabs/common v0.0.0-20240321085352-91b6c0c54fae/go.mod h1:eYgVwQSl9pxioCgQTXkbfSNe1SAAf4iZXOG0FOjUf9U=
 github.com/klauspost/compress v1.17.6 h1:60eq2E/jlfwQXtvZEeBUYADs+BwKBWURIY+Gj2eRGjI=
 github.com/klauspost/compress v1.17.6/go.mod h1:/dCuZOvVtNoHsyb+cuJD3itjs3NbnF6KH9zAO4BDxPM=
 github.com/kr/pretty v0.3.1 h1:flRD4NNwYAUpkphVc1HcthR4KEIFJ65n8Mw5qdRn3LE=
