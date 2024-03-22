@@ -7,6 +7,7 @@ MODE=${MODE:-"START"}
 if [ "$MODE" != "START" ];
 then
   docker compose -f docker-compose.yaml -f docker-compose.localdev.yaml stop storage dispatcher scheduler sdk portal startup
+  docker compose -f docker-compose.yaml -f docker-compose.localdev.yaml rm -f storage dispatcher scheduler sdk portal startup
   exit 0
 fi
 

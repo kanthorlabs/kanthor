@@ -30,6 +30,7 @@ func (service *sdk) httpx() error {
 
 	// protected routes
 	handler.Route("/api", func(router chi.Router) {
+		router.Use(httpxmw.Idempotency(service.infra.Idempotency(), service.conf.Sdk.Gateway.Idempotency.Disabled))
 		router.Use(httpxmw.Authn(
 			service.infra.Passport(),
 			httpxmw.AuthnWithCache(service.infra.Cache()),

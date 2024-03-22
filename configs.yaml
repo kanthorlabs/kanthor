@@ -68,11 +68,11 @@ infrastructure:
         engine: ask
         ask:
           accounts:
-            - name: "Super User"
-              username: admin
+            - name: "Demo User"
+              username: demo@kanthorlabs.com
               password_hash: "$2a$10$qv5Ct.Ee1GY4Fm5fnVS79uQG45q5ruFQoPncUrA29ASY74kIKTLP." #changemenow
               metadata:
-                avatar_url: https://ui-avatars.com/api/?name=Super+User
+                avatar_url: https://ui-avatars.com/api/?name=Demo+User
               created_at: 1728925200000
               updated_at: 1728925200000
       - name: kanthor.sdk
@@ -112,6 +112,8 @@ portal:
       exposed_headers: ["*"]
       allow_credentials: true
       max_age: 86400000
+    idempotency:
+      disabled: true
 
 sdk:
   gateway:
@@ -127,6 +129,8 @@ sdk:
       exposed_headers: ["*"]
       allow_credentials: true
       max_age: 86400000
+    idempotency:
+      disabled: true
 
 scheduler:
   request:
