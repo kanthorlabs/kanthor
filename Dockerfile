@@ -11,7 +11,7 @@ RUN go install github.com/google/wire/cmd/wire@latest
 RUN go install github.com/swaggo/swag/cmd/swag@latest
 
 COPY . .
-RUN make swagger ioc
+RUN make generator
 RUN go build -mod vendor -o ./.kanthor/kanthor -buildvcs=false cmd/server/main.go
 RUN go build -mod vendor -o ./.kanthor/kanthorhealthz -buildvcs=false cmd/healthz/main.go
 RUN go build -mod vendor -o ./.kanthor/kanthordata -buildvcs=false cmd/data/main.go
