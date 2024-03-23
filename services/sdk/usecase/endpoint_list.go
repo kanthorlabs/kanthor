@@ -43,16 +43,15 @@ type EndpointListIn struct {
 func (in *EndpointListIn) Validate() error {
 	err := validator.Validate(
 		validator.StringStartsWith("SDK.ENDPOINT.LIST.IN.APP_ID", in.AppId, entities.IdNsApp),
+		validator.PointerNotNil("SDK.ENDPOINT.LIST.IN.QUERY", in.Query),
 	)
 	if err != nil {
 		return err
 	}
 
-	if in.Query != nil {
-		return in.Query.Validate()
+	if err := in.Query.Validate(); err != nil {
+		return err
 	}
-	// must clone it to get the new one
-	in.Query = database.DefaultPagingQuery.Clone()
 	return nil
 }
 

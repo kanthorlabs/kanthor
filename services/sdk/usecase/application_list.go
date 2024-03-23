@@ -42,17 +42,16 @@ type ApplicationListIn struct {
 
 func (in *ApplicationListIn) Validate() error {
 	err := validator.Validate(
-		validator.StringStartsWith("SDK.WORKSPACE.LIST.IN.WS_ID", in.WsId, entities.IdNsWs),
+		validator.StringStartsWith("SDK.APPLICATION.LIST.IN.WS_ID", in.WsId, entities.IdNsWs),
+		validator.PointerNotNil("SDK.APPLICATION.LIST.IN.QUERY", in.Query),
 	)
 	if err != nil {
 		return err
 	}
 
-	if in.Query != nil {
-		return in.Query.Validate()
+	if err := in.Query.Validate(); err != nil {
+		return err
 	}
-	// must clone it to get the new one
-	in.Query = database.DefaultPagingQuery.Clone()
 	return nil
 }
 

@@ -1,4 +1,7 @@
 generator: swagger ioc
+debug: generator migrate-up
+migrate-up: up-db up-ds
+migrate-down: down-db down-ds
 
 ioc:
 	./scripts/gen_ioc.sh
@@ -12,7 +15,6 @@ up-db:
 up-ds:
 	go run cmd/data/main.go migrate up -s file://data/migration/datastore/postgres -d "postgres://postgres:changemenow@localhost:5432/postgres?sslmode=disable&x-migrations-table=kanthor_ds_migration"
 
-migrate-up: up-db up-ds
 
 down-db:
 	go run cmd/data/main.go migrate down -s file://data/migration/database/postgres -d "postgres://postgres:changemenow@localhost:5432/postgres?sslmode=disable&x-migrations-table=kanthor_db_migration"
@@ -20,7 +22,6 @@ down-db:
 down-ds:
 	go run cmd/data/main.go migrate down -s file://data/migration/datastore/postgres -d "postgres://postgres:changemenow@localhost:5432/postgres?sslmode=disable&x-migrations-table=kanthor_ds_migration"
 
-migrate-down: down-db down-ds
 
 gk-encode:
 	cat data/gatekeeper/definitions.json | jq -c . | base64 -w 0

@@ -33,7 +33,7 @@ func (uc *workspace) List(ctx context.Context, in *WorkspaceListIn) (*WorkspaceL
 		return tenant.Tenant
 	})
 
-	err = uc.orm.WithContext(ctx).Where("id IN ?", ids).Find(&docs).Error
+	err = uc.orm.WithContext(ctx).Where("id IN ?", ids).Order("created_at DESC").Find(&docs).Error
 	if err != nil {
 		uc.logger.Errorw(ErrWorkspaceList.Error(), "error", err.Error(), "in", utils.Stringify(in))
 		return nil, ErrWorkspaceList
