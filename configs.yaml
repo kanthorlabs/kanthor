@@ -76,8 +76,8 @@ infrastructure:
               created_at: 1728925200000
               updated_at: 1728925200000
       - name: kanthor.sdk
-        engine: durability
-        durability:
+        engine: internal
+        internal:
           sqlx:
             uri: postgres://postgres:changemenow@localhost:5432/postgres?sslmode=disable
             connection:

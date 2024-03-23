@@ -36,6 +36,7 @@ func (service *portal) httpx() error {
 			httpxmw.AuthnWithFallback(permissions.Owner),
 			// use default time to live - 1 hour
 		))
+		RegisterAccountRoutes(router, service)
 		RegisterWorkspaceRoutes(router, service)
 		RegisterCredentialsRoutes(router, service)
 	})

@@ -8,7 +8,7 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/google/wire v0.6.0
 	github.com/jedib0t/go-pretty/v6 v6.5.5
-	github.com/kanthorlabs/common v0.0.0-20240322033640-2fa31be6b74c
+	github.com/kanthorlabs/common v0.0.0-20240323013756-b21857c8dd87
 	github.com/nats-io/nats-server/v2 v2.10.11
 	github.com/samber/lo v1.39.0
 	github.com/sourcegraph/conc v0.3.0

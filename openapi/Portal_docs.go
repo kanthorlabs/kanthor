@@ -30,6 +30,32 @@ const docTemplatePortal = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/account": {
+            "get": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "tags": [
+                    "account"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/AccountGetRes"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
         "/credentials": {
             "get": {
                 "security": [
@@ -400,6 +426,41 @@ const docTemplatePortal = `{
         }
     },
     "definitions": {
+        "AccountGetRes": {
+            "type": "object",
+            "required": [
+                "created_at",
+                "deactivated_at",
+                "metadata",
+                "name",
+                "password_hash",
+                "updated_at",
+                "username"
+            ],
+            "properties": {
+                "created_at": {
+                    "type": "integer"
+                },
+                "deactivated_at": {
+                    "type": "integer"
+                },
+                "metadata": {
+                    "$ref": "#/definitions/safe.Metadata"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "password_hash": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "integer"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
         "CredentialsAccount": {
             "type": "object",
             "required": [

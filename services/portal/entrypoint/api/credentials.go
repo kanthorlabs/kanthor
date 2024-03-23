@@ -8,7 +8,6 @@ import (
 	"github.com/kanthorlabs/kanthor/services/portal/usecase"
 )
 
-// RegisterCredentialsRoutes registers the credentials routes that is sub-routed under the workspace router
 func RegisterCredentialsRoutes(router chi.Router, service *portal) {
 	router.Route("/credentials", func(sr chi.Router) {
 		sr.Use(httpxmw.Authz(service.infra.Gatekeeper(), permissions.Owner))

@@ -2,6 +2,31 @@ basePath: /api
 consumes:
 - application/json
 definitions:
+  AccountGetRes:
+    properties:
+      created_at:
+        type: integer
+      deactivated_at:
+        type: integer
+      metadata:
+        $ref: '#/definitions/safe.Metadata'
+      name:
+        type: string
+      password_hash:
+        type: string
+      updated_at:
+        type: integer
+      username:
+        type: string
+    required:
+    - created_at
+    - deactivated_at
+    - metadata
+    - name
+    - password_hash
+    - updated_at
+    - username
+    type: object
   CredentialsAccount:
     properties:
       created_at:
@@ -357,6 +382,21 @@ info:
   title: Kanthor Portal API
   version: v2024.1014.1700
 paths:
+  /account:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/AccountGetRes'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - Authorization: []
+      tags:
+      - account
   /credentials:
     get:
       responses:

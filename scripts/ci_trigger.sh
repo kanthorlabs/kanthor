@@ -1,8 +1,10 @@
 #!/bin/sh
 set -e
 
-SCRIPT_DIR="$( cd "$( dirname "$0" )" && pwd )";
+# run the test locally
+sh scripts/ci_test.sh
 
+# add all checksume
 find . -type f -name 'checksum' -exec git add {} \;
 
 NOW=$(date +%Y.%-m%d.%-H%M)
