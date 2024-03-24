@@ -3,16 +3,16 @@ package api
 import (
 	"net/http"
 
+	"github.com/kanthorlabs/common/gatekeeper"
 	httpxwriter "github.com/kanthorlabs/common/gateway/httpx/writer"
 	gwquery "github.com/kanthorlabs/common/gateway/query"
-	"github.com/kanthorlabs/kanthor/internal/database/entities"
 	"github.com/kanthorlabs/kanthor/services/sdk/usecase"
 )
 
 // UseRouteList
 // @Tags			route
 // @Router		/route						[get]
-// @Param			ep_id							query			string						true	"endpoint id"
+// @Param			ep_id							query			string						false	"endpoint id"
 // @Param			_ids							query			[]string					false	"list by ids"
 // @Param			_q								query			string						false	"search keyword"
 // @Param			_limit						query			int								false	"limit returning records"	default(5)
@@ -22,9 +22,9 @@ import (
 // @Security	Authorization
 func UseRouteList(service *sdk) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		ep := r.Context().Value(CtxEndpoint).(*entities.Endpoint)
 		in := &usecase.RouteListIn{
-			EpId:  ep.Id,
+			WsId:  r.Context().Value(gatekeeper.CtxTenantId).(string),
+			EpId:  r.URL.Query().Get("ep_id"),
 			Query: gwquery.FromHttpx(r).ToDbPagingQuery(),
 		}
 		if err := in.Validate(); err != nil {

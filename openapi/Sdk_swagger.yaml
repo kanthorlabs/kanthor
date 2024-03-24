@@ -176,6 +176,9 @@ definitions:
     type: object
   EndpointCreateReq:
     properties:
+      app_id:
+        example: app_2e77LVGiYP53IdHOa3FPcOEebIO
+        type: string
       method:
         example: POST
         type: string
@@ -186,6 +189,7 @@ definitions:
         example: https://postman-echo.com/post
         type: string
     required:
+    - app_id
     - method
     - name
     - uri
@@ -807,7 +811,6 @@ paths:
       - description: application id
         in: query
         name: app_id
-        required: true
         type: string
       - collectionFormat: csv
         description: list by ids
@@ -897,11 +900,6 @@ paths:
       - endpoint
     get:
       parameters:
-      - description: application id
-        in: query
-        name: app_id
-        required: true
-        type: string
       - description: endpoint id
         in: path
         name: id
@@ -922,11 +920,6 @@ paths:
       - endpoint
     patch:
       parameters:
-      - description: application id
-        in: query
-        name: app_id
-        required: true
-        type: string
       - description: endpoint id
         in: path
         name: id
@@ -954,11 +947,6 @@ paths:
   /endpoint/{id}/secret:
     get:
       parameters:
-      - description: application id
-        in: query
-        name: app_id
-        required: true
-        type: string
       - description: endpoint id
         in: path
         name: id
@@ -1010,7 +998,6 @@ paths:
       - description: endpoint id
         in: query
         name: ep_id
-        required: true
         type: string
       - collectionFormat: csv
         description: list by ids
@@ -1048,11 +1035,6 @@ paths:
       - route
     post:
       parameters:
-      - description: endpoint id
-        in: query
-        name: ep_id
-        required: true
-        type: string
       - description: request body
         in: body
         name: request
@@ -1075,11 +1057,6 @@ paths:
   /route/{id}:
     delete:
       parameters:
-      - description: endpoint id
-        in: query
-        name: ep_id
-        required: true
-        type: string
       - description: route id
         in: path
         name: id
@@ -1101,11 +1078,6 @@ paths:
     get:
       parameters:
       - description: endpoint id
-        in: query
-        name: ep_id
-        required: true
-        type: string
-      - description: endpoint id
         in: path
         name: id
         required: true
@@ -1125,11 +1097,6 @@ paths:
       - route
     patch:
       parameters:
-      - description: endpoint id
-        in: query
-        name: ep_id
-        required: true
-        type: string
       - description: route id
         in: path
         name: id

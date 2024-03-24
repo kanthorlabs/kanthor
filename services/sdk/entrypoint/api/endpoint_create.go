@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/kanthorlabs/common/gatekeeper"
 	httpxwriter "github.com/kanthorlabs/common/gateway/httpx/writer"
-	"github.com/kanthorlabs/kanthor/internal/database/entities"
 	"github.com/kanthorlabs/kanthor/services/sdk/usecase"
 )
 
@@ -25,9 +25,9 @@ func UseEndpointCreate(service *sdk) http.HandlerFunc {
 			return
 		}
 
-		app := r.Context().Value(CtxApplication).(*entities.Application)
 		in := &usecase.EndpointCreateIn{
-			AppId:  app.Id,
+			WsId:   r.Context().Value(gatekeeper.CtxTenantId).(string),
+			AppId:  req.AppId,
 			Name:   req.Name,
 			Method: req.Method,
 			Uri:    req.Uri,
@@ -50,6 +50,7 @@ func UseEndpointCreate(service *sdk) http.HandlerFunc {
 }
 
 type EndpointCreateReq struct {
+	AppId  string `json:"app_id" example:"app_2e77LVGiYP53IdHOa3FPcOEebIO"`
 	Name   string `json:"name" example:"echo endpoint"`
 	Method string `json:"method" example:"POST"`
 	Uri    string `json:"uri" example:"https://postman-echo.com/post"`

@@ -9,6 +9,7 @@ import (
 	"github.com/kanthorlabs/common/validator"
 	"github.com/kanthorlabs/kanthor/internal/conductor"
 	"github.com/kanthorlabs/kanthor/internal/database/entities"
+	"github.com/kanthorlabs/kanthor/internal/database/scopes"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 )
@@ -20,14 +21,12 @@ func (uc *route) Update(ctx context.Context, in *RouteUpdateIn) (*RouteUpdateOut
 		return nil, err
 	}
 
-	joinstm := fmt.Sprintf("JOIN %s ON %s.id = %s.ep_id", entities.TableEp, entities.TableEp, entities.TableRt)
-	wherestm := fmt.Sprintf("%s.id = ? AND %s.id = ?", entities.TableEp, entities.TableRt)
-
 	doc := &entities.Route{}
 	err := uc.orm.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
 		err := tx.
 			Clauses(clause.Locking{Strength: clause.LockingStrengthShare}).
-			InnerJoins(joinstm).Where(wherestm, in.EpId, in.Id).
+			Scopes(scopes.UseRt(in.WsId)).
+			Where(fmt.Sprintf("%s.id = ?", entities.TableRt), in.Id).
 			First(doc).Error
 		if err != nil {
 			uc.logger.Errorw(ErrRouteUpdate.Error(), "error", err.Error(), "in", utils.Stringify(in))
@@ -57,7 +56,7 @@ func (uc *route) Update(ctx context.Context, in *RouteUpdateIn) (*RouteUpdateOut
 }
 
 type RouteUpdateIn struct {
-	EpId                string
+	WsId                string
 	Id                  string
 	Name                string
 	Priority            int32
@@ -68,7 +67,7 @@ type RouteUpdateIn struct {
 
 func (in *RouteUpdateIn) Validate() error {
 	return validator.Validate(
-		validator.StringStartsWith("SDK.ROUTE.UPDATE.IN.EP_ID", in.EpId, entities.IdNsEp),
+		validator.StringStartsWith("SDK.ROUTE.UPDATE.IN.WS_ID", in.WsId, entities.IdNsWs),
 		validator.StringStartsWith("SDK.ROUTE.UPDATE.IN.ID", in.Id, entities.IdNsRt),
 		validator.StringRequired("SDK.ROUTE.UPDATE.IN.NAME", in.Name),
 		validator.NumberInRange("SDK.ROUTE.UPDATE.IN.PRIORITY", in.Priority, 1, 128),

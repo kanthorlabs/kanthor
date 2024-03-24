@@ -5,15 +5,14 @@ import (
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/kanthorlabs/common/gatekeeper"
 	httpxwriter "github.com/kanthorlabs/common/gateway/httpx/writer"
-	"github.com/kanthorlabs/kanthor/internal/database/entities"
 	"github.com/kanthorlabs/kanthor/services/sdk/usecase"
 )
 
 // UseRouteUpdate
 // @Tags			route
 // @Router		/route/{id}				[patch]
-// @Param			ep_id							query			string							true	"endpoint id"
 // @Param			id								path			string							true	"route id"
 // @Param			request						body			RouteUpdateReq			true	"request body"
 // @Success		200								{object}	RouteUpdateRes
@@ -27,9 +26,8 @@ func UseRouteUpdate(service *sdk) http.HandlerFunc {
 			return
 		}
 
-		ep := r.Context().Value(CtxEndpoint).(*entities.Endpoint)
 		in := &usecase.RouteUpdateIn{
-			EpId:                ep.Id,
+			WsId:                r.Context().Value(gatekeeper.CtxTenantId).(string),
 			Id:                  chi.URLParam(r, "id"),
 			Name:                req.Name,
 			Priority:            req.Priority,

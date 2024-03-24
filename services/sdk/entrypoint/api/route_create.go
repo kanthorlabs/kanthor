@@ -4,15 +4,14 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/kanthorlabs/common/gatekeeper"
 	httpxwriter "github.com/kanthorlabs/common/gateway/httpx/writer"
-	"github.com/kanthorlabs/kanthor/internal/database/entities"
 	"github.com/kanthorlabs/kanthor/services/sdk/usecase"
 )
 
 // UseRouteCreate
 // @Tags			route
 // @Router		/route				[post]
-// @Param			ep_id					query			string						true	"endpoint id"
 // @Param			request				body			RouteCreateReq		true	"request body"
 // @Success		200						{object}	RouteCreateRes
 // @Failure		default				{object}	Error
@@ -25,9 +24,9 @@ func UseRouteCreate(service *sdk) http.HandlerFunc {
 			return
 		}
 
-		ep := r.Context().Value(CtxEndpoint).(*entities.Endpoint)
 		in := &usecase.RouteCreateIn{
-			EpId:                ep.Id,
+			WsId:                r.Context().Value(gatekeeper.CtxTenantId).(string),
+			EpId:                req.EpId,
 			Name:                req.Name,
 			Priority:            req.Priority,
 			Exclusionary:        req.Exclusionary,
@@ -52,6 +51,7 @@ func UseRouteCreate(service *sdk) http.HandlerFunc {
 }
 
 type RouteCreateReq struct {
+	EpId                string `json:"ep_id" example:"ep_2e8RVZfPFmrZAXXLDlHMowN6nsn"`
 	Name                string `json:"name" example:"passthrough"`
 	Priority            int32  `json:"priority" example:"1"`
 	Exclusionary        bool   `json:"exclusionary" example:"false"`

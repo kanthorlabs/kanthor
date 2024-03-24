@@ -8,6 +8,7 @@ import (
 	"github.com/kanthorlabs/common/utils"
 	"github.com/kanthorlabs/common/validator"
 	"github.com/kanthorlabs/kanthor/internal/database/entities"
+	"github.com/kanthorlabs/kanthor/internal/database/scopes"
 )
 
 var ErrEndpointGet = errors.New("SDK.ENDPOINT.GET.ERROR")
@@ -17,16 +18,10 @@ func (uc *endpoint) Get(ctx context.Context, in *EndpointGetIn) (*EndpointGetOut
 		return nil, err
 	}
 
-	joinstm := fmt.Sprintf("JOIN %s ON %s.id = %s.app_id", entities.TableApp, entities.TableApp, entities.TableEp)
-	wherestm := fmt.Sprintf("%s.id = ? AND %s.id = ?", entities.TableApp, entities.TableEp)
-	selectstm := fmt.Sprintf("%s.*", entities.TableEp)
-
 	doc := &entities.Endpoint{}
-
 	err := uc.orm.WithContext(ctx).
-		InnerJoins(joinstm).
-		Where(wherestm, in.AppId, in.Id).
-		Select(selectstm).
+		Scopes(scopes.UseEp(in.WsId)).
+		Where(fmt.Sprintf("%s.id = ?", entities.TableEp), in.Id).
 		First(doc).Error
 	if err != nil {
 		uc.logger.Errorw(ErrEndpointGet.Error(), "error", err.Error(), "in", utils.Stringify(in))
@@ -38,13 +33,13 @@ func (uc *endpoint) Get(ctx context.Context, in *EndpointGetIn) (*EndpointGetOut
 }
 
 type EndpointGetIn struct {
-	AppId string
-	Id    string
+	WsId string
+	Id   string
 }
 
 func (in *EndpointGetIn) Validate() error {
 	return validator.Validate(
-		validator.StringStartsWith("SDK.ENDPOINT.CREATE.IN.APP_ID", in.AppId, entities.IdNsApp),
+		validator.StringStartsWith("SDK.ENDPOINT.GET.IN.WS_ID", in.WsId, entities.IdNsWs),
 		validator.StringStartsWith("SDK.ENDPOINT.GET.IN.ID", in.Id, entities.IdNsEp),
 	)
 }

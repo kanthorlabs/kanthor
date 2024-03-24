@@ -3,12 +3,14 @@ package usecase
 import (
 	"context"
 	"errors"
+	"fmt"
 	"net/http"
 
 	"github.com/kanthorlabs/common/cipher/encryption"
 	"github.com/kanthorlabs/common/utils"
 	"github.com/kanthorlabs/common/validator"
 	"github.com/kanthorlabs/kanthor/internal/database/entities"
+	"github.com/kanthorlabs/kanthor/internal/database/scopes"
 )
 
 var SecretLength = 32
@@ -19,8 +21,18 @@ func (uc *endpoint) Create(ctx context.Context, in *EndpointCreateIn) (*Endpoint
 		return nil, err
 	}
 
+	// ensure that the application exists in the requesting workspace before proceeding
+	var app entities.Application
+	err := uc.orm.WithContext(ctx).Scopes(scopes.UseApp(in.WsId)).
+		Where(fmt.Sprintf("%s.id = ?", entities.TableApp), in.AppId).
+		First(&app).Error
+	if err != nil {
+		uc.logger.Errorw(ErrEndpointCreate.Error(), "error", err.Error(), "in", utils.Stringify(in))
+		return nil, ErrEndpointCreate
+	}
+
 	doc := &entities.Endpoint{
-		AppId:  in.AppId,
+		AppId:  app.Id,
 		Name:   in.Name,
 		Method: in.Method,
 		Uri:    in.Uri,
@@ -45,6 +57,7 @@ func (uc *endpoint) Create(ctx context.Context, in *EndpointCreateIn) (*Endpoint
 }
 
 type EndpointCreateIn struct {
+	WsId   string
 	AppId  string
 	Name   string
 	Method string
@@ -53,6 +66,7 @@ type EndpointCreateIn struct {
 
 func (in *EndpointCreateIn) Validate() error {
 	return validator.Validate(
+		validator.StringStartsWith("SDK.ENDPOINT.CREATE.IN.WS_ID", in.WsId, entities.IdNsWs),
 		validator.StringStartsWith("SDK.ENDPOINT.CREATE.IN.APP_ID", in.AppId, entities.IdNsApp),
 		validator.StringRequired("SDK.ENDPOINT.CREATE.IN.NAME", in.Name),
 		validator.StringOneOf("SDK.ENDPOINT.CREATE.IN.METHOD", in.Method, []string{http.MethodPost, http.MethodPut}),

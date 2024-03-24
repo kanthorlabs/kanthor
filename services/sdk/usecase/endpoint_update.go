@@ -9,6 +9,7 @@ import (
 	"github.com/kanthorlabs/common/utils"
 	"github.com/kanthorlabs/common/validator"
 	"github.com/kanthorlabs/kanthor/internal/database/entities"
+	"github.com/kanthorlabs/kanthor/internal/database/scopes"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 )
@@ -20,14 +21,12 @@ func (uc *endpoint) Update(ctx context.Context, in *EndpointUpdateIn) (*Endpoint
 		return nil, err
 	}
 
-	joinstm := fmt.Sprintf("JOIN %s ON %s.id = %s.app_id", entities.TableApp, entities.TableApp, entities.TableEp)
-	wherestm := fmt.Sprintf("%s.id = ? AND %s.id = ?", entities.TableApp, entities.TableEp)
-
 	doc := &entities.Endpoint{}
 	err := uc.orm.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
 		err := tx.
 			Clauses(clause.Locking{Strength: clause.LockingStrengthShare}).
-			InnerJoins(joinstm).Where(wherestm, in.AppId, in.Id).
+			Scopes(scopes.UseEp(in.WsId)).
+			Where(fmt.Sprintf("%s.id = ?", entities.TableEp), in.Id).
 			First(doc).Error
 		if err != nil {
 			uc.logger.Errorw(ErrEndpointUpdate.Error(), "error", err.Error(), "in", utils.Stringify(in))
@@ -55,7 +54,7 @@ func (uc *endpoint) Update(ctx context.Context, in *EndpointUpdateIn) (*Endpoint
 }
 
 type EndpointUpdateIn struct {
-	AppId  string
+	WsId   string
 	Id     string
 	Name   string
 	Method string
@@ -64,11 +63,11 @@ type EndpointUpdateIn struct {
 
 func (in *EndpointUpdateIn) Validate() error {
 	return validator.Validate(
-		validator.StringStartsWith("SDK.ENDPOINT.CREATE.IN.APP_ID", in.AppId, entities.IdNsApp),
-		validator.StringStartsWith("SDK.ENDPOINT.GET.IN.ID", in.Id, entities.IdNsEp),
+		validator.StringStartsWith("SDK.ENDPOINT.UPDATE.IN.WS_ID", in.WsId, entities.IdNsWs),
+		validator.StringStartsWith("SDK.ENDPOINT.UPDATE.IN.ID", in.Id, entities.IdNsEp),
 		validator.StringRequired("SDK.ENDPOINT.UPDATE.IN.NAME", in.Name),
-		validator.StringOneOf("SDK.ENDPOINT.CREATE.IN.METHOD", in.Method, []string{http.MethodPost, http.MethodPut}),
-		validator.StringUri("SDK.ENDPOINT.CREATE.IN.URI", in.Uri),
+		validator.StringOneOf("SDK.ENDPOINT.UPDATE.IN.METHOD", in.Method, []string{http.MethodPost, http.MethodPut}),
+		validator.StringUri("SDK.ENDPOINT.UPDATE.IN.URI", in.Uri),
 	)
 }
 

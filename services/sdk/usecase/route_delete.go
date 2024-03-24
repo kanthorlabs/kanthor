@@ -8,6 +8,7 @@ import (
 	"github.com/kanthorlabs/common/utils"
 	"github.com/kanthorlabs/common/validator"
 	"github.com/kanthorlabs/kanthor/internal/database/entities"
+	"github.com/kanthorlabs/kanthor/internal/database/scopes"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 )
@@ -19,14 +20,12 @@ func (uc *route) Delete(ctx context.Context, in *RouteDeleteIn) (*RouteDeleteOut
 		return nil, err
 	}
 
-	joinstm := fmt.Sprintf("JOIN %s ON %s.id = %s.ep_id", entities.TableEp, entities.TableEp, entities.TableRt)
-	wherestm := fmt.Sprintf("%s.id = ? AND %s.id = ?", entities.TableEp, entities.TableRt)
-
 	doc := &entities.Route{}
 	err := uc.orm.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
 		err := tx.
 			Clauses(clause.Locking{Strength: clause.LockingStrengthShare}).
-			InnerJoins(joinstm).Where(wherestm, in.EpId, in.Id).
+			Scopes(scopes.UseRt(in.WsId)).
+			Where(fmt.Sprintf("%s.id = ?", entities.TableRt), in.Id).
 			First(doc).Error
 		if err != nil {
 			uc.logger.Errorw(ErrRouteDelete.Error(), "error", err.Error(), "in", utils.Stringify(in))
@@ -66,13 +65,13 @@ func (uc *route) Delete(ctx context.Context, in *RouteDeleteIn) (*RouteDeleteOut
 }
 
 type RouteDeleteIn struct {
-	EpId string
+	WsId string
 	Id   string
 }
 
 func (in *RouteDeleteIn) Validate() error {
 	return validator.Validate(
-		validator.StringStartsWith("SDK.ROUTE.DELETE.IN.EP_ID", in.EpId, entities.IdNsEp),
+		validator.StringStartsWith("SDK.ROUTE.UPDATE.IN.WS_ID", in.WsId, entities.IdNsWs),
 		validator.StringStartsWith("SDK.ROUTE.DELETE.IN.ID", in.Id, entities.IdNsRt),
 	)
 }

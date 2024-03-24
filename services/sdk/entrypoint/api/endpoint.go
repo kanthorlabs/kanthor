@@ -7,7 +7,6 @@ import (
 
 func RegisterEndpointRoutes(router chi.Router, service *sdk) {
 	router.Route("/endpoint", func(sr chi.Router) {
-		sr.Use(UseApplication(service, "app_id"))
 		sr.Post("/", UseEndpointCreate(service))
 		sr.Get("/", UseEndpointList(service))
 		sr.Route("/{id}", func(ssr chi.Router) {

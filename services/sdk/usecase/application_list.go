@@ -17,11 +17,11 @@ func (uc *application) List(ctx context.Context, in *ApplicationListIn) (*Applic
 		return nil, err
 	}
 
-	var count int64
-	var docs []*entities.Application
-
 	model := &entities.Application{}
 	base := uc.orm.WithContext(ctx).Model(model).Where("ws_id = ?", in.WsId)
+
+	var count int64
+	var docs []*entities.Application
 
 	if err := in.Query.SqlxCount(base, model.PrimaryProp(), model.SearchProps()).Count(&count).Error; err != nil {
 		uc.logger.Errorw(ErrApplicationList.Error(), "error", err.Error(), "in", utils.Stringify(in))

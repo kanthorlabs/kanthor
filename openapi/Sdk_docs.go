@@ -248,8 +248,7 @@ const docTemplateSdk = `{
                         "type": "string",
                         "description": "application id",
                         "name": "app_id",
-                        "in": "query",
-                        "required": true
+                        "in": "query"
                     },
                     {
                         "type": "array",
@@ -353,13 +352,6 @@ const docTemplateSdk = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "application id",
-                        "name": "app_id",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
                         "description": "endpoint id",
                         "name": "id",
                         "in": "path",
@@ -433,13 +425,6 @@ const docTemplateSdk = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "application id",
-                        "name": "app_id",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
                         "description": "endpoint id",
                         "name": "id",
                         "in": "path",
@@ -482,13 +467,6 @@ const docTemplateSdk = `{
                     "endpoint"
                 ],
                 "parameters": [
-                    {
-                        "type": "string",
-                        "description": "application id",
-                        "name": "app_id",
-                        "in": "query",
-                        "required": true
-                    },
                     {
                         "type": "string",
                         "description": "endpoint id",
@@ -572,8 +550,7 @@ const docTemplateSdk = `{
                         "type": "string",
                         "description": "endpoint id",
                         "name": "ep_id",
-                        "in": "query",
-                        "required": true
+                        "in": "query"
                     },
                     {
                         "type": "array",
@@ -632,13 +609,6 @@ const docTemplateSdk = `{
                 ],
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "endpoint id",
-                        "name": "ep_id",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
                         "description": "request body",
                         "name": "request",
                         "in": "body",
@@ -678,13 +648,6 @@ const docTemplateSdk = `{
                     {
                         "type": "string",
                         "description": "endpoint id",
-                        "name": "ep_id",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "endpoint id",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -715,13 +678,6 @@ const docTemplateSdk = `{
                     "route"
                 ],
                 "parameters": [
-                    {
-                        "type": "string",
-                        "description": "endpoint id",
-                        "name": "ep_id",
-                        "in": "query",
-                        "required": true
-                    },
                     {
                         "type": "string",
                         "description": "route id",
@@ -755,13 +711,6 @@ const docTemplateSdk = `{
                     "route"
                 ],
                 "parameters": [
-                    {
-                        "type": "string",
-                        "description": "endpoint id",
-                        "name": "ep_id",
-                        "in": "query",
-                        "required": true
-                    },
                     {
                         "type": "string",
                         "description": "route id",
@@ -1032,11 +981,16 @@ const docTemplateSdk = `{
         "EndpointCreateReq": {
             "type": "object",
             "required": [
+                "app_id",
                 "method",
                 "name",
                 "uri"
             ],
             "properties": {
+                "app_id": {
+                    "type": "string",
+                    "example": "app_2e77LVGiYP53IdHOa3FPcOEebIO"
+                },
                 "method": {
                     "type": "string",
                     "example": "POST"

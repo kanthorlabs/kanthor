@@ -241,8 +241,7 @@
                         "type": "string",
                         "description": "application id",
                         "name": "app_id",
-                        "in": "query",
-                        "required": true
+                        "in": "query"
                     },
                     {
                         "type": "array",
@@ -346,13 +345,6 @@
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "application id",
-                        "name": "app_id",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
                         "description": "endpoint id",
                         "name": "id",
                         "in": "path",
@@ -426,13 +418,6 @@
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "application id",
-                        "name": "app_id",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
                         "description": "endpoint id",
                         "name": "id",
                         "in": "path",
@@ -475,13 +460,6 @@
                     "endpoint"
                 ],
                 "parameters": [
-                    {
-                        "type": "string",
-                        "description": "application id",
-                        "name": "app_id",
-                        "in": "query",
-                        "required": true
-                    },
                     {
                         "type": "string",
                         "description": "endpoint id",
@@ -565,8 +543,7 @@
                         "type": "string",
                         "description": "endpoint id",
                         "name": "ep_id",
-                        "in": "query",
-                        "required": true
+                        "in": "query"
                     },
                     {
                         "type": "array",
@@ -625,13 +602,6 @@
                 ],
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "endpoint id",
-                        "name": "ep_id",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
                         "description": "request body",
                         "name": "request",
                         "in": "body",
@@ -671,13 +641,6 @@
                     {
                         "type": "string",
                         "description": "endpoint id",
-                        "name": "ep_id",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "endpoint id",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -708,13 +671,6 @@
                     "route"
                 ],
                 "parameters": [
-                    {
-                        "type": "string",
-                        "description": "endpoint id",
-                        "name": "ep_id",
-                        "in": "query",
-                        "required": true
-                    },
                     {
                         "type": "string",
                         "description": "route id",
@@ -748,13 +704,6 @@
                     "route"
                 ],
                 "parameters": [
-                    {
-                        "type": "string",
-                        "description": "endpoint id",
-                        "name": "ep_id",
-                        "in": "query",
-                        "required": true
-                    },
                     {
                         "type": "string",
                         "description": "route id",
@@ -1025,11 +974,16 @@
         "EndpointCreateReq": {
             "type": "object",
             "required": [
+                "app_id",
                 "method",
                 "name",
                 "uri"
             ],
             "properties": {
+                "app_id": {
+                    "type": "string",
+                    "example": "app_2e77LVGiYP53IdHOa3FPcOEebIO"
+                },
                 "method": {
                     "type": "string",
                     "example": "POST"

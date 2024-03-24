@@ -8,6 +8,7 @@ import (
 	"github.com/kanthorlabs/common/utils"
 	"github.com/kanthorlabs/common/validator"
 	"github.com/kanthorlabs/kanthor/internal/database/entities"
+	"github.com/kanthorlabs/kanthor/internal/database/scopes"
 )
 
 var ErrRouteGet = errors.New("SDK.ROUTE.GET.ERROR")
@@ -17,16 +18,10 @@ func (uc *route) Get(ctx context.Context, in *RouteGetIn) (*RouteGetOut, error) 
 		return nil, err
 	}
 
-	joinstm := fmt.Sprintf("JOIN %s ON %s.id = %s.ep_id", entities.TableEp, entities.TableEp, entities.TableRt)
-	wherestm := fmt.Sprintf("%s.id = ? AND %s.id = ?", entities.TableEp, entities.TableRt)
-	selectstm := fmt.Sprintf("%s.*", entities.TableRt)
-
 	doc := &entities.Route{}
-
 	err := uc.orm.WithContext(ctx).
-		InnerJoins(joinstm).
-		Where(wherestm, in.EpId, in.Id).
-		Select(selectstm).
+		Scopes(scopes.UseRt(in.WsId)).
+		Where(fmt.Sprintf("%s.id = ?", entities.TableRt), in.Id).
 		First(doc).Error
 	if err != nil {
 		uc.logger.Errorw(ErrRouteGet.Error(), "error", err.Error(), "in", utils.Stringify(in))
@@ -38,13 +33,13 @@ func (uc *route) Get(ctx context.Context, in *RouteGetIn) (*RouteGetOut, error) 
 }
 
 type RouteGetIn struct {
-	EpId string
+	WsId string
 	Id   string
 }
 
 func (in *RouteGetIn) Validate() error {
 	return validator.Validate(
-		validator.StringStartsWith("SDK.ROUTE.GET.IN.EP_ID", in.EpId, entities.IdNsEp),
+		validator.StringStartsWith("SDK.ROUTE.GET.IN.WS_ID", in.WsId, entities.IdNsWs),
 		validator.StringStartsWith("SDK.ROUTE.GET.IN.ID", in.Id, entities.IdNsRt),
 	)
 }
