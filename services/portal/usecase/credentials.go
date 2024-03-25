@@ -45,7 +45,7 @@ func (uc *credentials) get(ctx context.Context, tenant, username string) ([]*Cre
 
 	usernames, maps := cagkmap(users, username)
 	if len(usernames) == 0 {
-		return nil, errors.New("PORTAl.CREDENTIALS.GATEKEEPR.ERROR")
+		return []*CredentialsAccount{}, nil
 	}
 
 	accounts, err := strategy.List(ctx, usernames)
