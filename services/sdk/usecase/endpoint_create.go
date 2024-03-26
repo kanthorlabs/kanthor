@@ -7,13 +7,14 @@ import (
 	"net/http"
 
 	"github.com/kanthorlabs/common/cipher/encryption"
+	"github.com/kanthorlabs/common/idx"
 	"github.com/kanthorlabs/common/utils"
 	"github.com/kanthorlabs/common/validator"
 	"github.com/kanthorlabs/kanthor/internal/database/entities"
 	"github.com/kanthorlabs/kanthor/internal/database/scopes"
 )
 
-var SecretLength = 32
+var SecretLength = 128
 var ErrEndpointCreate = errors.New("SDK.ENDPOINT.CREATE.ERROR")
 
 func (uc *endpoint) Create(ctx context.Context, in *EndpointCreateIn) (*EndpointCreateOut, error) {
@@ -40,7 +41,8 @@ func (uc *endpoint) Create(ctx context.Context, in *EndpointCreateIn) (*Endpoint
 	doc.SetId()
 	doc.SetAuditFacttor(uc.watch.Now())
 
-	secret, err := encryption.Encrypt(uc.conf.Infrastructure.Secrets.Cipher[0], utils.RandomString(SecretLength))
+	secretKey := idx.Build(entities.IdNsEpsk, utils.RandomString(SecretLength))
+	secret, err := encryption.Encrypt(uc.conf.Infrastructure.Secrets.Cipher[0], secretKey)
 	if err != nil {
 		uc.logger.Errorw(ErrEndpointCreate.Error(), "error", err.Error(), "in", utils.Stringify(in), "endpoint", utils.Stringify(doc))
 		return nil, ErrEndpointCreate

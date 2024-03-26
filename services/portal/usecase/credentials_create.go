@@ -33,7 +33,7 @@ func (uc *credentials) Create(ctx context.Context, in *CredentialsCreateIn) (*Cr
 
 	out := &CredentialsCreateOut{
 		Tenant:   in.Tenant,
-		Username: idx.New(entities.IdNsCreds),
+		Username: idx.New(entities.IdNsWsc),
 		Password: utils.RandomString(PasswordLength),
 	}
 	hash, err := password.Hash(out.Password)

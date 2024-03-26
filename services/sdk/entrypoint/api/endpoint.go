@@ -14,6 +14,7 @@ func RegisterEndpointRoutes(router chi.Router, service *sdk) {
 		sr.Get("/", UseEndpointList(service))
 		sr.Route("/{id}", func(ssr chi.Router) {
 			ssr.Get("/", UseEndpointGet(service))
+			ssr.Get("/secret", UseEndpointGetSecretSecret(service))
 			ssr.Patch("/", UseEndpointUpdate(service))
 			ssr.Delete("/", UseEndpointDelete(service))
 		})

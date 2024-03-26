@@ -33,7 +33,7 @@ func UseEndpointGetSecretSecret(service *sdk) http.HandlerFunc {
 			return
 		}
 
-		res := &EndpointGetSecretRes{Endpoint: &Endpoint{}, SecretKey: out.SecretKey}
+		res := &EndpointGetSecretRes{Endpoint: &Endpoint{}, SecretKey: out.DescryptedSecretKey}
 		res.Map(out.Endpoint)
 		httpxwriter.Ok(w, res)
 	}
@@ -41,5 +41,5 @@ func UseEndpointGetSecretSecret(service *sdk) http.HandlerFunc {
 
 type EndpointGetSecretRes struct {
 	*Endpoint
-	SecretKey string
+	SecretKey string `json:"secret_key" example:"9eb54a48a25e425584bccb81c98ef049"`
 } // @name EndpointGetSecretRes
