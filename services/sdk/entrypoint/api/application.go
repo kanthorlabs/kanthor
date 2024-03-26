@@ -2,11 +2,15 @@ package api
 
 import (
 	"github.com/go-chi/chi/v5"
+	httpxmw "github.com/kanthorlabs/common/gateway/httpx/middleware"
 	"github.com/kanthorlabs/kanthor/internal/database/entities"
+	"github.com/kanthorlabs/kanthor/services/sdk/config"
 )
 
 func RegisterApplicationRoutes(router chi.Router, service *sdk) {
 	router.Route("/application", func(sr chi.Router) {
+		sr.Use(httpxmw.Authz(service.infra.Gatekeeper(), config.ServiceName))
+
 		sr.Post("/", UseApplicationCreate(service))
 		sr.Get("/", UseApplicationList(service))
 		sr.Route("/{id}", func(ssr chi.Router) {

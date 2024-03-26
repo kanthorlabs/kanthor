@@ -49,7 +49,7 @@ func (entity *Request) Validate() error {
 		validator.StringStartsWith("msg_id", entity.MsgId, IdNsMsg),
 		validator.StringRequired("tier", entity.Tier),
 		validator.StringRequired("app_id", entity.AppId),
-		validator.StringAlphaNumericUnderscoreDot("type", entity.Type),
+		validator.StringAlphaNumericUnderscoreHyphenDot("type", entity.Type),
 		validator.StringRequired("body", entity.Body),
 		validator.StringRequired("ep_id", entity.EpId),
 		validator.StringOneOf("method", entity.Method, []string{http.MethodPost, http.MethodPut}),

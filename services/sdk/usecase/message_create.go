@@ -94,7 +94,7 @@ type MessageCreateIn struct {
 func (in *MessageCreateIn) Validate() error {
 	return validator.Validate(
 		validator.StringStartsWith("SDK.MESSAGE.CREATE.IN.APP_ID", in.AppId, dbentities.IdNsApp),
-		validator.StringAlphaNumericUnderscoreDot("SDK.MESSAGE.CREATE.IN.TYPE", in.Type),
+		validator.StringAlphaNumericUnderscoreHyphenDot("SDK.MESSAGE.CREATE.IN.TYPE", in.Type),
 		validator.StringRequired("SDK.MESSAGE.CREATE.IN.BODY", in.Body),
 	)
 }

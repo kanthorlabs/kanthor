@@ -12,6 +12,7 @@ import (
 	"github.com/kanthorlabs/common/safe"
 	"github.com/kanthorlabs/common/utils"
 	"github.com/kanthorlabs/common/validator"
+	"github.com/kanthorlabs/kanthor/internal/database/entities"
 	"github.com/kanthorlabs/kanthor/services/permissions"
 )
 
@@ -32,7 +33,7 @@ func (uc *credentials) Create(ctx context.Context, in *CredentialsCreateIn) (*Cr
 
 	out := &CredentialsCreateOut{
 		Tenant:   in.Tenant,
-		Username: idx.New("sdkacc"),
+		Username: idx.New(entities.IdNsCreds),
 		Password: utils.RandomString(PasswordLength),
 	}
 	hash, err := password.Hash(out.Password)

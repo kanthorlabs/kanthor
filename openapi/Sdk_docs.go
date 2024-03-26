@@ -30,6 +30,32 @@ const docTemplateSdk = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/account": {
+            "get": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "tags": [
+                    "account"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/AccountGetRes"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
         "/application": {
             "get": {
                 "security": [
@@ -746,6 +772,41 @@ const docTemplateSdk = `{
         }
     },
     "definitions": {
+        "AccountGetRes": {
+            "type": "object",
+            "required": [
+                "created_at",
+                "deactivated_at",
+                "metadata",
+                "name",
+                "password_hash",
+                "updated_at",
+                "username"
+            ],
+            "properties": {
+                "created_at": {
+                    "type": "integer"
+                },
+                "deactivated_at": {
+                    "type": "integer"
+                },
+                "metadata": {
+                    "$ref": "#/definitions/safe.Metadata"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "password_hash": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "integer"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
         "Application": {
             "type": "object",
             "required": [
@@ -1345,6 +1406,7 @@ const docTemplateSdk = `{
             "required": [
                 "condition_expression",
                 "condition_source",
+                "ep_id",
                 "exclusionary",
                 "name",
                 "priority"
@@ -1357,6 +1419,10 @@ const docTemplateSdk = `{
                 "condition_source": {
                     "type": "string",
                     "example": "type"
+                },
+                "ep_id": {
+                    "type": "string",
+                    "example": "ep_2e8RVZfPFmrZAXXLDlHMowN6nsn"
                 },
                 "exclusionary": {
                     "type": "boolean",
@@ -1629,6 +1695,9 @@ const docTemplateSdk = `{
                     "example": 9
                 }
             }
+        },
+        "safe.Metadata": {
+            "type": "object"
         }
     },
     "securityDefinitions": {

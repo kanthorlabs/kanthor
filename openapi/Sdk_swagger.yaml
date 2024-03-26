@@ -2,6 +2,31 @@ basePath: /api
 consumes:
 - application/json
 definitions:
+  AccountGetRes:
+    properties:
+      created_at:
+        type: integer
+      deactivated_at:
+        type: integer
+      metadata:
+        $ref: '#/definitions/safe.Metadata'
+      name:
+        type: string
+      password_hash:
+        type: string
+      updated_at:
+        type: integer
+      username:
+        type: string
+    required:
+    - created_at
+    - deactivated_at
+    - metadata
+    - name
+    - password_hash
+    - updated_at
+    - username
+    type: object
   Application:
     properties:
       created_at:
@@ -452,6 +477,9 @@ definitions:
       condition_source:
         example: type
         type: string
+      ep_id:
+        example: ep_2e8RVZfPFmrZAXXLDlHMowN6nsn
+        type: string
       exclusionary:
         example: false
         type: boolean
@@ -464,6 +492,7 @@ definitions:
     required:
     - condition_expression
     - condition_source
+    - ep_id
     - exclusionary
     - name
     - priority
@@ -664,6 +693,8 @@ definitions:
     - name
     - priority
     type: object
+  safe.Metadata:
+    type: object
 externalDocs:
   description: OpenAPI
   url: https://swagger.io/resources/open-api/
@@ -680,6 +711,21 @@ info:
   title: Kanthor SDK API
   version: v2024.1014.1700
 paths:
+  /account:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/AccountGetRes'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - Authorization: []
+      tags:
+      - account
   /application:
     get:
       parameters:

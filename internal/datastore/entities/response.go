@@ -48,7 +48,7 @@ func (entity *Response) Validate() error {
 		validator.StringStartsWith("msg_id", entity.MsgId, IdNsMsg),
 		validator.StringRequired("tier", entity.Tier),
 		validator.StringRequired("app_id", entity.AppId),
-		validator.StringAlphaNumericUnderscoreDot("type", entity.Type),
+		validator.StringAlphaNumericUnderscoreHyphenDot("type", entity.Type),
 		validator.StringStartsWith("req_id", entity.ReqId, IdNsReq),
 		validator.StringRequired("ep_id", entity.EpId),
 		validator.StringUri("uri", entity.Uri),

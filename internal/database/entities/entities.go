@@ -7,10 +7,11 @@ import (
 )
 
 var (
-	IdNsWs  = "ws"
-	IdNsApp = "app"
-	IdNsEp  = "ep"
-	IdNsRt  = "rt"
+	IdNsWs    = "ws"
+	IdNsCreds = "creds"
+	IdNsApp   = "app"
+	IdNsEp    = "ep"
+	IdNsRt    = "rt"
 
 	TableWs  = project.Name("workspace")
 	TableApp = project.Name("application")

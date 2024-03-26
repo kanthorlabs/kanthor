@@ -1,12 +1,12 @@
 package api
 
 import (
-	"encoding/base64"
 	"encoding/json"
 	"net/http"
 
 	httpxmw "github.com/kanthorlabs/common/gateway/httpx/middleware"
 	httpxwriter "github.com/kanthorlabs/common/gateway/httpx/writer"
+	strategies "github.com/kanthorlabs/common/passport/strategies"
 	"github.com/kanthorlabs/kanthor/services/portal/usecase"
 )
 
@@ -46,7 +46,8 @@ func UseCredentialsCreate(service *portal) http.HandlerFunc {
 			Username: out.Username,
 			Password: out.Password,
 			Schemes: httpxwriter.M{
-				"basic": base64.StdEncoding.EncodeToString([]byte(out.Username + ":" + out.Password)),
+				// the region part will help the client detech what region API it needs to talk to
+				"basic": strategies.CreateRegionalBasicCredentials(out.Username + ":" + out.Password),
 			},
 		}
 		httpxwriter.Ok(w, res)
