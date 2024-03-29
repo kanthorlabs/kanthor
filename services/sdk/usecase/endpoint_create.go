@@ -41,7 +41,7 @@ func (uc *endpoint) Create(ctx context.Context, in *EndpointCreateIn) (*Endpoint
 	doc.SetId()
 	doc.SetAuditFacttor(uc.watch.Now())
 
-	secretKey := idx.Build(entities.IdNsEpsk, utils.RandomString(SecretLength))
+	secretKey := idx.Build(entities.IdNsEpSec, utils.RandomString(SecretLength))
 	secret, err := encryption.Encrypt(uc.conf.Infrastructure.Secrets.Cipher[0], secretKey)
 	if err != nil {
 		uc.logger.Errorw(ErrEndpointCreate.Error(), "error", err.Error(), "in", utils.Stringify(in), "endpoint", utils.Stringify(doc))
