@@ -9,10 +9,10 @@ definitions:
       deactivated_at:
         type: integer
       metadata:
-        $ref: '#/definitions/safe.Metadata'
+        allOf:
+        - $ref: '#/definitions/safe.Metadata'
+        description: '@name metadata'
       name:
-        type: string
-      password_hash:
         type: string
       updated_at:
         type: integer
@@ -23,7 +23,6 @@ definitions:
     - deactivated_at
     - metadata
     - name
-    - password_hash
     - updated_at
     - username
     type: object
@@ -332,7 +331,8 @@ definitions:
       name:
         example: echo endpoint
         type: string
-      secretKey:
+      secret_key:
+        example: 9eb54a48a25e425584bccb81c98ef049
         type: string
       updated_at:
         example: 1728925200000
@@ -346,6 +346,7 @@ definitions:
     - id
     - method
     - name
+    - secret_key
     - updated_at
     - uri
     type: object

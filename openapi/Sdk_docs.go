@@ -779,7 +779,6 @@ const docTemplateSdk = `{
                 "deactivated_at",
                 "metadata",
                 "name",
-                "password_hash",
                 "updated_at",
                 "username"
             ],
@@ -791,12 +790,14 @@ const docTemplateSdk = `{
                     "type": "integer"
                 },
                 "metadata": {
-                    "$ref": "#/definitions/safe.Metadata"
+                    "description": "@name metadata",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/safe.Metadata"
+                        }
+                    ]
                 },
                 "name": {
-                    "type": "string"
-                },
-                "password_hash": {
                     "type": "string"
                 },
                 "updated_at": {
@@ -1200,6 +1201,7 @@ const docTemplateSdk = `{
                 "id",
                 "method",
                 "name",
+                "secret_key",
                 "updated_at",
                 "uri"
             ],
@@ -1224,8 +1226,9 @@ const docTemplateSdk = `{
                     "type": "string",
                     "example": "echo endpoint"
                 },
-                "secretKey": {
-                    "type": "string"
+                "secret_key": {
+                    "type": "string",
+                    "example": "9eb54a48a25e425584bccb81c98ef049"
                 },
                 "updated_at": {
                     "type": "integer",
