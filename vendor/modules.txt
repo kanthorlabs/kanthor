@@ -154,7 +154,7 @@ github.com/jinzhu/now
 # github.com/josharian/intern v1.0.0
 ## explicit; go 1.5
 github.com/josharian/intern
-# github.com/kanthorlabs/common v0.0.0-20240326031801-0025e0f61569
+# github.com/kanthorlabs/common v0.0.0-20240329021053-a7723b5bcfcb
 ## explicit; go 1.21.7
 github.com/kanthorlabs/common/cache
 github.com/kanthorlabs/common/cache/config
@@ -189,6 +189,7 @@ github.com/kanthorlabs/common/passport
 github.com/kanthorlabs/common/passport/config
 github.com/kanthorlabs/common/passport/entities
 github.com/kanthorlabs/common/passport/strategies
+github.com/kanthorlabs/common/passport/utils
 github.com/kanthorlabs/common/patterns
 github.com/kanthorlabs/common/persistence
 github.com/kanthorlabs/common/persistence/database

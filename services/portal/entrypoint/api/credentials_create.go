@@ -6,7 +6,7 @@ import (
 
 	httpxmw "github.com/kanthorlabs/common/gateway/httpx/middleware"
 	httpxwriter "github.com/kanthorlabs/common/gateway/httpx/writer"
-	strategies "github.com/kanthorlabs/common/passport/strategies"
+	passportutils "github.com/kanthorlabs/common/passport/utils"
 	"github.com/kanthorlabs/kanthor/services/portal/usecase"
 )
 
@@ -47,7 +47,7 @@ func UseCredentialsCreate(service *portal) http.HandlerFunc {
 			Password: out.Password,
 			Schemes: httpxwriter.M{
 				// the region part will help the client detech what region API it needs to talk to
-				"basic": strategies.CreateRegionalBasicCredentials(out.Username + ":" + out.Password),
+				"basic": passportutils.CreateRegionalBasicCredentials(out.Username + ":" + out.Password),
 			},
 		}
 		httpxwriter.Ok(w, res)
