@@ -49,8 +49,8 @@ func UseApplicationUpdate(service *sdk) http.HandlerFunc {
 }
 
 type ApplicationUpdateReq struct {
-	Name string `json:"name" example:"anthor application name"`
-} // @name WorkspaceUpdateReq
+	Name string `json:"name" example:"anothor application name"`
+} // @name ApplicationUpdateReq
 
 type ApplicationUpdateRes struct {
 	*Application

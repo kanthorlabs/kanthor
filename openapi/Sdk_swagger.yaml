@@ -140,6 +140,14 @@ definitions:
     - count
     - data
     type: object
+  ApplicationUpdateReq:
+    properties:
+      name:
+        example: anothor application name
+        type: string
+    required:
+    - name
+    type: object
   ApplicationUpdateRes:
     properties:
       created_at:
@@ -359,6 +367,22 @@ definitions:
     required:
     - count
     - data
+    type: object
+  EndpointUpdateReq:
+    properties:
+      method:
+        example: PUT
+        type: string
+      name:
+        example: echo endpoint with PUT
+        type: string
+      uri:
+        example: https://postman-echo.com/put
+        type: string
+    required:
+    - method
+    - name
+    - uri
     type: object
   EndpointUpdateRes:
     properties:
@@ -628,6 +652,30 @@ definitions:
     - count
     - data
     type: object
+  RouteUpdateReq:
+    properties:
+      condition_expression:
+        example: prefix::testing.
+        type: string
+      condition_source:
+        example: type
+        type: string
+      exclusionary:
+        example: false
+        type: boolean
+      name:
+        example: only test type route
+        type: string
+      priority:
+        example: 9
+        type: integer
+    required:
+    - condition_expression
+    - condition_source
+    - exclusionary
+    - name
+    - priority
+    type: object
   RouteUpdateRes:
     properties:
       condition_expression:
@@ -667,30 +715,6 @@ definitions:
     - name
     - priority
     - updated_at
-    type: object
-  WorkspaceUpdateReq:
-    properties:
-      condition_expression:
-        example: prefix::testing.
-        type: string
-      condition_source:
-        example: type
-        type: string
-      exclusionary:
-        example: false
-        type: boolean
-      name:
-        example: only test type route
-        type: string
-      priority:
-        example: 9
-        type: integer
-    required:
-    - condition_expression
-    - condition_source
-    - exclusionary
-    - name
-    - priority
     type: object
   safe.Metadata:
     type: object
@@ -836,7 +860,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/WorkspaceUpdateReq'
+          $ref: '#/definitions/ApplicationUpdateReq'
       responses:
         "200":
           description: OK
@@ -975,7 +999,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/WorkspaceUpdateReq'
+          $ref: '#/definitions/EndpointUpdateReq'
       responses:
         "200":
           description: OK
@@ -1152,7 +1176,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/WorkspaceUpdateReq'
+          $ref: '#/definitions/RouteUpdateReq'
       responses:
         "200":
           description: OK

@@ -58,7 +58,7 @@ type RouteUpdateReq struct {
 	Exclusionary        bool   `json:"exclusionary" example:"false"`
 	ConditionSource     string `json:"condition_source" example:"type"`
 	ConditionExpression string `json:"condition_expression" example:"prefix::testing."`
-} // @name WorkspaceUpdateReq
+} // @name RouteUpdateReq
 
 type RouteUpdateRes struct {
 	*Route

@@ -54,7 +54,7 @@ github.com/kanthorlabs/kanthor/services/portal/usecase/credentials_list.go:14.38
 github.com/kanthorlabs/kanthor/services/portal/usecase/credentials_list.go:18.2,19.16 2 0
 github.com/kanthorlabs/kanthor/services/portal/usecase/credentials_list.go:19.16,22.3 2 0
 github.com/kanthorlabs/kanthor/services/portal/usecase/credentials_list.go:24.2,25.17 2 0
-github.com/kanthorlabs/kanthor/services/portal/usecase/credentials_list.go:32.47,36.2 1 0
+github.com/kanthorlabs/kanthor/services/portal/usecase/credentials_list.go:33.47,37.2 1 0
 github.com/kanthorlabs/kanthor/services/portal/usecase/credentials_update.go:15.108,16.38 1 0
 github.com/kanthorlabs/kanthor/services/portal/usecase/credentials_update.go:16.38,18.3 1 0
 github.com/kanthorlabs/kanthor/services/portal/usecase/credentials_update.go:20.2,21.16 2 0

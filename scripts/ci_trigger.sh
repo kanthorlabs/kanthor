@@ -4,6 +4,9 @@ set -e
 # run the test locally
 sh scripts/ci_test.sh
 
+git add cover.out coverage.out 
+find . -type f -name 'checksum' -exec git add {} \;
+
 # add all checksume
 find . -type f -name 'checksum' -exec git add {} \;
 

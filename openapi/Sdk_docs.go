@@ -239,7 +239,7 @@ const docTemplateSdk = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/WorkspaceUpdateReq"
+                            "$ref": "#/definitions/ApplicationUpdateReq"
                         }
                     }
                 ],
@@ -462,7 +462,7 @@ const docTemplateSdk = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/WorkspaceUpdateReq"
+                            "$ref": "#/definitions/EndpointUpdateReq"
                         }
                     }
                 ],
@@ -750,7 +750,7 @@ const docTemplateSdk = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/WorkspaceUpdateReq"
+                            "$ref": "#/definitions/RouteUpdateReq"
                         }
                     }
                 ],
@@ -958,6 +958,18 @@ const docTemplateSdk = `{
                     "items": {
                         "$ref": "#/definitions/Application"
                     }
+                }
+            }
+        },
+        "ApplicationUpdateReq": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "example": "anothor application name"
                 }
             }
         },
@@ -1250,6 +1262,28 @@ const docTemplateSdk = `{
                     "items": {
                         "$ref": "#/definitions/Endpoint"
                     }
+                }
+            }
+        },
+        "EndpointUpdateReq": {
+            "type": "object",
+            "required": [
+                "method",
+                "name",
+                "uri"
+            ],
+            "properties": {
+                "method": {
+                    "type": "string",
+                    "example": "PUT"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "echo endpoint with PUT"
+                },
+                "uri": {
+                    "type": "string",
+                    "example": "https://postman-echo.com/put"
                 }
             }
         },
@@ -1610,6 +1644,38 @@ const docTemplateSdk = `{
                 }
             }
         },
+        "RouteUpdateReq": {
+            "type": "object",
+            "required": [
+                "condition_expression",
+                "condition_source",
+                "exclusionary",
+                "name",
+                "priority"
+            ],
+            "properties": {
+                "condition_expression": {
+                    "type": "string",
+                    "example": "prefix::testing."
+                },
+                "condition_source": {
+                    "type": "string",
+                    "example": "type"
+                },
+                "exclusionary": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "name": {
+                    "type": "string",
+                    "example": "only test type route"
+                },
+                "priority": {
+                    "type": "integer",
+                    "example": 9
+                }
+            }
+        },
         "RouteUpdateRes": {
             "type": "object",
             "required": [
@@ -1659,38 +1725,6 @@ const docTemplateSdk = `{
                 "updated_at": {
                     "type": "integer",
                     "example": 1728925200000
-                }
-            }
-        },
-        "WorkspaceUpdateReq": {
-            "type": "object",
-            "required": [
-                "condition_expression",
-                "condition_source",
-                "exclusionary",
-                "name",
-                "priority"
-            ],
-            "properties": {
-                "condition_expression": {
-                    "type": "string",
-                    "example": "prefix::testing."
-                },
-                "condition_source": {
-                    "type": "string",
-                    "example": "type"
-                },
-                "exclusionary": {
-                    "type": "boolean",
-                    "example": false
-                },
-                "name": {
-                    "type": "string",
-                    "example": "only test type route"
-                },
-                "priority": {
-                    "type": "integer",
-                    "example": 9
                 }
             }
         },

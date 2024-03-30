@@ -54,7 +54,7 @@ type EndpointUpdateReq struct {
 	Name   string `json:"name" example:"echo endpoint with PUT"`
 	Method string `json:"method" example:"PUT"`
 	Uri    string `json:"uri" example:"https://postman-echo.com/put"`
-} // @name WorkspaceUpdateReq
+} // @name EndpointUpdateReq
 
 type EndpointUpdateRes struct {
 	*Endpoint
