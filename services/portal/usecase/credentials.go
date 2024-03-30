@@ -53,7 +53,7 @@ func (uc *credentials) get(ctx context.Context, tenant, username string) ([]*Cre
 		return nil, errors.New("PORTAl.CREDENTIALS.PASSPORT.ERROR")
 	}
 
-	return cappmap(maps, accounts), nil
+	return cappmap(accounts, maps), nil
 }
 
 type CredentialsAccount struct {
@@ -90,7 +90,7 @@ func cagkmap(users []gkentities.User, find string) ([]string, map[string]*Creden
 	return usernames, maps
 }
 
-func cappmap(maps map[string]*CredentialsAccount, accounts []*ppentities.Account) []*CredentialsAccount {
+func cappmap(accounts []*ppentities.Account, maps map[string]*CredentialsAccount) []*CredentialsAccount {
 	ca := []*CredentialsAccount{}
 	for i := range accounts {
 		if account, ok := maps[accounts[i].Username]; ok {

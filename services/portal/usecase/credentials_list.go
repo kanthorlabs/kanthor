@@ -15,7 +15,7 @@ func (uc *credentials) List(ctx context.Context, in *CredentialsListIn) (*Creden
 		return nil, err
 	}
 
-	accounts, err := uc.get(ctx, in.Tenant, "")
+	accounts, err := uc.get(ctx, in.Tenant, in.Username)
 	if err != nil {
 		uc.logger.Errorw(ErrCredentialsList.Error(), "error", err.Error(), "in", utils.Stringify(in))
 		return nil, ErrCredentialsList
@@ -26,7 +26,8 @@ func (uc *credentials) List(ctx context.Context, in *CredentialsListIn) (*Creden
 }
 
 type CredentialsListIn struct {
-	Tenant string
+	Tenant   string
+	Username string
 }
 
 func (in *CredentialsListIn) Validate() error {

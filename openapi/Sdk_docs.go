@@ -790,12 +790,7 @@ const docTemplateSdk = `{
                     "type": "integer"
                 },
                 "metadata": {
-                    "description": "@name metadata",
-                    "allOf": [
-                        {
-                            "$ref": "#/definitions/safe.Metadata"
-                        }
-                    ]
+                    "$ref": "#/definitions/safe.Metadata"
                 },
                 "name": {
                     "type": "string"

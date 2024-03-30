@@ -13,7 +13,7 @@ import (
 // UseCredentialsExpire
 // @Tags			credentials
 // @Router		/credentials/{username}/expiration		[put]
-// @Param			username															path			string						true	"credentials username"
+// @Param			username															path			string								true	"credentials username"
 // @Param			request																body			CredentialsExpireReq	true	"request body"
 // @Success		200																		{object}	CredentialsExpireRes
 // @Failure		default																{object}	Error

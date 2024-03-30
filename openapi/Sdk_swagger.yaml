@@ -9,9 +9,7 @@ definitions:
       deactivated_at:
         type: integer
       metadata:
-        allOf:
-        - $ref: '#/definitions/safe.Metadata'
-        description: '@name metadata'
+        $ref: '#/definitions/safe.Metadata'
       name:
         type: string
       updated_at:
