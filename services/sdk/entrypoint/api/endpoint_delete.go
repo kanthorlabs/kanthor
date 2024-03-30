@@ -12,7 +12,6 @@ import (
 // UseEndpointDelete
 // @Tags			endpoint
 // @Router		/endpoint/{id}			[delete]
-// @Param			app_id							query			string							true	"application id"
 // @Param			id									path			string							true	"endpoint id"
 // @Success		200									{object}	EndpointDeleteRes
 // @Failure		default							{object}	Error

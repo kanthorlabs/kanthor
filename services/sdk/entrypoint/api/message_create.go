@@ -12,7 +12,6 @@ import (
 // UseMessageCreate
 // @Tags			message
 // @Router		/message			[post]
-// @Param			app_id				query			string							true	"application id"
 // @Param			request				body			MessageCreateReq		true	"request body"
 // @Success		200						{object}	MessageCreateRes
 // @Failure		default				{object}	Error
@@ -47,6 +46,7 @@ func UseMessageCreate(service *sdk) http.HandlerFunc {
 }
 
 type MessageCreateReq struct {
+	AppId  string         `json:"app_id" example:"app_2e77LVGiYP53IdHOa3FPcOEebIO"`
 	Type   string         `json:"type" example:"testing.openapi"`
 	Object map[string]any `json:"object" example:"say:hello,from_client:openapi" swaggertype:"object,string"`
 } // @name MessageCreateReq

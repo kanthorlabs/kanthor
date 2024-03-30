@@ -12,7 +12,6 @@ import (
 // UseEndpointCreate
 // @Tags			endpoint
 // @Router		/endpoint			[post]
-// @Param			app_id				query			string							true	"application id"
 // @Param			request				body			EndpointCreateReq		true	"request body"
 // @Success		200						{object}	EndpointCreateRes
 // @Failure		default				{object}	Error

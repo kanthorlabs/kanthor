@@ -12,7 +12,6 @@ import (
 // UseRouteList
 // @Tags			route
 // @Router		/route						[get]
-// @Param			ep_id							query			string						false	"endpoint id"
 // @Param			_ids							query			[]string					false	"list by ids"
 // @Param			_q								query			string						false	"search keyword"
 // @Param			_limit						query			int								false	"limit returning records"	default(5)
