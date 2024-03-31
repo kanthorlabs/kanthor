@@ -22,3 +22,18 @@ type Timeseries struct {
 	// but, we should keep our entities stateless if we can
 	CreatedAt int64 `gorm:"autoCreateTime:false"`
 }
+
+type MessagePk struct {
+	AppId string
+	Id    string
+}
+
+type RequestPk struct {
+	EpId  string
+	MsgId string
+}
+
+type ResponsePk struct {
+	EpId  string
+	MsgId string
+}

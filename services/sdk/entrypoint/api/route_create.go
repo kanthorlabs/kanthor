@@ -51,7 +51,7 @@ func UseRouteCreate(service *sdk) http.HandlerFunc {
 }
 
 type RouteCreateReq struct {
-	EpId                string `json:"ep_id" example:"ep_2e8RVZfPFmrZAXXLDlHMowN6nsn"`
+	EpId                string `json:"ep_id" example:"ep_2dZRCcnumVTMI9eHdmep89IpOgY"`
 	Name                string `json:"name" example:"passthrough"`
 	Priority            int32  `json:"priority" example:"1"`
 	Exclusionary        bool   `json:"exclusionary" example:"false"`

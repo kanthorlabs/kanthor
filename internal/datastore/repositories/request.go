@@ -8,4 +8,5 @@ import (
 
 type Request interface {
 	Save(ctx context.Context, docs []*entities.Request) error
+	Get(ctx context.Context, pks []entities.RequestPk) ([]*entities.Request, error)
 }

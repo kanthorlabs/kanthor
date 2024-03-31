@@ -534,6 +534,41 @@ const docTemplateSdk = `{
                 }
             }
         },
+        "/message/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "tags": [
+                    "message"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "message id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/MessageGetRes"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
         "/route": {
             "get": {
                 "security": [
@@ -1025,7 +1060,7 @@ const docTemplateSdk = `{
             "properties": {
                 "app_id": {
                     "type": "string",
-                    "example": "app_2e77LVGiYP53IdHOa3FPcOEebIO"
+                    "example": "msg_2ePVr2tTfiJA20mN8wkc8EkGZu4"
                 },
                 "method": {
                     "type": "string",
@@ -1308,6 +1343,53 @@ const docTemplateSdk = `{
                 }
             }
         },
+        "Message": {
+            "type": "object",
+            "required": [
+                "app_id",
+                "body",
+                "created_at",
+                "id",
+                "metadata",
+                "tier",
+                "type"
+            ],
+            "properties": {
+                "app_id": {
+                    "type": "string",
+                    "example": "msg_2ePVr2tTfiJA20mN8wkc8EkGZu4"
+                },
+                "body": {
+                    "type": "string",
+                    "example": "{\"app_id\":\"msg_2ePVr2tTfiJA20mN8wkc8EkGZu4\",\"type\":\"testing.openapi\",\"object\":{\"from_client\":\"openapi\",\"say\":\"hello\"}}"
+                },
+                "created_at": {
+                    "type": "integer",
+                    "example": 1728925200000
+                },
+                "id": {
+                    "type": "string",
+                    "example": "msg_2ePVr2tTfiJA20mN8wkc8EkGZu4"
+                },
+                "metadata": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    },
+                    "example": {
+                        "kanthor.server.version": "v2024.1014.1700"
+                    }
+                },
+                "tier": {
+                    "type": "string",
+                    "example": "default"
+                },
+                "type": {
+                    "type": "string",
+                    "example": "testing.openapi"
+                }
+            }
+        },
         "MessageCreateReq": {
             "type": "object",
             "required": [
@@ -1318,17 +1400,10 @@ const docTemplateSdk = `{
             "properties": {
                 "app_id": {
                     "type": "string",
-                    "example": "app_2e77LVGiYP53IdHOa3FPcOEebIO"
+                    "example": "msg_2ePVr2tTfiJA20mN8wkc8EkGZu4"
                 },
                 "object": {
-                    "type": "object",
-                    "additionalProperties": {
-                        "type": "string"
-                    },
-                    "example": {
-                        "from_client": "openapi",
-                        "say": "hello"
-                    }
+                    "type": "object"
                 },
                 "type": {
                     "type": "string",
@@ -1350,6 +1425,221 @@ const docTemplateSdk = `{
                 "id": {
                     "type": "string",
                     "example": "msg_2dgJIHGMePYS4VJRmEGv73RfIvu"
+                }
+            }
+        },
+        "MessageEndpoint": {
+            "type": "object",
+            "required": [
+                "endpoint",
+                "requests",
+                "responses"
+            ],
+            "properties": {
+                "endpoint": {
+                    "$ref": "#/definitions/Endpoint"
+                },
+                "requests": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Request"
+                    }
+                },
+                "responses": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Response"
+                    }
+                }
+            }
+        },
+        "MessageGetRes": {
+            "type": "object",
+            "required": [
+                "endpoints",
+                "message"
+            ],
+            "properties": {
+                "endpoints": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/MessageEndpoint"
+                    }
+                },
+                "message": {
+                    "$ref": "#/definitions/Message"
+                }
+            }
+        },
+        "Request": {
+            "type": "object",
+            "required": [
+                "app_id",
+                "body",
+                "created_at",
+                "ep_id",
+                "headers",
+                "id",
+                "metadata",
+                "method",
+                "msg_id",
+                "tier",
+                "type",
+                "uri"
+            ],
+            "properties": {
+                "app_id": {
+                    "type": "string",
+                    "example": "msg_2ePVr2tTfiJA20mN8wkc8EkGZu4"
+                },
+                "body": {
+                    "type": "string",
+                    "example": "{\"app_id\":\"msg_2ePVr2tTfiJA20mN8wkc8EkGZu4\",\"type\":\"testing.openapi\",\"object\":{\"from_client\":\"openapi\",\"say\":\"hello\"}}"
+                },
+                "created_at": {
+                    "type": "integer",
+                    "example": 1728925200000
+                },
+                "ep_id": {
+                    "type": "string",
+                    "example": "ep_2dZRCcnumVTMI9eHdmep89IpOgY"
+                },
+                "headers": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    },
+                    "example": {
+                        "Content-Type": "application/json",
+                        "Idempotency-Key": "ik_2eR0d3ySDxK0ZjA35zdMswsF6HG",
+                        "User-Agent": "Kanthor/v2024.1014.1700",
+                        "Webhook-Id": "req_2ePVrMU69SGTlX0QC9Lvqkma82x",
+                        "Webhook-Signature": "v1=d0c41af2d916cf09225288ddebeb5fbb42a0a635f059b777bf4d4e787b3c5714",
+                        "Webhook-Timestamp": "1711806397376",
+                        "Webhook-Type": "testing.openapi"
+                    }
+                },
+                "id": {
+                    "type": "string",
+                    "example": "req_2ePVrMU69SGTlX0QC9Lvqkma82x"
+                },
+                "metadata": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    },
+                    "example": {
+                        "kanthor.rt.id": "rt_2ePVcGq0hlMi1xBohNLuJvyIVHW",
+                        "kanthor.server.version": "v2024.1014.1700"
+                    }
+                },
+                "method": {
+                    "type": "string",
+                    "example": "POST"
+                },
+                "msg_id": {
+                    "type": "string",
+                    "example": "msg_2ePVr2tTfiJA20mN8wkc8EkGZu4"
+                },
+                "tier": {
+                    "type": "string",
+                    "example": "default"
+                },
+                "type": {
+                    "type": "string",
+                    "example": "testing.openapi"
+                },
+                "uri": {
+                    "type": "string",
+                    "example": "https://postman-echo.com/post"
+                }
+            }
+        },
+        "Response": {
+            "type": "object",
+            "required": [
+                "app_id",
+                "body",
+                "created_at",
+                "ep_id",
+                "headers",
+                "id",
+                "metadata",
+                "method",
+                "msg_id",
+                "req_id",
+                "status",
+                "tier",
+                "type",
+                "uri"
+            ],
+            "properties": {
+                "app_id": {
+                    "type": "string",
+                    "example": "msg_2ePVr2tTfiJA20mN8wkc8EkGZu4"
+                },
+                "body": {
+                    "type": "string",
+                    "example": "{\"args\":{},\"headers\":{},\"url\":\"https://postman-echo.com/post\"}"
+                },
+                "created_at": {
+                    "type": "integer",
+                    "example": 1728925200000
+                },
+                "ep_id": {
+                    "type": "string",
+                    "example": "ep_2dZRCcnumVTMI9eHdmep89IpOgY"
+                },
+                "headers": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    },
+                    "example": {
+                        "Content-Type": "application/json"
+                    }
+                },
+                "id": {
+                    "type": "string",
+                    "example": "res2eQwR88Z4xujEzwjUBmtQxK5uHB"
+                },
+                "metadata": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    },
+                    "example": {
+                        "kanthor.rt.id": "rt_2ePVcGq0hlMi1xBohNLuJvyIVHW",
+                        "kanthor.server.version": "v2024.1014.1700"
+                    }
+                },
+                "method": {
+                    "type": "string",
+                    "example": "POST"
+                },
+                "msg_id": {
+                    "type": "string",
+                    "example": "msg_2ePVr2tTfiJA20mN8wkc8EkGZu4"
+                },
+                "req_id": {
+                    "type": "string",
+                    "example": "req_2ePVrMU69SGTlX0QC9Lvqkma82x"
+                },
+                "status": {
+                    "type": "integer",
+                    "example": 200
+                },
+                "tier": {
+                    "type": "string",
+                    "example": "default"
+                },
+                "type": {
+                    "type": "string",
+                    "example": "testing.openapi"
+                },
+                "uri": {
+                    "type": "string",
+                    "example": "https://postman-echo.com/post"
                 }
             }
         },
@@ -1426,7 +1716,7 @@ const docTemplateSdk = `{
                 },
                 "ep_id": {
                     "type": "string",
-                    "example": "ep_2e8RVZfPFmrZAXXLDlHMowN6nsn"
+                    "example": "ep_2dZRCcnumVTMI9eHdmep89IpOgY"
                 },
                 "exclusionary": {
                     "type": "boolean",

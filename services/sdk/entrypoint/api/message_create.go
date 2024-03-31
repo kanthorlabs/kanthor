@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/kanthorlabs/common/gatekeeper"
 	httpxwriter "github.com/kanthorlabs/common/gateway/httpx/writer"
 	"github.com/kanthorlabs/common/utils"
 	"github.com/kanthorlabs/kanthor/services/sdk/usecase"
@@ -25,7 +26,8 @@ func UseMessageCreate(service *sdk) http.HandlerFunc {
 		}
 
 		in := &usecase.MessageCreateIn{
-			AppId: r.URL.Query().Get("app_id"),
+			WsId:  r.Context().Value(gatekeeper.CtxTenantId).(string),
+			AppId: req.AppId,
 			Type:  req.Type,
 			Body:  utils.Stringify(req),
 		}
@@ -46,9 +48,9 @@ func UseMessageCreate(service *sdk) http.HandlerFunc {
 }
 
 type MessageCreateReq struct {
-	AppId  string         `json:"app_id" example:"app_2e77LVGiYP53IdHOa3FPcOEebIO"`
+	AppId  string         `json:"app_id" example:"msg_2ePVr2tTfiJA20mN8wkc8EkGZu4"`
 	Type   string         `json:"type" example:"testing.openapi"`
-	Object map[string]any `json:"object" example:"say:hello,from_client:openapi" swaggertype:"object,string"`
+	Object map[string]any `json:"object" swaggertype:"object"`
 } // @name MessageCreateReq
 
 type MessageCreateRes struct {

@@ -207,7 +207,7 @@ definitions:
   EndpointCreateReq:
     properties:
       app_id:
-        example: app_2e77LVGiYP53IdHOa3FPcOEebIO
+        example: msg_2ePVr2tTfiJA20mN8wkc8EkGZu4
         type: string
       method:
         example: POST
@@ -424,17 +424,47 @@ definitions:
     required:
     - error
     type: object
-  MessageCreateReq:
+  Message:
     properties:
       app_id:
-        example: app_2e77LVGiYP53IdHOa3FPcOEebIO
+        example: msg_2ePVr2tTfiJA20mN8wkc8EkGZu4
         type: string
-      object:
+      body:
+        example: '{"app_id":"msg_2ePVr2tTfiJA20mN8wkc8EkGZu4","type":"testing.openapi","object":{"from_client":"openapi","say":"hello"}}'
+        type: string
+      created_at:
+        example: 1728925200000
+        type: integer
+      id:
+        example: msg_2ePVr2tTfiJA20mN8wkc8EkGZu4
+        type: string
+      metadata:
         additionalProperties:
           type: string
         example:
-          from_client: openapi
-          say: hello
+          kanthor.server.version: v2024.1014.1700
+        type: object
+      tier:
+        example: default
+        type: string
+      type:
+        example: testing.openapi
+        type: string
+    required:
+    - app_id
+    - body
+    - created_at
+    - id
+    - metadata
+    - tier
+    - type
+    type: object
+  MessageCreateReq:
+    properties:
+      app_id:
+        example: msg_2ePVr2tTfiJA20mN8wkc8EkGZu4
+        type: string
+      object:
         type: object
       type:
         example: testing.openapi
@@ -455,6 +485,167 @@ definitions:
     required:
     - created_at
     - id
+    type: object
+  MessageEndpoint:
+    properties:
+      endpoint:
+        $ref: '#/definitions/Endpoint'
+      requests:
+        items:
+          $ref: '#/definitions/Request'
+        type: array
+      responses:
+        items:
+          $ref: '#/definitions/Response'
+        type: array
+    required:
+    - endpoint
+    - requests
+    - responses
+    type: object
+  MessageGetRes:
+    properties:
+      endpoints:
+        items:
+          $ref: '#/definitions/MessageEndpoint'
+        type: array
+      message:
+        $ref: '#/definitions/Message'
+    required:
+    - endpoints
+    - message
+    type: object
+  Request:
+    properties:
+      app_id:
+        example: msg_2ePVr2tTfiJA20mN8wkc8EkGZu4
+        type: string
+      body:
+        example: '{"app_id":"msg_2ePVr2tTfiJA20mN8wkc8EkGZu4","type":"testing.openapi","object":{"from_client":"openapi","say":"hello"}}'
+        type: string
+      created_at:
+        example: 1728925200000
+        type: integer
+      ep_id:
+        example: ep_2dZRCcnumVTMI9eHdmep89IpOgY
+        type: string
+      headers:
+        additionalProperties:
+          type: string
+        example:
+          Content-Type: application/json
+          Idempotency-Key: ik_2eR0d3ySDxK0ZjA35zdMswsF6HG
+          User-Agent: Kanthor/v2024.1014.1700
+          Webhook-Id: req_2ePVrMU69SGTlX0QC9Lvqkma82x
+          Webhook-Signature: v1=d0c41af2d916cf09225288ddebeb5fbb42a0a635f059b777bf4d4e787b3c5714
+          Webhook-Timestamp: "1711806397376"
+          Webhook-Type: testing.openapi
+        type: object
+      id:
+        example: req_2ePVrMU69SGTlX0QC9Lvqkma82x
+        type: string
+      metadata:
+        additionalProperties:
+          type: string
+        example:
+          kanthor.rt.id: rt_2ePVcGq0hlMi1xBohNLuJvyIVHW
+          kanthor.server.version: v2024.1014.1700
+        type: object
+      method:
+        example: POST
+        type: string
+      msg_id:
+        example: msg_2ePVr2tTfiJA20mN8wkc8EkGZu4
+        type: string
+      tier:
+        example: default
+        type: string
+      type:
+        example: testing.openapi
+        type: string
+      uri:
+        example: https://postman-echo.com/post
+        type: string
+    required:
+    - app_id
+    - body
+    - created_at
+    - ep_id
+    - headers
+    - id
+    - metadata
+    - method
+    - msg_id
+    - tier
+    - type
+    - uri
+    type: object
+  Response:
+    properties:
+      app_id:
+        example: msg_2ePVr2tTfiJA20mN8wkc8EkGZu4
+        type: string
+      body:
+        example: '{"args":{},"headers":{},"url":"https://postman-echo.com/post"}'
+        type: string
+      created_at:
+        example: 1728925200000
+        type: integer
+      ep_id:
+        example: ep_2dZRCcnumVTMI9eHdmep89IpOgY
+        type: string
+      headers:
+        additionalProperties:
+          type: string
+        example:
+          Content-Type: application/json
+        type: object
+      id:
+        example: res2eQwR88Z4xujEzwjUBmtQxK5uHB
+        type: string
+      metadata:
+        additionalProperties:
+          type: string
+        example:
+          kanthor.rt.id: rt_2ePVcGq0hlMi1xBohNLuJvyIVHW
+          kanthor.server.version: v2024.1014.1700
+        type: object
+      method:
+        example: POST
+        type: string
+      msg_id:
+        example: msg_2ePVr2tTfiJA20mN8wkc8EkGZu4
+        type: string
+      req_id:
+        example: req_2ePVrMU69SGTlX0QC9Lvqkma82x
+        type: string
+      status:
+        example: 200
+        type: integer
+      tier:
+        example: default
+        type: string
+      type:
+        example: testing.openapi
+        type: string
+      uri:
+        example: https://postman-echo.com/post
+        type: string
+    required:
+    - app_id
+    - body
+    - created_at
+    - ep_id
+    - headers
+    - id
+    - metadata
+    - method
+    - msg_id
+    - req_id
+    - status
+    - tier
+    - type
+    - uri
     type: object
   Route:
     properties:
@@ -505,7 +696,7 @@ definitions:
         example: type
         type: string
       ep_id:
-        example: ep_2e8RVZfPFmrZAXXLDlHMowN6nsn
+        example: ep_2dZRCcnumVTMI9eHdmep89IpOgY
         type: string
       exclusionary:
         example: false
@@ -1038,6 +1229,27 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/MessageCreateRes'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - Authorization: []
+      tags:
+      - message
+  /message/{id}:
+    get:
+      parameters:
+      - description: message id
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/MessageGetRes'
         default:
           description: ""
           schema:

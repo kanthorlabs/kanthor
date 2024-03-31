@@ -8,4 +8,5 @@ import (
 
 type Message interface {
 	Save(ctx context.Context, docs []*entities.Message) error
+	Get(ctx context.Context, pks []entities.MessagePk) ([]*entities.Message, error)
 }

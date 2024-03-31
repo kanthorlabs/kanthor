@@ -6,6 +6,7 @@ import (
 	"github.com/kanthorlabs/common/clock"
 	"github.com/kanthorlabs/common/logging"
 	"github.com/kanthorlabs/kanthor/infrastructure"
+	"github.com/kanthorlabs/kanthor/internal/datastore/repositories"
 	"github.com/kanthorlabs/kanthor/services/sdk/config"
 	"gorm.io/gorm"
 )
@@ -16,11 +17,16 @@ func New(
 	infra infrastructure.Infrastructure,
 	watch clock.Clock,
 ) (Sdk, error) {
+	repos, err := repositories.New(infra.Datastore())
+	if err != nil {
+		return nil, err
+	}
 	uc := &sdk{
 		conf:   conf,
 		logger: logger,
 		watch:  watch,
 		infra:  infra,
+		repos:  repos,
 	}
 
 	return uc, nil
@@ -38,6 +44,7 @@ type sdk struct {
 	logger logging.Logger
 	watch  clock.Clock
 	infra  infrastructure.Infrastructure
+	repos  repositories.Repositories
 
 	application *application
 	endpoint    *endpoint
@@ -109,6 +116,7 @@ func (uc *sdk) Message() Message {
 			watch:  uc.watch,
 			infra:  uc.infra,
 			orm:    uc.infra.Database().Client().(*gorm.DB),
+			repos:  uc.repos,
 		}
 	}
 

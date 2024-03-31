@@ -49,7 +49,7 @@ func UseEndpointCreate(service *sdk) http.HandlerFunc {
 }
 
 type EndpointCreateReq struct {
-	AppId  string `json:"app_id" example:"app_2e77LVGiYP53IdHOa3FPcOEebIO"`
+	AppId  string `json:"app_id" example:"msg_2ePVr2tTfiJA20mN8wkc8EkGZu4"`
 	Name   string `json:"name" example:"echo endpoint"`
 	Method string `json:"method" example:"POST"`
 	Uri    string `json:"uri" example:"https://postman-echo.com/post"`
