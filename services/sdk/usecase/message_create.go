@@ -41,6 +41,10 @@ func (uc *message) Create(ctx context.Context, in *MessageCreateIn) (*MessageCre
 	msg.SetId()
 	msg.SetTimeseries(uc.watch.Now())
 	msg.Metadata.Set(constants.MetadataProjectVersion, project.GetVersion())
+
+	// message is the most important entity in the system
+	// without it we cannot process further process like recovery or attempt
+	// so make sure we save it before do anything else
 	if err := uc.repos.Message().Save(ctx, []*dsentities.Message{msg}); err != nil {
 		uc.logger.Errorw(ErrMessageCreate.Error(), "error", err.Error(), "in", utils.Stringify(in))
 		return nil, ErrMessageCreate

@@ -21,21 +21,13 @@ var ErrStorageConsumerSave = errors.New("STORAGE.CONSUMER.SAVE.ERROR")
 func handler(service *scheduler) streaming.SubHandler {
 	// If you return a map of errors, the message with the following refId will be retried
 	return func(ctx context.Context, events map[string]*stmentities.Event) map[string]error {
-		messages := make(map[string]*entities.Message)
 		requests := make(map[string]*entities.Request)
 		responses := make(map[string]*entities.Response)
 
 		for refId, event := range events {
 			if project.IsTopic(event.Subject, constants.MessageTopic) {
-				message, err := transformation.EventToMessage(event)
-				if err != nil {
-					service.logger.Errorw(ErrStorageConsumerSave.Error(), "error", err.Error(), "event", event.String())
-					// unable to parse message from event is considered as un-retriable error
-					// ignore the error, and we need to check it manually with log
-					continue
-				}
-
-				messages[refId] = message
+				// every message must be put into datastore before publish to datastream
+				// so we don't need to handle it in storage service
 				continue
 			}
 
@@ -70,23 +62,6 @@ func handler(service *scheduler) streaming.SubHandler {
 		}
 
 		returning := safe.Map[error]{}
-
-		// saving messages
-		if len(messages) > 0 {
-			timeout := time.Millisecond * time.Duration(service.conf.Storage.Message.Timeout)
-			msgctx, cancel := context.WithTimeout(ctx, timeout)
-			defer cancel()
-			in := &usecase.SaveMessageIn{Messages: messages}
-			// we alreay validated messages items, don't need to validate again
-			out, err := service.uc.Message().Save(msgctx, in)
-			if err != nil {
-				service.logger.Errorw(ErrStorageConsumerSave.Error(), "error", err.Error(), "messages", utils.Stringify(messages))
-				// un-retriable error, reject the whole message batch
-				return map[string]error{}
-			}
-
-			returning.Merge(out.Error)
-		}
 
 		// saving requests
 		if len(requests) > 0 {
