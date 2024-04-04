@@ -15,6 +15,7 @@ type Message struct {
 	AppId    string
 	Type     string
 	Body     string
+	Headers  *safe.Metadata
 	Metadata *safe.Metadata
 }
 

@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/kanthorlabs/common/cipher/signature"
-	"github.com/kanthorlabs/common/idx"
 	"github.com/kanthorlabs/common/project"
 	"github.com/kanthorlabs/common/safe"
 	dbentities "github.com/kanthorlabs/kanthor/internal/database/entities"
@@ -45,10 +44,11 @@ func Request(
 
 	req.SetId()
 	req.SetTimeseries(now)
+	req.Headers.Merge(msg.Headers)
 	req.Metadata.Merge(msg.Metadata)
 	req.Metadata.Set(MetaRouteId, rt.Id)
 	req.Headers.Set("User-Agent", fmt.Sprintf("Kanthor/%s", project.GetVersion()))
-	req.Headers.Set("Idempotency-Key", idx.New("ik"))
+	req.Headers.Set("Idempotency-Key", msg.Id)
 
 	req.Headers.Set("Webhook-Id", req.Id)
 	req.Headers.Set("Webhook-Timestamp", fmt.Sprintf("%d", req.CreatedAt))

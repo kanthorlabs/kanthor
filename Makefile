@@ -15,7 +15,6 @@ up-db:
 up-ds:
 	go run cmd/data/main.go migrate up -s file://data/migration/datastore/postgres -d "postgres://postgres:changemenow@localhost:5432/postgres?sslmode=disable&x-migrations-table=kanthor_ds_migration"
 
-
 down-db:
 	go run cmd/data/main.go migrate down -s file://data/migration/database/postgres -d "postgres://postgres:changemenow@localhost:5432/postgres?sslmode=disable&x-migrations-table=kanthor_db_migration"
 

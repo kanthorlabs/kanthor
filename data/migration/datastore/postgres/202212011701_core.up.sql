@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS kanthor_message (
   tier VARCHAR(64) NOT NULL,
   type VARCHAR(256) NOT NULL,
   metadata TEXT NOT NULL,
+  headers TEXT NOT NULL,
   body TEXT NOT NULL
 );
 

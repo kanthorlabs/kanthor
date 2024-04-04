@@ -35,8 +35,9 @@ func (uc *message) Create(ctx context.Context, in *MessageCreateIn) (*MessageCre
 		Tier:     app.Tier,
 		AppId:    app.Id,
 		Type:     in.Type,
-		Metadata: &safe.Metadata{},
 		Body:     in.Body,
+		Headers:  &safe.Metadata{},
+		Metadata: &safe.Metadata{},
 	}
 	msg.SetId()
 	msg.SetTimeseries(uc.watch.Now())
