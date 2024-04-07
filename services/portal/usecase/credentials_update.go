@@ -28,7 +28,7 @@ func (uc *credentials) Update(ctx context.Context, in *CredentialsUpdateIn) (*Cr
 	}
 
 	accounts[0].Name = in.Name
-	account := &ppentities.Account{
+	account := ppentities.Account{
 		Username: accounts[0].Username,
 		Name:     accounts[0].Name,
 	}

@@ -42,7 +42,7 @@ func (uc *credentials) Create(ctx context.Context, in *CredentialsCreateIn) (*Cr
 		return nil, ErrCredentialsCreate
 	}
 
-	acc := &ppentities.Account{
+	acc := ppentities.Account{
 		Username:     out.Username,
 		PasswordHash: hash,
 		Name:         in.Name,
