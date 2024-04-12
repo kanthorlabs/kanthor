@@ -48,7 +48,7 @@ func (uc *credentials) get(ctx context.Context, tenant, username string) ([]*Cre
 		return []*CredentialsAccount{}, nil
 	}
 
-	accounts, err := strategy.List(ctx, usernames)
+	accounts, err := strategy.Management().List(ctx, usernames)
 	if err != nil {
 		return nil, errors.New("PORTAl.CREDENTIALS.PASSPORT.ERROR")
 	}

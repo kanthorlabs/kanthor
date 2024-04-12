@@ -32,7 +32,7 @@ func (uc *credentials) Expire(ctx context.Context, in *CredentialsExpireIn) (*Cr
 
 	// the strategy is already checked in the .get method
 	strategy, _ := uc.infra.Passport().Strategy(permissions.Sdk)
-	if err := strategy.Deactivate(ctx, in.Username, out.DeactivatedAt); err != nil {
+	if err := strategy.Management().Deactivate(ctx, in.Username, out.DeactivatedAt); err != nil {
 		uc.logger.Errorw(ErrCredentialsExpire.Error(), "error", err.Error(), "in", utils.Stringify(in), "account", utils.Stringify(out))
 		return nil, ErrCredentialsExpire
 	}

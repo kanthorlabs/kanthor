@@ -35,7 +35,7 @@ func (uc *credentials) Update(ctx context.Context, in *CredentialsUpdateIn) (*Cr
 
 	// the strategy is already checked in the .get method
 	strategy, _ := uc.infra.Passport().Strategy(permissions.Sdk)
-	if err := strategy.Update(ctx, account); err != nil {
+	if err := strategy.Management().Update(ctx, account); err != nil {
 		uc.logger.Errorw(ErrCredentialsUpdate.Error(), "error", err.Error(), "in", utils.Stringify(in))
 		return nil, ErrCredentialsUpdate
 	}

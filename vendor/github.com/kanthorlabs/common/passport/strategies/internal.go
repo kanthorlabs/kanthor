@@ -98,13 +98,26 @@ func (instance *internal) Disconnect(ctx context.Context) error {
 }
 
 func (instance *internal) Register(ctx context.Context, acc entities.Account) error {
+	if err := acc.Validate(); err != nil {
+		return err
+	}
+	if err := validator.StringRequired("PASSPORT.ACCOUNT.PASSWORD", acc.Password)(); err != nil {
+		return err
+	}
+
+	hash, err := password.Hash(acc.Password)
+	if err != nil {
+		return err
+	}
+
+	acc.PasswordHash = hash
 	if instance.orm.WithContext(ctx).Create(acc).Error != nil {
 		return ErrRegister
 	}
 	return nil
 }
 
-func (instance *internal) Login(ctx context.Context, credentials entities.Credentials) (*entities.Tokens, error) {
+func (instance *internal) Login(ctx context.Context, creds entities.Credentials) (*entities.Tokens, error) {
 	return nil, errors.New("PASSPORT.ASK.LOGIN.UNIMPLEMENT.ERROR")
 }
 
@@ -113,18 +126,18 @@ func (instance *internal) Logout(ctx context.Context, tokens entities.Tokens) er
 }
 
 func (instance *internal) Verify(ctx context.Context, tokens entities.Tokens) (*entities.Account, error) {
-	credentials, err := utils.ParseBasicCredentials(tokens.Access)
+	creds, err := utils.ParseBasicCredentials(tokens.Access)
 	if err != nil {
 		return nil, err
 	}
 
-	if err := credentials.Validate(); err != nil {
+	if err := creds.Validate(); err != nil {
 		return nil, err
 	}
 
 	var acc entities.Account
 	err = instance.orm.WithContext(ctx).
-		Where("username = ?", credentials.Username).
+		Where("username = ?", creds.Username).
 		First(&acc).
 		Error
 	if err != nil {
@@ -135,14 +148,29 @@ func (instance *internal) Verify(ctx context.Context, tokens entities.Tokens) (*
 		return nil, ErrAccountDeactivated
 	}
 
-	if err := password.Compare(credentials.Password, acc.PasswordHash); err != nil {
+	if err := password.Compare(creds.Password, acc.PasswordHash); err != nil {
 		return nil, ErrLogin
 	}
 
 	return acc.Censor(), nil
 }
 
-func (instance *internal) Deactivate(ctx context.Context, username string, at int64) error {
+func (instance *internal) Management() Management {
+	if instance.status != patterns.StatusConnected {
+		panic(ErrNotConnected)
+	}
+	return &internalmanagement{orm: instance.orm}
+}
+
+type internalmanagement struct {
+	orm *gorm.DB
+}
+
+func (instance *internalmanagement) Deactivate(ctx context.Context, username string, at int64) error {
+	if err := validator.StringRequired("PASSPORT.ACCOUNT.USERNAME", username)(); err != nil {
+		return err
+	}
+
 	return instance.orm.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
 		acc := &entities.Account{Username: username}
 
@@ -163,7 +191,7 @@ func (instance *internal) Deactivate(ctx context.Context, username string, at in
 	})
 }
 
-func (instance *internal) List(ctx context.Context, usernames []string) ([]*entities.Account, error) {
+func (instance *internalmanagement) List(ctx context.Context, usernames []string) ([]*entities.Account, error) {
 	err := validator.Validate(
 		validator.SliceRequired("usernames", usernames),
 		validator.Slice(usernames, func(i int, item *string) error {
@@ -193,9 +221,18 @@ func (instance *internal) List(ctx context.Context, usernames []string) ([]*enti
 	return accounts, nil
 }
 
-func (instance *internal) Update(ctx context.Context, account entities.Account) error {
+func (instance *internalmanagement) Update(ctx context.Context, acc entities.Account) error {
+	err := validator.Validate(
+		validator.StringRequired("PASSPORT.ACCOUNT.USERNAME", acc.Username),
+		validator.StringRequired("PASSPORT.ACCOUNT.NAME", acc.Name),
+		validator.NumberGreaterThan("PASSPORT.ACCOUNT.UPDATED_AT", acc.UpdatedAt, 0),
+	)
+	if err != nil {
+		return err
+	}
+
 	return instance.orm.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
-		acc := &entities.Account{Username: account.Username}
+		acc := &entities.Account{Username: acc.Username}
 		if acc.Metadata == nil {
 			acc.Metadata = &safe.Metadata{}
 		}
@@ -208,13 +245,10 @@ func (instance *internal) Update(ctx context.Context, account entities.Account) 
 			return ErrDeactivate
 		}
 
-		updates := map[string]any{}
-		if account.Name != "" {
-			updates["name"] = account.Name
-		}
-		if account.Metadata != nil {
-			account.Metadata.Merge(acc.Metadata)
-			updates["metadata"] = account.Metadata
+		updates := map[string]any{"name": acc.Name}
+		if acc.Metadata != nil {
+			acc.Metadata.Merge(acc.Metadata)
+			updates["metadata"] = acc.Metadata
 		}
 
 		if tx.Model(acc).Updates(updates).Error != nil {

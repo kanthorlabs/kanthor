@@ -93,7 +93,7 @@ func (instance *ask) Register(ctx context.Context, acc entities.Account) error {
 	return errors.New("PASSPORT.ASK.REGISTER.UNIMPLEMENT.ERROR")
 }
 
-func (instance *ask) Login(ctx context.Context, credentials entities.Credentials) (*entities.Tokens, error) {
+func (instance *ask) Login(ctx context.Context, creds entities.Credentials) (*entities.Tokens, error) {
 	return nil, errors.New("PASSPORT.ASK.LOGIN.UNIMPLEMENT.ERROR")
 }
 
@@ -102,31 +102,42 @@ func (instance *ask) Logout(ctx context.Context, tokens entities.Tokens) error {
 }
 
 func (instance *ask) Verify(ctx context.Context, tokens entities.Tokens) (*entities.Account, error) {
-	credentials, err := utils.ParseBasicCredentials(tokens.Access)
+	creds, err := utils.ParseBasicCredentials(tokens.Access)
 	if err != nil {
 		return nil, err
 	}
 
-	if err := credentials.Validate(); err != nil {
+	if err := creds.Validate(); err != nil {
 		return nil, err
 	}
-	acc, has := instance.accounts[credentials.Username]
+	acc, has := instance.accounts[creds.Username]
 	if !has {
 		return nil, ErrLogin
 	}
 
-	if err := password.Compare(credentials.Password, acc.PasswordHash); err != nil {
+	if err := password.Compare(creds.Password, acc.PasswordHash); err != nil {
 		return nil, ErrLogin
 	}
 
 	return acc.Censor(), nil
 }
 
-func (instance *ask) Deactivate(ctx context.Context, username string, ts int64) error {
-	return errors.New("PASSPORT.ASK.DEACTIVATE.UNIMPLEMENT.ERROR")
+func (instance *ask) Management() Management {
+	if instance.status != patterns.StatusConnected {
+		panic(ErrNotConnected)
+	}
+	return &askmanagement{accounts: instance.accounts}
 }
 
-func (instance *ask) List(ctx context.Context, usernames []string) ([]*entities.Account, error) {
+type askmanagement struct {
+	accounts map[string]*entities.Account
+}
+
+func (instance *askmanagement) Deactivate(ctx context.Context, username string, ts int64) error {
+	return errors.New("PASSPORT.ASK.MANAGEMENT.DEACTIVATE.UNIMPLEMENT.ERROR")
+}
+
+func (instance *askmanagement) List(ctx context.Context, usernames []string) ([]*entities.Account, error) {
 	err := validator.Validate(
 		validator.SliceRequired("usernames", usernames),
 		validator.Slice(usernames, func(i int, item *string) error {
@@ -148,6 +159,6 @@ func (instance *ask) List(ctx context.Context, usernames []string) ([]*entities.
 	return accounts, nil
 }
 
-func (instance *ask) Update(ctx context.Context, account entities.Account) error {
-	return errors.New("PASSPORT.ASK.UPDATE.UNIMPLEMENT.ERROR")
+func (instance *askmanagement) Update(ctx context.Context, acc entities.Account) error {
+	return errors.New("PASSPORT.ASK.MANAGEMENT.UPDATE.UNIMPLEMENT.ERROR")
 }
