@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 
-	"github.com/kanthorlabs/common/cipher/password"
 	"github.com/kanthorlabs/common/gatekeeper"
 	gkentities "github.com/kanthorlabs/common/gatekeeper/entities"
 	"github.com/kanthorlabs/common/idx"
@@ -36,19 +35,14 @@ func (uc *credentials) Create(ctx context.Context, in *CredentialsCreateIn) (*Cr
 		Username: idx.New(entities.IdNsWsc),
 		Password: utils.RandomString(PasswordLength),
 	}
-	hash, err := password.Hash(out.Password)
-	if err != nil {
-		uc.logger.Errorw(ErrCredentialsCreate.Error(), "error", err.Error(), "in", utils.Stringify(in), "out", utils.Stringify(out))
-		return nil, ErrCredentialsCreate
-	}
 
 	acc := ppentities.Account{
-		Username:     out.Username,
-		PasswordHash: hash,
-		Name:         in.Name,
-		Metadata:     &safe.Metadata{},
-		CreatedAt:    uc.watch.Now().UnixMilli(),
-		UpdatedAt:    uc.watch.Now().UnixMilli(),
+		Username:  out.Username,
+		Password:  out.Password,
+		Name:      in.Name,
+		Metadata:  &safe.Metadata{},
+		CreatedAt: uc.watch.Now().UnixMilli(),
+		UpdatedAt: uc.watch.Now().UnixMilli(),
 	}
 	// the account must be bound to the tenant
 	acc.Metadata.Set(string(gatekeeper.CtxTenantId), out.Tenant)

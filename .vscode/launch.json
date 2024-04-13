@@ -13,7 +13,7 @@
       "showLog": true,
       "env": {
         "PROJECT_ENV": "development",
-        "KANTHOR_HOME": "${workspaceRoot}"
+        "KANTHOR_HOME": "${workspaceRoot}/.env"
       },
       "args": ["run", "${input:service_name}"],
       "preLaunchTask": "make"
