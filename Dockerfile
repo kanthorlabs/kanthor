@@ -1,10 +1,10 @@
 # syntax=docker/dockerfile:1
-FROM golang:1.21-alpine as build
+FROM golang:1.21-alpine AS build
 
 WORKDIR /app
 
 # for Makefile
-RUN apk add build-base
+RUN apk add --no-cache build-base
 # for golang wire
 RUN go install github.com/google/wire/cmd/wire@latest
 # for golang swaggo
