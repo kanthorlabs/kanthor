@@ -1,0 +1,6 @@
+{
+  "sonarlint.connectedMode.project": {
+    "connectionId": "kanthorlabs",
+    "projectKey": "kanthorlabs_kanthor"
+  }
+}
