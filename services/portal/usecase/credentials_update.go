@@ -7,7 +7,6 @@ import (
 	ppentities "github.com/kanthorlabs/common/passport/entities"
 	"github.com/kanthorlabs/common/utils"
 	"github.com/kanthorlabs/common/validator"
-	"github.com/kanthorlabs/kanthor/services/permissions"
 )
 
 var ErrCredentialsUpdate = errors.New("PORTAL.CREDENTIALS.UPDATE.ERROR")
@@ -34,7 +33,7 @@ func (uc *credentials) Update(ctx context.Context, in *CredentialsUpdateIn) (*Cr
 	}
 
 	// the strategy is already checked in the .get method
-	strategy, _ := uc.infra.Passport().Strategy(permissions.Sdk)
+	strategy, _ := uc.strategy()
 	if err := strategy.Management().Update(ctx, account); err != nil {
 		uc.logger.Errorw(ErrCredentialsUpdate.Error(), "error", err.Error(), "in", utils.Stringify(in))
 		return nil, ErrCredentialsUpdate

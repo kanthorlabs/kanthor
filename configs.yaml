@@ -64,7 +64,7 @@ infrastructure:
         error_ratio: 0.8
   passport:
     strategies:
-      - name: kanthor.owner
+      - name: kanthor.systemuser
         engine: ask
         ask:
           accounts:
@@ -75,7 +75,7 @@ infrastructure:
                 avatar_url: https://ui-avatars.com/api/?name=Demo+User
               created_at: 1728925200000
               updated_at: 1728925200000
-      - name: kanthor.sdk
+      - name: kanthor.sdkclient
         engine: internal
         internal:
           sqlx:
@@ -99,6 +99,10 @@ infrastructure:
           max_open_count: 3
 
 portal:
+  authn:
+    default_strategy: kanthor.systemuser
+  credentials:
+    default_strategy: kanthor.sdkclient
   gateway:
     addr: ":8180"
     timeout: 3000
@@ -116,6 +120,8 @@ portal:
       disabled: true
 
 sdk:
+  authn:
+    default_strategy: kanthor.sdkclient
   gateway:
     addr: ":8280"
     timeout: 3000

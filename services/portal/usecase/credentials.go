@@ -9,6 +9,7 @@ import (
 	gkentities "github.com/kanthorlabs/common/gatekeeper/entities"
 	"github.com/kanthorlabs/common/logging"
 	ppentities "github.com/kanthorlabs/common/passport/entities"
+	"github.com/kanthorlabs/common/passport/strategies"
 	"github.com/kanthorlabs/common/safe"
 	"github.com/kanthorlabs/kanthor/infrastructure"
 	"github.com/kanthorlabs/kanthor/services/permissions"
@@ -32,10 +33,19 @@ type credentials struct {
 	orm    *gorm.DB
 }
 
-func (uc *credentials) get(ctx context.Context, tenant, username string) ([]*CredentialsAccount, error) {
-	strategy, err := uc.infra.Passport().Strategy(permissions.Sdk)
+func (uc *credentials) strategy() (strategies.Strategy, error) {
+	strategy, err := uc.infra.Passport().Strategy(uc.conf.Portal.Credentials.DefaultStrategy)
 	if err != nil {
 		return nil, errors.New("PORTAl.CREDENTIALS.PASSPORT.NO_STRATEGY.ERROR")
+	}
+
+	return strategy, nil
+}
+
+func (uc *credentials) get(ctx context.Context, tenant, username string) ([]*CredentialsAccount, error) {
+	strategy, err := uc.strategy()
+	if err != nil {
+		return nil, err
 	}
 
 	users, err := uc.infra.Gatekeeper().Users(ctx, tenant)

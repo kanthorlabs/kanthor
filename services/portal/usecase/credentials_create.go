@@ -20,7 +20,7 @@ var PasswordLength = 64
 var ErrCredentialsCreate = errors.New("PORTAL.CREDENTIALS.CREATE.ERROR")
 
 func (uc *credentials) Create(ctx context.Context, in *CredentialsCreateIn) (*CredentialsCreateOut, error) {
-	strategy, err := uc.infra.Passport().Strategy(permissions.Sdk)
+	strategy, err := uc.strategy()
 	if err != nil {
 		uc.logger.Errorw(ErrCredentialsCreate.Error(), "error", err.Error(), "passport_strategy", permissions.Sdk)
 		return nil, ErrCredentialsCreate

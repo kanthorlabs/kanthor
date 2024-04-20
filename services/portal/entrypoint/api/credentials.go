@@ -4,13 +4,13 @@ import (
 	"github.com/go-chi/chi/v5"
 	httpxmw "github.com/kanthorlabs/common/gateway/httpx/middleware"
 	"github.com/kanthorlabs/common/safe"
-	"github.com/kanthorlabs/kanthor/services/permissions"
+	"github.com/kanthorlabs/kanthor/services/portal/config"
 	"github.com/kanthorlabs/kanthor/services/portal/usecase"
 )
 
 func RegisterCredentialsRoutes(router chi.Router, service *portal) {
 	router.Route("/credentials", func(sr chi.Router) {
-		sr.Use(httpxmw.Authz(service.infra.Gatekeeper(), permissions.Owner))
+		sr.Use(httpxmw.Authz(service.infra.Gatekeeper(), config.ServiceName))
 		sr.Post("/", UseCredentialsCreate(service))
 		sr.Get("/", UseCredentialsList(service))
 		sr.Route("/{username}", func(ssr chi.Router) {
