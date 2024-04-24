@@ -1,0 +1,20 @@
+version: "3.8"
+
+services:
+  otelcol:
+    image: otel/opentelemetry-collector-contrib:0.97.0
+    container_name: kanthor-monitoring-otelcol
+    restart: unless-stopped
+    networks:
+      - kanthor 
+    volumes:
+      - ./docker/.otelcollector:/etc/otelcollector
+    command: [ "--config=/etc/otelcollector/config.yaml", "--config=/etc/otelcollector/config-extras.yaml" ]
+    ports:
+      - "4317:4317" # gRPC
+      - "4318:4318" # HTTP
+
+networks:
+  kanthor:
+    name: kanthor
+    external: true
