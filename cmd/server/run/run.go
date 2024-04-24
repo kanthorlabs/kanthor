@@ -1,9 +1,11 @@
 package run
 
 import (
+	"errors"
 	"slices"
 
 	"github.com/kanthorlabs/common/configuration"
+	"github.com/kanthorlabs/common/opentelemetry"
 	"github.com/kanthorlabs/kanthor/cmd/base"
 	"github.com/spf13/cobra"
 )
@@ -14,12 +16,23 @@ func New(provider configuration.Provider) *cobra.Command {
 		Short:     "run a single service or multiple services",
 		ValidArgs: append(base.ServiceNames(), ALL),
 		Args:      cobra.MatchAll(cobra.MinimumNArgs(1), cobra.OnlyValidArgs),
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: func(cmd *cobra.Command, args []string) (err error) {
+			if err = opentelemetry.Setup(cmd.Context()); err != nil {
+				return
+			}
+			defer func() {
+				if teardownerr := opentelemetry.Teardown(cmd.Context()); teardownerr != nil {
+					err = errors.Join(err, teardownerr)
+				}
+			}()
+
 			if slices.Contains(args, ALL) || len(args) > 1 {
-				return multiple(provider, args)
+				err = multiple(provider, args)
+				return
 			}
 
-			return single(provider, args[0])
+			err = single(provider, args[0])
+			return
 		},
 	}
 

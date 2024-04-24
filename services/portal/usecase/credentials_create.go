@@ -13,6 +13,7 @@ import (
 	"github.com/kanthorlabs/common/validator"
 	"github.com/kanthorlabs/kanthor/internal/database/entities"
 	"github.com/kanthorlabs/kanthor/services/permissions"
+	"go.opentelemetry.io/otel"
 )
 
 // bcrypt: password length exceeds 72 bytes
@@ -20,6 +21,9 @@ var PasswordLength = 64
 var ErrCredentialsCreate = errors.New("PORTAL.CREDENTIALS.CREATE.ERROR")
 
 func (uc *credentials) Create(ctx context.Context, in *CredentialsCreateIn) (*CredentialsCreateOut, error) {
+	ctx, span := otel.Tracer("SERVICE.CREDENTIALS.CREATE").Start(ctx, "USECASE")
+	defer span.End()
+
 	strategy, err := uc.strategy()
 	if err != nil {
 		uc.logger.Errorw(ErrCredentialsCreate.Error(), "error", err.Error(), "passport_strategy", permissions.Sdk)

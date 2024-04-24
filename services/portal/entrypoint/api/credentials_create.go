@@ -8,6 +8,7 @@ import (
 	httpxwriter "github.com/kanthorlabs/common/gateway/httpx/writer"
 	passportutils "github.com/kanthorlabs/common/passport/utils"
 	"github.com/kanthorlabs/kanthor/services/portal/usecase"
+	"go.opentelemetry.io/otel"
 )
 
 // UseCredentialsCreate
@@ -20,6 +21,9 @@ import (
 // @Security	TenantId
 func UseCredentialsCreate(service *portal) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		ctx, span := otel.Tracer("SERVICE.CREDENTIALS.CREATE").Start(r.Context(), "ENTRYPOINT.API")
+		defer span.End()
+
 		var req CredentialsCreateReq
 		if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 			httpxwriter.ErrBadRequest(w, httpxwriter.ErrorString("PORTAl.CREDENTIALS.CREATE.DECODE.ERROR"))
@@ -35,7 +39,7 @@ func UseCredentialsCreate(service *portal) http.HandlerFunc {
 			return
 		}
 
-		out, err := service.uc.Credentials().Create(r.Context(), in)
+		out, err := service.uc.Credentials().Create(ctx, in)
 		if err != nil {
 			httpxwriter.ErrUnknown(w, httpxwriter.Error(err))
 			return
