@@ -4,11 +4,10 @@ go 1.21.7
 
 require (
 	github.com/go-chi/chi/v5 v5.0.12
-	github.com/golang-migrate/migrate/v4 v4.17.0
 	github.com/google/uuid v1.6.0
 	github.com/google/wire v0.6.0
 	github.com/jedib0t/go-pretty/v6 v6.5.5
-	github.com/kanthorlabs/common v0.0.0-20240424083845-6e805cb3fb0b
+	github.com/kanthorlabs/common v0.0.0-20240511032708-1a6ad31b37e6
 	github.com/nats-io/nats-server/v2 v2.10.11
 	github.com/samber/lo v1.39.0
 	github.com/sourcegraph/conc v0.3.0
@@ -42,6 +41,7 @@ require (
 	github.com/go-redsync/redsync/v4 v4.12.1 // indirect
 	github.com/go-resty/resty/v2 v2.11.0 // indirect
 	github.com/gobwas/glob v0.2.3 // indirect
+	github.com/golang-migrate/migrate/v4 v4.17.1 // indirect
 	github.com/gorilla/mux v1.8.1 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.19.0 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
@@ -51,7 +51,8 @@ require (
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20221227161230-091c0ba34f0a // indirect
-	github.com/jackc/pgx/v5 v5.4.3 // indirect
+	github.com/jackc/pgx/v5 v5.5.4 // indirect
+	github.com/jackc/puddle/v2 v2.2.1 // indirect
 	github.com/jaswdr/faker v1.19.1 // indirect
 	github.com/jellydator/ttlcache/v3 v3.2.0 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect

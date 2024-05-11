@@ -5,8 +5,8 @@ import (
 
 	_ "embed"
 
+	"github.com/kanthorlabs/common/commands/migrate"
 	"github.com/kanthorlabs/kanthor/cmd/base"
-	"github.com/kanthorlabs/kanthor/cmd/data/migrate"
 )
 
 func main() {

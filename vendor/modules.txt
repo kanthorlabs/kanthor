@@ -73,7 +73,7 @@ github.com/gobwas/glob/syntax/ast
 github.com/gobwas/glob/syntax/lexer
 github.com/gobwas/glob/util/runes
 github.com/gobwas/glob/util/strings
-# github.com/golang-migrate/migrate/v4 v4.17.0
+# github.com/golang-migrate/migrate/v4 v4.17.1
 ## explicit; go 1.18
 github.com/golang-migrate/migrate/v4
 github.com/golang-migrate/migrate/v4/database
@@ -129,7 +129,7 @@ github.com/jackc/pgpassfile
 # github.com/jackc/pgservicefile v0.0.0-20221227161230-091c0ba34f0a
 ## explicit; go 1.14
 github.com/jackc/pgservicefile
-# github.com/jackc/pgx/v5 v5.4.3
+# github.com/jackc/pgx/v5 v5.5.4
 ## explicit; go 1.19
 github.com/jackc/pgx/v5
 github.com/jackc/pgx/v5/internal/anynil
@@ -142,7 +142,12 @@ github.com/jackc/pgx/v5/pgconn/internal/bgreader
 github.com/jackc/pgx/v5/pgconn/internal/ctxwatch
 github.com/jackc/pgx/v5/pgproto3
 github.com/jackc/pgx/v5/pgtype
+github.com/jackc/pgx/v5/pgxpool
 github.com/jackc/pgx/v5/stdlib
+# github.com/jackc/puddle/v2 v2.2.1
+## explicit; go 1.19
+github.com/jackc/puddle/v2
+github.com/jackc/puddle/v2/internal/genstack
 # github.com/jaswdr/faker v1.19.1
 ## explicit; go 1.11
 github.com/jaswdr/faker
@@ -162,7 +167,7 @@ github.com/jinzhu/now
 # github.com/josharian/intern v1.0.0
 ## explicit; go 1.5
 github.com/josharian/intern
-# github.com/kanthorlabs/common v0.0.0-20240424083845-6e805cb3fb0b
+# github.com/kanthorlabs/common v0.0.0-20240511032708-1a6ad31b37e6
 ## explicit; go 1.21.7
 github.com/kanthorlabs/common/cache
 github.com/kanthorlabs/common/cache/config
@@ -172,6 +177,7 @@ github.com/kanthorlabs/common/cipher/signature
 github.com/kanthorlabs/common/circuitbreaker
 github.com/kanthorlabs/common/circuitbreaker/config
 github.com/kanthorlabs/common/clock
+github.com/kanthorlabs/common/commands/migrate
 github.com/kanthorlabs/common/configuration
 github.com/kanthorlabs/common/distributedlockmanager
 github.com/kanthorlabs/common/distributedlockmanager/config
@@ -597,6 +603,7 @@ golang.org/x/net/publicsuffix
 golang.org/x/net/trace
 # golang.org/x/sync v0.6.0
 ## explicit; go 1.18
+golang.org/x/sync/semaphore
 golang.org/x/sync/singleflight
 # golang.org/x/sys v0.18.0
 ## explicit; go 1.18
